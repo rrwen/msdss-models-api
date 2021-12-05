@@ -1,9 +1,9 @@
-Class
-======
+core
+====
 
-.. autoclass:: msdss_models_api
+.. automodule:: msdss_models_api.core
 
-Method
-------
+ModelsAPI
+---------
 
-.. automethod:: msdss_models_api
+.. autoclass:: msdss_models_api.core.ModelsAPI

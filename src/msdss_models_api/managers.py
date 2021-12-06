@@ -31,7 +31,7 @@ class ModelsManager:
         * Each key is the class name
         * Each value is the class itself
 
-    instances : dict
+    instances : dict(:class:`msdss_models_api.models.Model`)
         Dictionary of loaded model instances created from method ``create``.
     folder : str
         Same as parameter ``folder``.
@@ -63,8 +63,29 @@ class ModelsManager:
             # Create model instance
             models_manager.create('temp_model', 'Model')
 
-            # 
+            # Initialize a model instance with inputs
+            train_data = [
+                {'col_a': 1, 'col_b': 'a'},
+                {'col_a': 2, 'col_b': 'b'}
+            ]
+            models_manager.input('temp_model', train_data)
+            
+            # Update model instance with new data
+            new_data = [
+                {'col_a': 2, 'col_b': 'c'},
+                {'col_a': 3, 'col_b': 'd'}
+            ]
+            models_manager.update('temp_model', new_data)
 
+            # Produce output from a model instance
+            test_data = [
+                {'col_a': 2, 'col_b': 'c'},
+                {'col_a': 3, 'col_b': 'd'}
+            ]
+            results = models_manager.output('temp_model', test_data)
+
+            # Delete model instance
+            models_manager.delete('temp_model')
     """
     def __init__(
         self,
@@ -84,6 +105,137 @@ class ModelsManager:
         self.instances = {}
         self.handler = handler if handler else ModelsHandler()
         self.suffix = suffix
+
+    def _get_file(self, name):
+        """
+        Get the path of the base file for the model instance.
+
+        Parameters
+        ----------
+        name : str
+            Unique name of the model instance. The instance is stored in ``.instances[name]``.
+        
+        Returns
+        -------
+        str
+            File path for the base file of the model instance.
+
+        Author
+        ------
+        Richard Wen <rrwen.dev@gmail.com>
+        
+        Example
+        -------
+        .. jupyter-execute::
+
+            import tempfile
+            from msdss_models_api.models import Model
+            from msdss_models_api.managers import ModelsManager
+
+            with tempfile.TemporaryDirectory() as folder_path:
+
+                # Setup available models
+                models = [Model]
+                
+                # Create manager
+                models_manager = ModelsManager(models, folder=folder_path)
+
+                # Create model instance
+                models_manager.create('temp_model', 'Model')
+
+                # Delete model instance
+                path = models_manager._get_file('temp_model')
+        """
+        folder = self._get_folder(name)
+        out = os.path.join(folder, name + self.suffix)
+        return out
+
+    def _get_folder(self, name):
+        """
+        Get the path of the subfolder for the model instance.
+
+        Parameters
+        ----------
+        name : str
+            Unique name of the model instance. The instance is stored in ``.instances[name]``.
+        
+        Returns
+        -------
+        str
+            File path for the subfolder of the model instance.
+
+        Author
+        ------
+        Richard Wen <rrwen.dev@gmail.com>
+        
+        Example
+        -------
+        .. jupyter-execute::
+
+            import tempfile
+            from msdss_models_api.models import Model
+            from msdss_models_api.managers import ModelsManager
+
+            with tempfile.TemporaryDirectory() as folder_path:
+
+                # Setup available models
+                models = [Model]
+                
+                # Create manager
+                models_manager = ModelsManager(models, folder=folder_path)
+
+                # Create model instance
+                models_manager.create('temp_model', 'Model')
+
+                # Delete model instance
+                folder_path = models_manager._get_folder('temp_model')
+        """
+        out = os.path.join(self.folder, name)
+        return out
+
+    def _get_save_file(self, name):
+        """
+        Get the path of the save file for the model instance without the extension.
+
+        Parameters
+        ----------
+        name : str
+            Unique name of the model instance. The instance is stored in ``.instances[name]``.
+        
+        Returns
+        -------
+        str
+            File path for the save file of the model instance. Does not include extension.
+
+        Author
+        ------
+        Richard Wen <rrwen.dev@gmail.com>
+        
+        Example
+        -------
+        .. jupyter-execute::
+
+            import tempfile
+            from msdss_models_api.models import Model
+            from msdss_models_api.managers import ModelsManager
+
+            with tempfile.TemporaryDirectory() as folder_path:
+
+                # Setup available models
+                models = [Model]
+                
+                # Create manager
+                models_manager = ModelsManager(models, folder=folder_path)
+
+                # Create model instance
+                models_manager.create('temp_model', 'Model')
+
+                # Delete model instance
+                save_path = models_manager._get_save_file('temp_model')
+        """
+        folder = self._get_folder(name)
+        out = os.path.join(folder, name)
+        return out
 
     def create(self, name, model, settings={}):
         """
@@ -124,18 +276,19 @@ class ModelsManager:
                 # Create model instance
                 models_manager.create('temp_model', 'Model')
         """
+        self.handler.handle_create(name, model, self.instances, self.models)
         
         # (ModelsManager_create_subfolder) Create subfolder if not exists for model
-        folder = self.get_folder(name)
+        folder = self._get_folder(name)
         if not os.path.isdir(folder):
             os.path.makedirs(folder)
         
         # (ModelsManager_create_obj) Create base model object
-        save_file = self.get_save_file(name)
+        save_file = self._get_save_file(name)
         base_model = self.models[model](file_path=save_file, **settings)
 
         # (ModelsManager_create_save) Save base model object
-        base_file = self.get_file(name)
+        base_file = self._get_file(name)
         pickle.dumps(base_model, base_file)
         self.instances[name] = base_model
 
@@ -179,146 +332,16 @@ class ModelsManager:
                 # Delete model instance
                 models_manager.delete('temp_model')
         """
+        self.handler.handle_read(name, self.instances)
 
         # (ModelsManager_delete_instance) Run instance deletion
         instance = self.instances[name]
         instance.delete(**settings)
 
         # (ModelsManager_delete_folder) Delete folder
-        folder = self.get_folder(name)
+        folder = self._get_folder(name)
         shutil.rmtree(folder)
         del self.instances[name]
-
-    def get_file(self, name):
-        """
-        Get the path of the base file for the model instance.
-
-        Parameters
-        ----------
-        name : str
-            Unique name of the model instance. The instance is stored in ``.instances[name]``.
-        
-        Returns
-        -------
-        str
-            File path for the base file of the model instance.
-
-        Author
-        ------
-        Richard Wen <rrwen.dev@gmail.com>
-        
-        Example
-        -------
-        .. jupyter-execute::
-
-            import tempfile
-            from msdss_models_api.models import Model
-            from msdss_models_api.managers import ModelsManager
-
-            with tempfile.TemporaryDirectory() as folder_path:
-
-                # Setup available models
-                models = [Model]
-                
-                # Create manager
-                models_manager = ModelsManager(models, folder=folder_path)
-
-                # Create model instance
-                models_manager.create('temp_model', 'Model')
-
-                # Delete model instance
-                path = models_manager.get_file('temp_model')
-        """
-        folder = self.get_folder(name)
-        out = os.path.join(folder, name + self.suffix)
-        return out
-
-    def get_folder(self, name):
-        """
-        Get the path of the subfolder for the model instance.
-
-        Parameters
-        ----------
-        name : str
-            Unique name of the model instance. The instance is stored in ``.instances[name]``.
-        
-        Returns
-        -------
-        str
-            File path for the subfolder of the model instance.
-
-        Author
-        ------
-        Richard Wen <rrwen.dev@gmail.com>
-        
-        Example
-        -------
-        .. jupyter-execute::
-
-            import tempfile
-            from msdss_models_api.models import Model
-            from msdss_models_api.managers import ModelsManager
-
-            with tempfile.TemporaryDirectory() as folder_path:
-
-                # Setup available models
-                models = [Model]
-                
-                # Create manager
-                models_manager = ModelsManager(models, folder=folder_path)
-
-                # Create model instance
-                models_manager.create('temp_model', 'Model')
-
-                # Delete model instance
-                folder_path = models_manager.get_folder('temp_model')
-        """
-        out = os.path.join(self.folder, name)
-        return out
-
-    def get_save_file(self, name):
-        """
-        Get the path of the save file for the model instance without the extension.
-
-        Parameters
-        ----------
-        name : str
-            Unique name of the model instance. The instance is stored in ``.instances[name]``.
-        
-        Returns
-        -------
-        str
-            File path for the save file of the model instance. Does not include extension.
-
-        Author
-        ------
-        Richard Wen <rrwen.dev@gmail.com>
-        
-        Example
-        -------
-        .. jupyter-execute::
-
-            import tempfile
-            from msdss_models_api.models import Model
-            from msdss_models_api.managers import ModelsManager
-
-            with tempfile.TemporaryDirectory() as folder_path:
-
-                # Setup available models
-                models = [Model]
-                
-                # Create manager
-                models_manager = ModelsManager(models, folder=folder_path)
-
-                # Create model instance
-                models_manager.create('temp_model', 'Model')
-
-                # Delete model instance
-                save_path = models_manager.get_save_file('temp_model')
-        """
-        folder = self.get_folder(name)
-        out = os.path.join(folder, name)
-        return out
 
     def load(self):
         """
@@ -354,7 +377,7 @@ class ModelsManager:
         """
         names = [name for name in os.listdir(self.folder) if os.path.isdir(name)]
         for name in names:
-            self.instances[name] = pickle.load(self.get_file(name))
+            self.instances[name] = pickle.load(self._get_file(name))
 
     def input(self, name, data, settings={}):
         """
@@ -401,6 +424,7 @@ class ModelsManager:
                 ]
                 models_manager.input('temp_model', train_data)
         """
+        self.handler.handle_read(name, self.instances)
         instance = self.instances[name]
         instance.input(data, **settings)
         instance.save()
@@ -417,6 +441,11 @@ class ModelsManager:
             Data to use for obtaining the model instance output. Should accept a ``list`` or ``dict`` to be input in a :class:`pandas:pandas.DataFrame` or the dataframe itself.
         settings : dict
             Keyword arguments passed to the :meth:`msdss_models_api.models.Model.output`.
+
+         Returns
+        -------
+        :class:`pandas:pandas.DataFrame`
+            Output data from the ``name`` model instance using the input data from parameter ``data``.
 
         Author
         ------
@@ -448,13 +477,14 @@ class ModelsManager:
                 ]
                 models_manager.input('temp_model', train_data)
 
-                # Produce output from a model
+                # Produce output from a model instance
                 test_data = [
                     {'col_a': 2, 'col_b': 'c'},
                     {'col_a': 3, 'col_b': 'd'}
                 ]
-                models_manager.output('temp_model', test_data)
+                results = models_manager.output('temp_model', test_data)
         """
+        self.handler.handle_read(name, self.instances)
         instance = self.instances[name]
         if instance.can_load():
             instance.load()
@@ -503,13 +533,14 @@ class ModelsManager:
                 ]
                 models_manager.input('temp_model', train_data)
 
-                # Produce output from a model
+                # Update model instance with new data
                 new_data = [
                     {'col_a': 2, 'col_b': 'c'},
                     {'col_a': 3, 'col_b': 'd'}
                 ]
                 models_manager.update('temp_model', new_data)
         """
+        self.handler.handle_read(name, self.instances)
         instance = self.get(name)
         if instance.can_load():
             instance.load()
@@ -539,10 +570,9 @@ class ModelsMetadataManager:
 
         # (ModelsMetadataManager_create_vars) Set variables
         data = [data] if isinstance(data, dict) else data
-        instance = self.models_manager.get(name)
+        instance = self.models_manager.instances[name]
 
         # (ModelsMetadataManager_create_add) Add metadata for model
         data[0]['name'] = name
-        data[0]['model'] = instance.__name__
-        data[0]['directory'] = instance.file
+        data[0]['model'] = type(instance).__name__
         self.database.insert(self.table, data)

@@ -315,7 +315,8 @@ class Model:
                 # Save model
                 blank_model.save()
         """
-        pickle.dumps(self.instance, self.file)
+        with open(self.file, 'wb') as file:
+            pickle.dumps(self.instance, file)
 
     def update(self, data):
         """

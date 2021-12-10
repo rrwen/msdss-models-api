@@ -41,10 +41,12 @@ def get_models_router(
     # (get_models_router_create) Add create route to models router
     if enable['create']:
         @out.post(**settings['create'])
-        async def create_data(
+        async def create_model_instance(
             name: str = Query(..., description='Name of the model instance to create'),
             model: str = Query(..., description='Type of model to create an instance of'),
             bg_manager = Depends(get_bg_manager),
             user = Depends(get_user['create'])
         ):
             bg_manager.create(name, model)
+
+    return out

@@ -1271,6 +1271,60 @@ class ModelsBackgroundManager:
                 bg_manager.start()
         """
         self.worker.Worker(**worker_kwargs).start(*args, **kwargs)
+
+    def shutdown(self, *args, **kwargs):
+        """
+        Shutdown all workers and tasks.
+
+        Parameters
+        ----------
+        *args, **kwargs
+            Additional arguments passed to :meth:`celery:celery.app.control.shutdown`.
+
+        Author
+        ------
+        Richard Wen <rrwen.dev@gmail.com>
+        
+        Example
+        -------
+        .. code::
+
+            import tempfile
+            from celery import Celery
+            from msdss_models_api.models import Model
+            from msdss_models_api.managers import *
+
+            with tempfile.TemporaryDirectory() as folder_path:
+
+                # Setup available models
+                models = [Model]
+                
+                # Create manager
+                models_manager = ModelsManager(models, folder=folder_path)
+
+                # Create model instance
+                models_manager.create('temp_model', 'Model')
+
+                # Create background manager
+                worker = Celery(broker='amqp://msdss:msdss123@localhost:5672', backend='rpc://') # rabbitmq
+                bg_manager = ModelsBackgroundManager(worker, models_manager)
+
+                # Initialize a model instance with inputs as a background process
+                train_data = [
+                    {'col_a': 1, 'col_b': 'a'},
+                    {'col_a': 2, 'col_b': 'b'}
+                ]
+                bg_manager._add_model_task('input', 'temp_model', train_data)
+
+                # Start worker
+                bg_manager.start()
+
+                # In another thread
+                bg_manager.shutdown()
+        """
+        for name in self.states:
+            self.cancel(name)
+        self.worker.control.shutdown(*args, **kwargs)
     
     def update(self, name, *args, **kwargs):
         """

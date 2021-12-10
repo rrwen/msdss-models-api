@@ -947,6 +947,7 @@
 <span class="sd">    tasks : dict</span>
 <span class="sd">        Dictionary of background tasks from the ``worker`` object with the following keys:</span>
 
+<span class="sd">        * ``create`` (func): background task to create a model instance</span>
 <span class="sd">        * ``input`` (func): background task to initialize models with input data</span>
 <span class="sd">        * ``load`` (func): background task to load saved models</span>
 <span class="sd">        * ``update`` (func): background task to update models</span>
@@ -954,7 +955,7 @@
 <span class="sd">    states : dict</span>
 <span class="sd">        Dictionary of processing states for each instance, consisting of the following keys:</span>
 
-<span class="sd">        * ``task`` (str): the action that the process is performing - one of: ``INPUT``, ``UPDATE``, ``LOAD``</span>
+<span class="sd">        * ``task`` (str): the action that the process is performing - one of: ``CREATE``, ``INPUT``, ``LOAD``, ``UPDATE``</span>
 <span class="sd">        * ``result`` (:class:`celery:celery.result.AsyncResult`): celery async object for getting states, ids, etc (see `celery.result &lt;https://docs.celeryproject.org/en/stable/reference/celery.result.html#celery.result.AsyncResult&gt;`_)</span>
 <span class="sd">        * ``started_at`` (:class:`datetime.datetime`): datetime object for when the task was started</span>
 
@@ -1026,6 +1027,12 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">tasks</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">states</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">handler</span> <span class="o">=</span> <span class="n">handler</span> <span class="k">if</span> <span class="n">handler</span> <span class="k">else</span> <span class="n">ModelsBackgroundHandler</span><span class="p">()</span>
+
+        <span class="c1"># (ModelsBackgroundManager_task_create) Define create task</span>
+        <span class="nd">@self</span><span class="o">.</span><span class="n">worker</span><span class="o">.</span><span class="n">task</span>
+        <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">settings</span><span class="o">=</span><span class="p">{}):</span>
+            <span class="n">models_manager</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">settings</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tasks</span><span class="p">[</span><span class="s1">'create'</span><span class="p">]</span> <span class="o">=</span> <span class="n">create</span>
 
         <span class="c1"># (ModelsBackgroundManager_task_input) Define input task</span>
         <span class="nd">@self</span><span class="o">.</span><span class="n">worker</span><span class="o">.</span><span class="n">task</span>
@@ -1152,6 +1159,49 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">handler</span><span class="o">.</span><span class="n">handle_cancel</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">states</span><span class="p">)</span>
         <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="s1">'result'</span><span class="p">]</span>
         <span class="n">result</span><span class="o">.</span><span class="n">revoke</span><span class="p">(</span><span class="n">terminate</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">"""</span>
+<span class="sd">        Create a model instance.</span>
+
+<span class="sd">         * Runs :meth:`msdss_models_api.managers.ModelsManager.create`</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        name : str</span>
+<span class="sd">            See parameter ``name`` in :meth:`msdss_models_api.managers.ModelsManager.create`.</span>
+<span class="sd">        *args, **kwargs</span>
+<span class="sd">            Additional arguments passed to :meth:`msdss_models_api.managers.ModelsManager.create`.</span>
+
+<span class="sd">        Author</span>
+<span class="sd">        ------</span>
+<span class="sd">        Richard Wen &lt;rrwen.dev@gmail.com&gt;</span>
+<span class="sd">        </span>
+<span class="sd">        Example</span>
+<span class="sd">        -------</span>
+<span class="sd">        .. code::</span>
+
+<span class="sd">            import tempfile</span>
+<span class="sd">            from celery import Celery</span>
+<span class="sd">            from msdss_models_api.models import Model</span>
+<span class="sd">            from msdss_models_api.managers import *</span>
+
+<span class="sd">            with tempfile.TemporaryDirectory() as folder_path:</span>
+
+<span class="sd">                # Setup available models</span>
+<span class="sd">                models = [Model]</span>
+<span class="sd">                </span>
+<span class="sd">                # Create manager</span>
+<span class="sd">                models_manager = ModelsManager(models, folder=folder_path)</span>
+
+<span class="sd">                # Create background manager</span>
+<span class="sd">                worker = Celery(broker='amqp://msdss:msdss123@localhost:5672', backend='rpc://') # rabbitmq</span>
+<span class="sd">                bg_manager = ModelsBackgroundManager(worker, models_manager)</span>
+
+<span class="sd">                # Create model instance</span>
+<span class="sd">                bg_manager.create('temp_model', 'Model')</span>
+<span class="sd">        """</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add_model_task</span><span class="p">(</span><span class="s1">'create'</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
 <div class="viewcode-block" id="ModelsBackgroundManager.delete"><a class="viewcode-back" href="../../reference/managers.html#msdss_models_api.managers.ModelsBackgroundManager.delete">[docs]</a>    <span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">"""</span>

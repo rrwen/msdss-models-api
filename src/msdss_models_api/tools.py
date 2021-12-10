@@ -7,7 +7,7 @@ from .managers import *
 def create_models_bg_manager_func(
     models=[],
     folder=DEFAULT_MODELS_FOLDER,
-    worker=Celery(broker='amqp://msdss:msdss123@localhost:5672', backend='rpc://'),
+    worker=Celery(broker=DEFAULT_BROKER_URL, backend=DEFAULT_BACKEND_URL),
     models_manager=None,
     bg_manager=None,
     *args,

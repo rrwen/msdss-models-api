@@ -10,14 +10,16 @@ Setup and install a development environment:
 1. Install [git](https://git-scm.com/)
 2. Install [Anaconda Python 3](https://www.anaconda.com/distribution/)
 3. Install [GraphViz](https://www.graphviz.org/)
-4. Clone this repository `git clone`
-5. Move to the cloned folder `cd msdss-models-api`
-6. Install python dependencies with `bin\install.bat` or `bin/install.sh`
+4. Install [RabbitMQ](https://www.rabbitmq.com/)
+5. Clone this repository `git clone`
+6. Move to the cloned folder `cd msdss-models-api`
+7. Install python dependencies with `bin\install.bat` or `bin/install.sh`
 
 In Mac OS (with [Homebrew](https://brew.sh/) installed):
 
 ```
 brew install git graphviz -y
+brew install rabbitmq
 git clone https://www.github.com/rrwen/msdss-models-api
 cd msdss-models-api
 chmod +x bin/install.sh

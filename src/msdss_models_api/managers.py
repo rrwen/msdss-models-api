@@ -755,7 +755,7 @@ class ModelsBackgroundManager:
         self.worker = worker
         self.tasks = {}
         self.states = {}
-        self.handler = handler if handler else ModelsBackgroundHandler()
+        self.handler = handler if handler else ModelsBackgroundHandler(models_manager=models_manager)
 
         # (ModelsBackgroundManager_task_create) Define create task
         @self.worker.task
@@ -889,7 +889,7 @@ class ModelsBackgroundManager:
         result = self.state[name]['result']
         result.revoke(terminate=True)
 
-    def create(self, name, *args, **kwargs):
+    def create(self, name, model, *args, **kwargs):
         """
         Create a model instance.
 
@@ -899,6 +899,8 @@ class ModelsBackgroundManager:
         ----------
         name : str
             See parameter ``name`` in :meth:`msdss_models_api.managers.ModelsManager.create`.
+        model : str
+            See parameter ``model`` in :meth:`msdss_models_api.managers.ModelsManager.create`.
         *args, **kwargs
             Additional arguments passed to :meth:`msdss_models_api.managers.ModelsManager.create`.
 
@@ -930,7 +932,8 @@ class ModelsBackgroundManager:
                 # Create model instance
                 bg_manager.create('temp_model', 'Model')
         """
-        self._add_model_task('create', name, *args, **kwargs)
+        self.models_manager.handler.handle_create(name, model, self.models_manager.instances, self.models_manager.models)
+        self._add_model_task('create', name, model, *args, **kwargs)
 
     def delete(self, name, *args, **kwargs):
         """
@@ -1102,6 +1105,7 @@ class ModelsBackgroundManager:
                 ]
                 bg_manager.input('temp_model', train_data)
         """
+        self.models_manager.handler.handle_read(name, self.models_manager.instances)
         self.handler.handle_processing(name, self.states)
         self._add_model_task('input', name, *args, **kwargs)
 
@@ -1156,6 +1160,8 @@ class ModelsBackgroundManager:
                 # Load model instance as a background process
                 bg_manager.load('temp_model')
         """
+        self.models_manager.handler.handle_read(name, self.models_manager.instances)
+        self.models_manager.handler.handle_load(self.models_manager.instance)
         self.handler.handle_processing(name, self.states)
         self._add_model_task('load', name, *args, **kwargs)
 
@@ -1214,6 +1220,7 @@ class ModelsBackgroundManager:
                 ]
                 bg_manager.output('temp_model', new_data)
         """
+        self.models_manager.handler.handle_read(name, self.models_manager.instances)
         self.handler.handle_processing(name, self.states)
         return self.models_manager.output(name, *args, **kwargs)
 
@@ -1381,6 +1388,7 @@ class ModelsBackgroundManager:
                 ]
                 bg_manager.update('temp_model', new_data)
         """
+        self.models_manager.handler.handle_read(name, self.models_manager.instances)
         self.handler.handle_processing(name, self.states)
         self._add_model_task('update', name, *args, **kwargs)
 

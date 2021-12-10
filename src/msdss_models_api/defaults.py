@@ -11,3 +11,10 @@ DEFAULT_MODELS_COLUMNS = [
     ('created_at', 'DateTime'),
     ('updated_at', 'DateTime')
 ]
+DEFAULT_MODELS_ROUTE_SETTINGS = dict(
+    create=dict(
+        path='/',
+        _enable=True,
+        _get_user={'superuser': True}
+    ),
+)

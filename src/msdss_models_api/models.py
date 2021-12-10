@@ -12,8 +12,6 @@ class Model:
     
     Parameters
     ----------
-    model : class
-        Object to use for modelling. Can be used in methods as ``self.model``.
     file_path : str
         Path to save, load, and delete the model for persistence without the extension. Can be used in methods as ``self.file``.
     file_ext : str
@@ -21,8 +19,6 @@ class Model:
 
     Attributes
     ----------
-    model : class
-        Same as parameter ``model``.
     instance : obj or None
         An instance of the model initialized with method :meth:`msdss_models_api.models.Model.input`. Initial value is ``None``.
     file : str
@@ -72,10 +68,9 @@ class Model:
             # This will also set .instance to None
             blank_model.delete()
     """
-    def __init__(self, model=None, file_path='./model', file_ext='pickle'):
-        self.model = model
+    def __init__(self, file_path='./model', file_ext='pickle'):
         self.instance = None
-        self.file = os.path.join(file_path, file_ext)
+        self.file = f'{file_path}.{file_ext}'
         self.last_loaded = None
 
     def can_load(self):
@@ -221,15 +216,46 @@ class Model:
                 # Load model
                 blank_model.load()
         """
+        if force or self.needs_load():
+            with open(self.file, 'rb') as file:
+                self.instance = pickle.load(file)
+                self.last_loaded = datetime.now()
 
-        # (Model_load_cond) Get conditions for loading
+    def needs_load(self):
+        """
+        Check if model needs to be loaded again.
+
+        Returns
+        -------
+        bool
+            Whether the model needs to be loaded again based on whether the save ``file`` has changed.
+        
+        Author
+        ------
+        Richard Wen <rrwen.dev@gmail.com>
+        
+        Example
+        -------
+        .. jupyter-execute::
+
+            import tempfile
+            from msdss_models_api.models import Model
+
+            with tempfile.NamedTemporaryFile() as file:
+
+                # Create template model
+                model_path = file.name
+                blank_model = Model(file_path=model_path)
+
+                # Save model
+                blank_model.save()
+
+                # Check if needs load
+                blank_model.needs_load()
+        """
         last_modified = datetime.fromtimestamp(os.path.getmtime(self.file))
-        changed = last_modified > self.last_loaded if self.last_loaded else True
-
-        # (Model_load_file) Load the saved model
-        if force or changed:
-            self.instance = pickle.loads(self.file)
-            self.last_loaded = datetime.now()
+        out = last_modified > self.last_loaded if self.last_loaded else True
+        return out
 
     def output(self, data):
         """
@@ -316,7 +342,7 @@ class Model:
                 blank_model.save()
         """
         with open(self.file, 'wb') as file:
-            pickle.dumps(self.instance, file)
+            pickle.dump(self.instance, file)
 
     def update(self, data):
         """

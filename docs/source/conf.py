@@ -52,7 +52,8 @@ extensions = [
     'sphinx.ext.mathjax'
 ]
 intersphinx_mapping = {
-    'python': ('https://docs.python.org/3/', None)
+    'python': ('https://docs.python.org/3/', None),
+    'celery': ('https://docs.celeryproject.org/en/stable/index.html', None)
 }
 napoleon_custom_sections = ['Author', 'Authors']
 napoleon_include_private_with_doc = True

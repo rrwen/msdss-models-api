@@ -1,0 +1,1541 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="lang:clipboard.copy" content="Copy to clipboard">
+  <meta name="lang:clipboard.copied" content="Copied to clipboard">
+  <meta name="lang:search.language" content="en">
+  <meta name="lang:search.pipeline.stopwords" content="True">
+  <meta name="lang:search.pipeline.trimmer" content="True">
+  <meta name="lang:search.result.none" content="No matching documents">
+  <meta name="lang:search.result.one" content="1 matching document">
+  <meta name="lang:search.result.other" content="# matching documents">
+  <meta name="lang:search.tokenizer" content="[\s\-]+">
+
+  
+    <link href="https://fonts.gstatic.com/" rel="preconnect" crossorigin>
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Mono:400,500,700|Roboto:300,400,400i,700&display=fallback" rel="stylesheet">
+
+    <style>
+      body,
+      input {
+        font-family: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif
+      }
+
+      code,
+      kbd,
+      pre {
+        font-family: "Roboto Mono", "Courier New", Courier, monospace
+      }
+    </style>
+  
+
+  <link rel="stylesheet" href="../_static/stylesheets/application.css"/>
+  <link rel="stylesheet" href="../_static/stylesheets/application-palette.css"/>
+  <link rel="stylesheet" href="../_static/stylesheets/application-fixes.css"/>
+  
+  <link rel="stylesheet" href="../_static/fonts/material-icons.css"/>
+  
+  <meta name="theme-color" content="#3f51b5">
+  <script src="../_static/javascripts/modernizr.js"></script>
+  
+  
+  
+    <title>managers &#8212; 0.0.0</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/material.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/jupyter-sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/thebelab.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/thebelab-helper.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="models" href="models.html" />
+    <link rel="prev" title="core" href="core.html" />
+  
+   
+
+  </head>
+  <body dir=ltr
+        data-md-color-primary=indigo data-md-color-accent=light-blue>
+  
+  <svg class="md-svg">
+    <defs data-children-count="0">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448" viewBox="0 0 416 448" id="__github"><path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19T128 352t-18.125-8.5-10.75-19T96 304t3.125-20.5 10.75-19T128 256t18.125 8.5 10.75 19T160 304zm160 0q0 10-3.125 20.5t-10.75 19T288 352t-18.125-8.5-10.75-19T256 304t3.125-20.5 10.75-19T288 256t18.125 8.5 10.75 19T320 304zm40 0q0-30-17.25-51T296 232q-10.25 0-48.75 5.25Q229.5 240 208 240t-39.25-2.75Q130.75 232 120 232q-29.5 0-46.75 21T56 304q0 22 8 38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0 37.25-1.75t35-7.375 30.5-15 20.25-25.75T360 304zm56-44q0 51.75-15.25 82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5T212 416q-19.5 0-35.5-.75t-36.875-3.125-38.125-7.5-34.25-12.875T37 371.5t-21.5-28.75Q0 312 0 260q0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25 30.875Q171.5 96 212 96q37 0 70 8 26.25-20.5 46.75-30.25T376 64q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34 99.5z"/></svg>
+      
+    </defs>
+  </svg>
+  
+  <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer">
+  <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search">
+  <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
+  <a href="#reference/managers" tabindex="1" class="md-skip"> Skip to content </a>
+  <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid">
+    <div class="md-flex navheader">
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <a href="../index.html" title="0.0.0"
+           class="md-header-nav__button md-logo">
+          
+              <img src="../_static/logo.svg" height="26"
+                   alt="0.0.0 logo">
+          
+        </a>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--menu md-header-nav__button" for="__drawer"></label>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch">
+        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
+          <span class="md-header-nav__topic">msdss-models-api</span>
+          <span class="md-header-nav__topic"> managers </span>
+        </div>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
+        
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" action="../search.html" method="get" name="search">
+      <input type="text" class="md-search__input" name="q" placeholder="Search"
+             autocapitalize="off" autocomplete="off" spellcheck="false"
+             data-md-component="query" data-md-state="active">
+      <label class="md-icon md-search__icon" for="__search"></label>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
+        &#xE5CD;
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="result">
+          <div class="md-search-result__meta">
+            Type to start searching
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+      </div>
+      
+        <div class="md-flex__cell md-flex__cell--shrink">
+          <div class="md-header-nav__source">
+            <a href="https://github.com/rrwen/msdss-models-api/" title="Go to repository" class="md-source" data-md-source="github">
+
+    <div class="md-source__icon">
+      <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 24 24" width="28" height="28">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    msdss-models-api
+  </div>
+</a>
+          </div>
+        </div>
+      
+      
+  
+  <script src="../_static/javascripts/version_dropdown.js"></script>
+  <script>
+    var json_loc = "../"versions.json"",
+        target_loc = "../../",
+        text = "Versions";
+    $( document ).ready( add_version_dropdown(json_loc, target_loc, text));
+  </script>
+  
+
+    </div>
+  </nav>
+</header>
+
+  
+  <div class="md-container">
+    
+    
+    
+  <nav class="md-tabs" data-md-component="tabs">
+    <div class="md-tabs__inner md-grid">
+      <ul class="md-tabs__list">
+          <li class="md-tabs__item"><a href="../index.html" class="md-tabs__link">0.0.0</a></li>
+          <li class="md-tabs__item"><a href="index.html" class="md-tabs__link">API Reference</a></li>
+      </ul>
+    </div>
+  </nav>
+    <main class="md-main">
+      <div class="md-main__inner md-grid" data-md-component="container">
+        
+          <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+            <div class="md-sidebar__scrollwrap">
+              <div class="md-sidebar__inner">
+                <nav class="md-nav md-nav--primary" data-md-level="0">
+  <label class="md-nav__title md-nav__title--site" for="__drawer">
+    <a href="../index.html" title="0.0.0" class="md-nav__button md-logo">
+      
+        <img src="../_static/logo.svg" alt=" logo" width="48" height="48">
+      
+    </a>
+    <a href="../index.html"
+       title="0.0.0">msdss-models-api</a>
+  </label>
+    <div class="md-nav__source">
+      <a href="https://github.com/rrwen/msdss-models-api/" title="Go to repository" class="md-source" data-md-source="github">
+
+    <div class="md-source__icon">
+      <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 24 24" width="28" height="28">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    msdss-models-api
+  </div>
+</a>
+    </div>
+  
+  
+
+  
+  <ul class="md-nav__list">
+    <li class="md-nav__item">
+    
+    
+      <a href="../install.html" class="md-nav__link">Install</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="../quickstart.html" class="md-nav__link">Quick Start</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="../howitworks.html" class="md-nav__link">How it Works</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="index.html" class="md-nav__link">API Reference</a>
+      
+    
+    </li>
+  </ul>
+  
+
+</nav>
+              </div>
+            </div>
+          </div>
+          <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+            <div class="md-sidebar__scrollwrap">
+              <div class="md-sidebar__inner">
+                
+<nav class="md-nav md-nav--secondary">
+    <label class="md-nav__title" for="__toc">Contents</label>
+  <ul class="md-nav__list" data-md-scrollfix="">
+        <li class="md-nav__item"><a href="#reference-managers--page-root" class="md-nav__link">managers</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#modelsmanager" class="md-nav__link">ModelsManager</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#get-file" class="md-nav__link">_get_file</a>
+        </li>
+        <li class="md-nav__item"><a href="#get-folder" class="md-nav__link">_get_folder</a>
+        </li>
+        <li class="md-nav__item"><a href="#get-save-file" class="md-nav__link">_get_save_file</a>
+        </li>
+        <li class="md-nav__item"><a href="#load-base" class="md-nav__link">_load_base</a>
+        </li>
+        <li class="md-nav__item"><a href="#create" class="md-nav__link">create</a>
+        </li>
+        <li class="md-nav__item"><a href="#delete" class="md-nav__link">delete</a>
+        </li>
+        <li class="md-nav__item"><a href="#get" class="md-nav__link">get</a>
+        </li>
+        <li class="md-nav__item"><a href="#input" class="md-nav__link">input</a>
+        </li>
+        <li class="md-nav__item"><a href="#load" class="md-nav__link">load</a>
+        </li>
+        <li class="md-nav__item"><a href="#output" class="md-nav__link">output</a>
+        </li>
+        <li class="md-nav__item"><a href="#update" class="md-nav__link">update</a>
+        </li></ul>
+            </nav>
+        </li>
+        <li class="md-nav__item"><a href="#modelsbackgroundmanager" class="md-nav__link">ModelsBackgroundManager</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#add-model-task" class="md-nav__link">_add_model_task</a>
+        </li>
+        <li class="md-nav__item"><a href="#cancel" class="md-nav__link">cancel</a>
+        </li>
+        <li class="md-nav__item"><a href="#id1" class="md-nav__link">delete</a>
+        </li>
+        <li class="md-nav__item"><a href="#get-status" class="md-nav__link">get_status</a>
+        </li>
+        <li class="md-nav__item"><a href="#id4" class="md-nav__link">input</a>
+        </li>
+        <li class="md-nav__item"><a href="#id5" class="md-nav__link">load</a>
+        </li>
+        <li class="md-nav__item"><a href="#id6" class="md-nav__link">output</a>
+        </li>
+        <li class="md-nav__item"><a href="#start" class="md-nav__link">start</a>
+        </li>
+        <li class="md-nav__item"><a href="#id7" class="md-nav__link">update</a>
+        </li></ul>
+            </nav>
+        </li></ul>
+            </nav>
+        </li>
+    
+<li class="md-nav__item"><a class="md-nav__extra_link" href="../_sources/reference/managers.rst.txt">Show Source</a> </li>
+
+<li id="searchbox" class="md-nav__item"></li>
+
+  </ul>
+</nav>
+              </div>
+            </div>
+          </div>
+        
+        <div class="md-content">
+          <article class="md-content__inner md-typeset" role="main">
+            
+  <section id="module-msdss_models_api.managers">
+<span id="managers"></span><h1 id="reference-managers--page-root">managers<a class="headerlink" href="#reference-managers--page-root" title="Permalink to this headline">¶</a></h1>
+<section id="modelsmanager">
+<h2 id="modelsmanager">ModelsManager<a class="headerlink" href="#modelsmanager" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="msdss_models_api.managers.ModelsManager">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">msdss_models_api.managers.</span></span><span class="sig-name descname"><span class="pre">ModelsManager</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">models</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">folder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'./models'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">handler</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">suffix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'_base.pickle'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msdss_models_api/managers.html#ModelsManager"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msdss_models_api.managers.ModelsManager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class to manage <a class="reference internal" href="models.html#msdss_models_api.models.Model" title="msdss_models_api.models.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">msdss_models_api.models.Model</span></code></a> objects.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>models</strong> (list(<a class="reference internal" href="models.html#msdss_models_api.models.Model" title="msdss_models_api.models.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">msdss_models_api.models.Model</span></code></a>)) – List of available <code class="docutils literal notranslate"><span class="pre">Model</span></code> objects to use for creating and managing model instances.
+Ensure that the class names are unique, otherwise the last object takes priority.</p></li>
+<li><p><strong>folder</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – The folder path to store models in. The folder will be created if it does not exist.</p></li>
+<li><p><strong>handler</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">msdss_models_api.handlers.ModelsHandler</span></code>) – Handler object to manage model operations.</p></li>
+<li><p><strong>suffix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Suffix for pickled model object files. These files contain the model objects without inputs or loading.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="msdss_models_api.managers.ModelsManager.models">
+<span class="sig-name descname"><span class="pre">models</span></span><a class="headerlink" href="#msdss_models_api.managers.ModelsManager.models" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dictionary of available models from parameter <code class="docutils literal notranslate"><span class="pre">models</span></code>, where:</p>
+<ul class="simple">
+<li><p>Each key is the class name</p></li>
+<li><p>Each value is the class itself</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>dict(<a class="reference internal" href="models.html#msdss_models_api.models.Model" title="msdss_models_api.models.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">msdss_models_api.models.Model</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="msdss_models_api.managers.ModelsManager.instances">
+<span class="sig-name descname"><span class="pre">instances</span></span><a class="headerlink" href="#msdss_models_api.managers.ModelsManager.instances" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dictionary of loaded model instances created from method <code class="docutils literal notranslate"><span class="pre">create</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>dict(<a class="reference internal" href="models.html#msdss_models_api.models.Model" title="msdss_models_api.models.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">msdss_models_api.models.Model</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="msdss_models_api.managers.ModelsManager.folder">
+<span class="sig-name descname"><span class="pre">folder</span></span><a class="headerlink" href="#msdss_models_api.managers.ModelsManager.folder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Same as parameter <code class="docutils literal notranslate"><span class="pre">folder</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="msdss_models_api.managers.ModelsManager.handler">
+<span class="sig-name descname"><span class="pre">handler</span></span><a class="headerlink" href="#msdss_models_api.managers.ModelsManager.handler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Same as parameter <code class="docutils literal notranslate"><span class="pre">handler</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">msdss_models_api.handlers.ModelsHandler</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="msdss_models_api.managers.ModelsManager.suffix">
+<span class="sig-name descname"><span class="pre">suffix</span></span><a class="headerlink" href="#msdss_models_api.managers.ModelsManager.suffix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Same as parameter <code class="docutils literal notranslate"><span class="pre">suffix</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+<p class="rubric">Author</p>
+<p>Richard Wen &lt;<a class="reference external" href="mailto:rrwen.dev%40gmail.com">rrwen<span>.</span>dev<span>@</span>gmail<span>.</span>com</a>&gt;</p>
+<p class="rubric">Example</p>
+<div class="jupyter_cell jupyter_container docutils container">
+<div class="cell_input code_cell docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">tempfile</span>
+<span class="kn">from</span> <span class="nn">msdss_models_api.models</span> <span class="kn">import</span> <span class="n">Model</span>
+<span class="kn">from</span> <span class="nn">msdss_models_api.managers</span> <span class="kn">import</span> <span class="n">ModelsManager</span>
+
+<span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryDirectory</span><span class="p">()</span> <span class="k">as</span> <span class="n">folder_path</span><span class="p">:</span>
+
+    <span class="c1"># Setup available models</span>
+    <span class="n">models</span> <span class="o">=</span> <span class="p">[</span><span class="n">Model</span><span class="p">]</span>
+
+    <span class="c1"># Create manager</span>
+    <span class="n">models_manager</span> <span class="o">=</span> <span class="n">ModelsManager</span><span class="p">(</span><span class="n">models</span><span class="p">,</span> <span class="n">folder</span><span class="o">=</span><span class="n">folder_path</span><span class="p">)</span>
+
+    <span class="c1"># Create model instance</span>
+    <span class="n">models_manager</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s1">'temp_model'</span><span class="p">,</span> <span class="s1">'Model'</span><span class="p">)</span>
+
+    <span class="c1"># Initialize a model instance with inputs</span>
+    <span class="n">train_data</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">{</span><span class="s1">'col_a'</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">'col_b'</span><span class="p">:</span> <span class="s1">'a'</span><span class="p">},</span>
+        <span class="p">{</span><span class="s1">'col_a'</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">'col_b'</span><span class="p">:</span> <span class="s1">'b'</span><span class="p">}</span>
+    <span class="p">]</span>
+    <span class="n">models_manager</span><span class="o">.</span><span class="n">input</span><span class="p">(</span><span class="s1">'temp_model'</span><span class="p">,</span> <span class="n">train_data</span><span class="p">)</span>
+
+    <span class="c1"># Update model instance with new data</span>
+    <span class="n">new_data</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">{</span><span class="s1">'col_a'</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">'col_b'</span><span class="p">:</span> <span class="s1">'c'</span><span class="p">},</span>
+        <span class="p">{</span><span class="s1">'col_a'</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">'col_b'</span><span class="p">:</span> <span class="s1">'d'</span><span class="p">}</span>
+    <span class="p">]</span>
+    <span class="n">models_manager</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="s1">'temp_model'</span><span class="p">,</span> <span class="n">new_data</span><span class="p">)</span>
+
+    <span class="c1"># Produce output from a model instance</span>
+    <span class="n">test_data</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">{</span><span class="s1">'col_a'</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">'col_b'</span><span class="p">:</span> <span class="s1">'c'</span><span class="p">},</span>
+        <span class="p">{</span><span class="s1">'col_a'</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">'col_b'</span><span class="p">:</span> <span class="s1">'d'</span><span class="p">}</span>
+    <span class="p">]</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="n">models_manager</span><span class="o">.</span><span class="n">output</span><span class="p">(</span><span class="s1">'temp_model'</span><span class="p">,</span> <span class="n">test_data</span><span class="p">)</span>
+
+    <span class="c1"># Delete model instance</span>
+    <span class="n">models_manager</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s1">'temp_model'</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+</div>
+</div>
+</dd></dl>
+<section id="get-file">
+<h3 id="get-file">_get_file<a class="headerlink" href="#get-file" title="Permalink to this headline">¶</a></h3>
+<dl class="py method">
+<dt class="sig sig-object py" id="msdss_models_api.managers.ModelsManager._get_file">
+<span class="sig-prename descclassname"><span class="pre">ModelsManager.</span></span><span class="sig-name descname"><span class="pre">_get_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msdss_models_api/managers.html#ModelsManager._get_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msdss_models_api.managers.ModelsManager._get_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the path of the base file for the model instance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Unique name of the model instance. The instance is stored in <code class="docutils literal notranslate"><span class="pre">.instances[name]</span></code>.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>File path for the base file of the model instance.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a></p>
+</dd>
+</dl>
+<p class="rubric">Author</p>
+<p>Richard Wen &lt;<a class="reference external" href="mailto:rrwen.dev%40gmail.com">rrwen<span>.</span>dev<span>@</span>gmail<span>.</span>com</a>&gt;</p>
+<p class="rubric">Example</p>
+<div class="jupyter_cell jupyter_container docutils container">
+<div class="cell_input code_cell docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">tempfile</span>
+<span class="kn">from</span> <span class="nn">msdss_models_api.models</span> <span class="kn">import</span> <span class="n">Model</span>
+<span class="kn">from</span> <span class="nn">msdss_models_api.managers</span> <span class="kn">import</span> <span class="n">ModelsManager</span>
+
+<span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryDirectory</span><span class="p">()</span> <span class="k">as</span> <span class="n">folder_path</span><span class="p">:</span>
+
+    <span class="c1"># Setup available models</span>
+    <span class="n">models</span> <span class="o">=</span> <span class="p">[</span><span class="n">Model</span><span class="p">]</span>
+
+    <span class="c1"># Create manager</span>
+    <span class="n">models_manager</span> <span class="o">=</span> <span class="n">ModelsManager</span><span class="p">(</span><span class="n">models</span><span class="p">,</span> <span class="n">folder</span><span class="o">=</span><span class="n">folder_path</span><span class="p">)</span>
+
+    <span class="c1"># Create model instance</span>
+    <span class="n">models_manager</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s1">'temp_model'</span><span class="p">,</span> <span class="s1">'Model'</span><span class="p">)</span>
+
+    <span class="c1"># Delete model instance</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="n">models_manager</span><span class="o">.</span><span class="n">_get_file</span><span class="p">(</span><span class="s1">'temp_model'</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+</div>
+</div>
+</dd></dl>
+</section>
+<section id="get-folder">
+<h3 id="get-folder">_get_folder<a class="headerlink" href="#get-folder" title="Permalink to this headline">¶</a></h3>
+<dl class="py method">
+<dt class="sig sig-object py" id="msdss_models_api.managers.ModelsManager._get_folder">
+<span class="sig-prename descclassname"><span class="pre">ModelsManager.</span></span><span class="sig-name descname"><span class="pre">_get_folder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msdss_models_api/managers.html#ModelsManager._get_folder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msdss_models_api.managers.ModelsManager._get_folder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the path of the subfolder for the model instance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Unique name of the model instance. The instance is stored in <code class="docutils literal notranslate"><span class="pre">.instances[name]</span></code>.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>File path for the subfolder of the model instance.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a></p>
+</dd>
+</dl>
+<p class="rubric">Author</p>
+<p>Richard Wen &lt;<a class="reference external" href="mailto:rrwen.dev%40gmail.com">rrwen<span>.</span>dev<span>@</span>gmail<span>.</span>com</a>&gt;</p>
+<p class="rubric">Example</p>
+<div class="jupyter_cell jupyter_container docutils container">
+<div class="cell_input code_cell docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">tempfile</span>
+<span class="kn">from</span> <span class="nn">msdss_models_api.models</span> <span class="kn">import</span> <span class="n">Model</span>
+<span class="kn">from</span> <span class="nn">msdss_models_api.managers</span> <span class="kn">import</span> <span class="n">ModelsManager</span>
+
+<span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryDirectory</span><span class="p">()</span> <span class="k">as</span> <span class="n">folder_path</span><span class="p">:</span>
+
+    <span class="c1"># Setup available models</span>
+    <span class="n">models</span> <span class="o">=</span> <span class="p">[</span><span class="n">Model</span><span class="p">]</span>
+
+    <span class="c1"># Create manager</span>
+    <span class="n">models_manager</span> <span class="o">=</span> <span class="n">ModelsManager</span><span class="p">(</span><span class="n">models</span><span class="p">,</span> <span class="n">folder</span><span class="o">=</span><span class="n">folder_path</span><span class="p">)</span>
+
+    <span class="c1"># Create model instance</span>
+    <span class="n">models_manager</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s1">'temp_model'</span><span class="p">,</span> <span class="s1">'Model'</span><span class="p">)</span>
+
+    <span class="c1"># Delete model instance</span>
+    <span class="n">folder_path</span> <span class="o">=</span> <span class="n">models_manager</span><span class="o">.</span><span class="n">_get_folder</span><span class="p">(</span><span class="s1">'temp_model'</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+</div>
+</div>
+</dd></dl>
+</section>
+<section id="get-save-file">
+<h3 id="get-save-file">_get_save_file<a class="headerlink" href="#get-save-file" title="Permalink to this headline">¶</a></h3>
+<dl class="py method">
+<dt class="sig sig-object py" id="msdss_models_api.managers.ModelsManager._get_save_file">
+<span class="sig-prename descclassname"><span class="pre">ModelsManager.</span></span><span class="sig-name descname"><span class="pre">_get_save_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msdss_models_api/managers.html#ModelsManager._get_save_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msdss_models_api.managers.ModelsManager._get_save_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the path of the save file for the model instance without the extension.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Unique name of the model instance. The instance is stored in <code class="docutils literal notranslate"><span class="pre">.instances[name]</span></code>.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>File path for the save file of the model instance. Does not include extension.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a></p>
+</dd>
+</dl>
+<p class="rubric">Author</p>
+<p>Richard Wen &lt;<a class="reference external" href="mailto:rrwen.dev%40gmail.com">rrwen<span>.</span>dev<span>@</span>gmail<span>.</span>com</a>&gt;</p>
+<p class="rubric">Example</p>
+<div class="jupyter_cell jupyter_container docutils container">
+<div class="cell_input code_cell docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">tempfile</span>
+<span class="kn">from</span> <span class="nn">msdss_models_api.models</span> <span class="kn">import</span> <span class="n">Model</span>
+<span class="kn">from</span> <span class="nn">msdss_models_api.managers</span> <span class="kn">import</span> <span class="n">ModelsManager</span>
+
+<span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryDirectory</span><span class="p">()</span> <span class="k">as</span> <span class="n">folder_path</span><span class="p">:</span>
+
+    <span class="c1"># Setup available models</span>
+    <span class="n">models</span> <span class="o">=</span> <span class="p">[</span><span class="n">Model</span><span class="p">]</span>
+
+    <span class="c1"># Create manager</span>
+    <span class="n">models_manager</span> <span class="o">=</span> <span class="n">ModelsManager</span><span class="p">(</span><span class="n">models</span><span class="p">,</span> <span class="n">folder</span><span class="o">=</span><span class="n">folder_path</span><span class="p">)</span>
+
+    <span class="c1"># Create model instance</span>
+    <span class="n">models_manager</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s1">'temp_model'</span><span class="p">,</span> <span class="s1">'Model'</span><span class="p">)</span>
+
+    <span class="c1"># Delete model instance</span>
+    <span class="n">save_path</span> <span class="o">=</span> <span class="n">models_manager</span><span class="o">.</span><span class="n">_get_save_file</span><span class="p">(</span><span class="s1">'temp_model'</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+</div>
+</div>
+</dd></dl>
+</section>
+<section id="load-base">
+<h3 id="load-base">_load_base<a class="headerlink" href="#load-base" title="Permalink to this headline">¶</a></h3>
+<dl class="py method">
+<dt class="sig sig-object py" id="msdss_models_api.managers.ModelsManager._load_base">
+<span class="sig-prename descclassname"><span class="pre">ModelsManager.</span></span><span class="sig-name descname"><span class="pre">_load_base</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msdss_models_api/managers.html#ModelsManager._load_base"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msdss_models_api.managers.ModelsManager._load_base" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load all base models.</p>
+<p>Sets attribute <code class="docutils literal notranslate"><span class="pre">.instances</span></code> to be initialized <a class="reference internal" href="models.html#msdss_models_api.models.Model" title="msdss_models_api.models.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">msdss_models_api.models.Model</span></code></a> instances based on the subfolders in attribute <code class="docutils literal notranslate"><span class="pre">folders</span></code></p>
+<p class="rubric">Author</p>
+<p>Richard Wen &lt;<a class="reference external" href="mailto:rrwen.dev%40gmail.com">rrwen<span>.</span>dev<span>@</span>gmail<span>.</span>com</a>&gt;</p>
+<p class="rubric">Example</p>
+<div class="jupyter_cell jupyter_container docutils container">
+<div class="cell_input code_cell docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">tempfile</span>
+<span class="kn">from</span> <span class="nn">msdss_models_api.models</span> <span class="kn">import</span> <span class="n">Model</span>
+<span class="kn">from</span> <span class="nn">msdss_models_api.managers</span> <span class="kn">import</span> <span class="n">ModelsManager</span>
+
+<span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryDirectory</span><span class="p">()</span> <span class="k">as</span> <span class="n">folder_path</span><span class="p">:</span>
+
+    <span class="c1"># Setup available models</span>
+    <span class="n">models</span> <span class="o">=</span> <span class="p">[</span><span class="n">Model</span><span class="p">]</span>
+
+    <span class="c1"># Create manager</span>
+    <span class="n">models_manager</span> <span class="o">=</span> <span class="n">ModelsManager</span><span class="p">(</span><span class="n">models</span><span class="p">,</span> <span class="n">folder</span><span class="o">=</span><span class="n">folder_path</span><span class="p">)</span>
+
+    <span class="c1"># Create model instance</span>
+    <span class="n">models_manager</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s1">'temp_model'</span><span class="p">,</span> <span class="s1">'Model'</span><span class="p">)</span>
+
+    <span class="c1"># Load all base models</span>
+    <span class="n">models_manager</span><span class="o">.</span><span class="n">_load_base</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+</div>
+</div>
+</dd></dl>
+</section>
+<section id="create">
+<h3 id="create">create<a class="headerlink" href="#create" title="Permalink to this headline">¶</a></h3>
+<dl class="py method">
+<dt class="sig sig-object py" id="msdss_models_api.managers.ModelsManager.create">
+<span class="sig-prename descclassname"><span class="pre">ModelsManager.</span></span><span class="sig-name descname"><span class="pre">create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">settings</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msdss_models_api/managers.html#ModelsManager.create"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msdss_models_api.managers.ModelsManager.create" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a model instance.</p>
+<ul class="simple">
+<li><p>Stores the instance in attribute <code class="docutils literal notranslate"><span class="pre">instances</span></code></p></li>
+<li><p>Creates a subfolder and base model file for the instance</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Unique name of the model instance. The instance is stored in <code class="docutils literal notranslate"><span class="pre">.instances[name]</span></code>.</p></li>
+<li><p><strong>model</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Name of the model to use for the instance. This is the same as the class name from attribute</p></li>
+<li><p><strong>settings</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a>) – Settings to be passed to <a class="reference internal" href="models.html#msdss_models_api.models.Model" title="msdss_models_api.models.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">msdss_models_api.models.Model</span></code></a> to instantiate the instance.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Author</p>
+<p>Richard Wen &lt;<a class="reference external" href="mailto:rrwen.dev%40gmail.com">rrwen<span>.</span>dev<span>@</span>gmail<span>.</span>com</a>&gt;</p>
+<p class="rubric">Example</p>
+<div class="jupyter_cell jupyter_container docutils container">
+<div class="cell_input code_cell docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">tempfile</span>
+<span class="kn">from</span> <span class="nn">msdss_models_api.models</span> <span class="kn">import</span> <span class="n">Model</span>
+<span class="kn">from</span> <span class="nn">msdss_models_api.managers</span> <span class="kn">import</span> <span class="n">ModelsManager</span>
+
+<span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryDirectory</span><span class="p">()</span> <span class="k">as</span> <span class="n">folder_path</span><span class="p">:</span>
+
+    <span class="c1"># Setup available models</span>
+    <span class="n">models</span> <span class="o">=</span> <span class="p">[</span><span class="n">Model</span><span class="p">]</span>
+
+    <span class="c1"># Create manager</span>
+    <span class="n">models_manager</span> <span class="o">=</span> <span class="n">ModelsManager</span><span class="p">(</span><span class="n">models</span><span class="p">,</span> <span class="n">folder</span><span class="o">=</span><span class="n">folder_path</span><span class="p">)</span>
+
+    <span class="c1"># Create model instance</span>
+    <span class="n">models_manager</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s1">'temp_model'</span><span class="p">,</span> <span class="s1">'Model'</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+</div>
+</div>
+</dd></dl>
+</section>
+<section id="delete">
+<h3 id="delete">delete<a class="headerlink" href="#delete" title="Permalink to this headline">¶</a></h3>
+<dl class="py method">
+<dt class="sig sig-object py" id="msdss_models_api.managers.ModelsManager.delete">
+<span class="sig-prename descclassname"><span class="pre">ModelsManager.</span></span><span class="sig-name descname"><span class="pre">delete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">settings</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msdss_models_api/managers.html#ModelsManager.delete"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msdss_models_api.managers.ModelsManager.delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a model instance.</p>
+<ul class="simple">
+<li><p>Removes the instance in attribute <code class="docutils literal notranslate"><span class="pre">instances</span></code></p></li>
+<li><p>Removes the subfolder and base model file for the instance</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Unique name of the model instance. The instance is stored in <code class="docutils literal notranslate"><span class="pre">.instances[name]</span></code>.</p></li>
+<li><p><strong>settings</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a>) – Settings to be passed to <a class="reference internal" href="models.html#msdss_models_api.models.Model.delete" title="msdss_models_api.models.Model.delete"><code class="xref py py-meth docutils literal notranslate"><span class="pre">msdss_models_api.models.Model.delete()</span></code></a>.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Author</p>
+<p>Richard Wen &lt;<a class="reference external" href="mailto:rrwen.dev%40gmail.com">rrwen<span>.</span>dev<span>@</span>gmail<span>.</span>com</a>&gt;</p>
+<p class="rubric">Example</p>
+<div class="jupyter_cell jupyter_container docutils container">
+<div class="cell_input code_cell docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">tempfile</span>
+<span class="kn">from</span> <span class="nn">msdss_models_api.models</span> <span class="kn">import</span> <span class="n">Model</span>
+<span class="kn">from</span> <span class="nn">msdss_models_api.managers</span> <span class="kn">import</span> <span class="n">ModelsManager</span>
+
+<span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryDirectory</span><span class="p">()</span> <span class="k">as</span> <span class="n">folder_path</span><span class="p">:</span>
+
+    <span class="c1"># Setup available models</span>
+    <span class="n">models</span> <span class="o">=</span> <span class="p">[</span><span class="n">Model</span><span class="p">]</span>
+
+    <span class="c1"># Create manager</span>
+    <span class="n">models_manager</span> <span class="o">=</span> <span class="n">ModelsManager</span><span class="p">(</span><span class="n">models</span><span class="p">,</span> <span class="n">folder</span><span class="o">=</span><span class="n">folder_path</span><span class="p">)</span>
+
+    <span class="c1"># Create model instance</span>
+    <span class="n">models_manager</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s1">'temp_model'</span><span class="p">,</span> <span class="s1">'Model'</span><span class="p">)</span>
+
+    <span class="c1"># Initialize a model instance with inputs</span>
+    <span class="n">train_data</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">{</span><span class="s1">'col_a'</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">'col_b'</span><span class="p">:</span> <span class="s1">'a'</span><span class="p">},</span>
+        <span class="p">{</span><span class="s1">'col_a'</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">'col_b'</span><span class="p">:</span> <span class="s1">'b'</span><span class="p">}</span>
+    <span class="p">]</span>
+    <span class="n">models_manager</span><span class="o">.</span><span class="n">input</span><span class="p">(</span><span class="s1">'temp_model'</span><span class="p">,</span> <span class="n">train_data</span><span class="p">)</span>
+
+    <span class="c1"># Delete model instance</span>
+    <span class="n">models_manager</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s1">'temp_model'</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+</div>
+</div>
+</dd></dl>
+</section>
+<section id="get">
+<h3 id="get">get<a class="headerlink" href="#get" title="Permalink to this headline">¶</a></h3>
+<dl class="py method">
+<dt class="sig sig-object py" id="msdss_models_api.managers.ModelsManager.get">
+<span class="sig-prename descclassname"><span class="pre">ModelsManager.</span></span><span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msdss_models_api/managers.html#ModelsManager.get"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msdss_models_api.managers.ModelsManager.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a model instance by name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Unique name of the model instance. The instance is stored in <code class="docutils literal notranslate"><span class="pre">.instances[name]</span></code>.</p>
+</dd>
+</dl>
+<p class="rubric">Author</p>
+<p>Richard Wen &lt;<a class="reference external" href="mailto:rrwen.dev%40gmail.com">rrwen<span>.</span>dev<span>@</span>gmail<span>.</span>com</a>&gt;</p>
+<p class="rubric">Example</p>
+<div class="jupyter_cell jupyter_container docutils container">
+<div class="cell_input code_cell docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">tempfile</span>
+<span class="kn">from</span> <span class="nn">msdss_models_api.models</span> <span class="kn">import</span> <span class="n">Model</span>
+<span class="kn">from</span> <span class="nn">msdss_models_api.managers</span> <span class="kn">import</span> <span class="n">ModelsManager</span>
+
+<span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryDirectory</span><span class="p">()</span> <span class="k">as</span> <span class="n">folder_path</span><span class="p">:</span>
+
+    <span class="c1"># Setup available models</span>
+    <span class="n">models</span> <span class="o">=</span> <span class="p">[</span><span class="n">Model</span><span class="p">]</span>
+
+    <span class="c1"># Create manager</span>
+    <span class="n">models_manager</span> <span class="o">=</span> <span class="n">ModelsManager</span><span class="p">(</span><span class="n">models</span><span class="p">,</span> <span class="n">folder</span><span class="o">=</span><span class="n">folder_path</span><span class="p">)</span>
+
+    <span class="c1"># Create model instance</span>
+    <span class="n">models_manager</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s1">'temp_model'</span><span class="p">,</span> <span class="s1">'Model'</span><span class="p">)</span>
+
+    <span class="c1"># Delete model instance</span>
+    <span class="n">models_manager</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'temp_model'</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+</div>
+</div>
+</dd></dl>
+</section>
+<section id="input">
+<h3 id="input">input<a class="headerlink" href="#input" title="Permalink to this headline">¶</a></h3>
+<dl class="py method">
+<dt class="sig sig-object py" id="msdss_models_api.managers.ModelsManager.input">
+<span class="sig-prename descclassname"><span class="pre">ModelsManager.</span></span><span class="sig-name descname"><span class="pre">input</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">settings</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msdss_models_api/managers.html#ModelsManager.input"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msdss_models_api.managers.ModelsManager.input" title="Permalink to this definition">¶</a></dt>
+<dd><p>Train an initial model instance and save it by adding input data.</p>
+<ul class="simple">
+<li><p>Modifies <code class="docutils literal notranslate"><span class="pre">.instance[name]</span></code> by calling the <code class="docutils literal notranslate"><span class="pre">input</span></code> and <code class="docutils literal notranslate"><span class="pre">save</span></code> methods</p></li>
+<li><p>Modifies <code class="docutils literal notranslate"><span class="pre">.states[name]</span></code> with action and results for inputting data into the model instance</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Unique name of the model instance. The instance is stored in <code class="docutils literal notranslate"><span class="pre">.instances[name]</span></code>.</p></li>
+<li><p><strong>data</strong> (dict or list or <code class="xref py py-class docutils literal notranslate"><span class="pre">pandas:pandas.DataFrame</span></code>) – Data to use for initializing the model instance. Should accept a <code class="docutils literal notranslate"><span class="pre">list</span></code> or <code class="docutils literal notranslate"><span class="pre">dict</span></code> to be input in a <code class="xref py py-class docutils literal notranslate"><span class="pre">pandas:pandas.DataFrame</span></code> or the dataframe itself.</p></li>
+<li><p><strong>settings</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a>) – Keyword arguments passed to the <a class="reference internal" href="models.html#msdss_models_api.models.Model.input" title="msdss_models_api.models.Model.input"><code class="xref py py-meth docutils literal notranslate"><span class="pre">msdss_models_api.models.Model.input()</span></code></a>.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Author</p>
+<p>Richard Wen &lt;<a class="reference external" href="mailto:rrwen.dev%40gmail.com">rrwen<span>.</span>dev<span>@</span>gmail<span>.</span>com</a>&gt;</p>
+<p class="rubric">Example</p>
+<div class="jupyter_cell jupyter_container docutils container">
+<div class="cell_input code_cell docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">tempfile</span>
+<span class="kn">from</span> <span class="nn">msdss_models_api.models</span> <span class="kn">import</span> <span class="n">Model</span>
+<span class="kn">from</span> <span class="nn">msdss_models_api.managers</span> <span class="kn">import</span> <span class="n">ModelsManager</span>
+
+<span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryDirectory</span><span class="p">()</span> <span class="k">as</span> <span class="n">folder_path</span><span class="p">:</span>
+
+    <span class="c1"># Setup available models</span>
+    <span class="n">models</span> <span class="o">=</span> <span class="p">[</span><span class="n">Model</span><span class="p">]</span>
+
+    <span class="c1"># Create manager</span>
+    <span class="n">models_manager</span> <span class="o">=</span> <span class="n">ModelsManager</span><span class="p">(</span><span class="n">models</span><span class="p">,</span> <span class="n">folder</span><span class="o">=</span><span class="n">folder_path</span><span class="p">)</span>
+
+    <span class="c1"># Create model instance</span>
+    <span class="n">models_manager</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s1">'temp_model'</span><span class="p">,</span> <span class="s1">'Model'</span><span class="p">)</span>
+
+    <span class="c1"># Initialize a model instance with inputs</span>
+    <span class="n">train_data</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">{</span><span class="s1">'col_a'</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">'col_b'</span><span class="p">:</span> <span class="s1">'a'</span><span class="p">},</span>
+        <span class="p">{</span><span class="s1">'col_a'</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">'col_b'</span><span class="p">:</span> <span class="s1">'b'</span><span class="p">}</span>
+    <span class="p">]</span>
+    <span class="n">models_manager</span><span class="o">.</span><span class="n">input</span><span class="p">(</span><span class="s1">'temp_model'</span><span class="p">,</span> <span class="n">train_data</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+</div>
+</div>
+</dd></dl>
+</section>
+<section id="load">
+<h3 id="load">load<a class="headerlink" href="#load" title="Permalink to this headline">¶</a></h3>
+<dl class="py method">
+<dt class="sig sig-object py" id="msdss_models_api.managers.ModelsManager.load">
+<span class="sig-prename descclassname"><span class="pre">ModelsManager.</span></span><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">settings</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msdss_models_api/managers.html#ModelsManager.load"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msdss_models_api.managers.ModelsManager.load" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load a model instance if the save exists and has not changed from last loaded instance.</p>
+<ul class="simple">
+<li><p>Modifies <code class="docutils literal notranslate"><span class="pre">.instance[name]</span></code> by calling the <code class="docutils literal notranslate"><span class="pre">load</span></code> method</p></li>
+<li><p>Modifies <code class="docutils literal notranslate"><span class="pre">.states[name]</span></code> with action and results for loading the model instance</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Unique name of the model instance. The instance is stored in <code class="docutils literal notranslate"><span class="pre">.instances[name]</span></code>.</p></li>
+<li><p><strong>settings</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a>) – Keyword arguments passed to the <a class="reference internal" href="models.html#msdss_models_api.models.Model.load" title="msdss_models_api.models.Model.load"><code class="xref py py-meth docutils literal notranslate"><span class="pre">msdss_models_api.models.Model.load()</span></code></a>.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Author</p>
+<p>Richard Wen &lt;<a class="reference external" href="mailto:rrwen.dev%40gmail.com">rrwen<span>.</span>dev<span>@</span>gmail<span>.</span>com</a>&gt;</p>
+<p class="rubric">Example</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">tempfile</span>
+<span class="kn">from</span> <span class="nn">msdss_models_api.models</span> <span class="kn">import</span> <span class="n">Model</span>
+<span class="kn">from</span> <span class="nn">msdss_models_api.managers</span> <span class="kn">import</span> <span class="n">ModelsManager</span>
+
+<span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryDirectory</span><span class="p">()</span> <span class="k">as</span> <span class="n">folder_path</span><span class="p">:</span>
+
+    <span class="c1"># Setup available models</span>
+    <span class="n">models</span> <span class="o">=</span> <span class="p">[</span><span class="n">Model</span><span class="p">]</span>
+
+    <span class="c1"># Create manager</span>
+    <span class="n">models_manager</span> <span class="o">=</span> <span class="n">ModelsManager</span><span class="p">(</span><span class="n">models</span><span class="p">,</span> <span class="n">folder</span><span class="o">=</span><span class="n">folder_path</span><span class="p">)</span>
+
+    <span class="c1"># Create model instance</span>
+    <span class="n">models_manager</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s1">'temp_model'</span><span class="p">,</span> <span class="s1">'Model'</span><span class="p">)</span>
+
+    <span class="c1"># Initialize a model instance with inputs</span>
+    <span class="n">train_data</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">{</span><span class="s1">'col_a'</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">'col_b'</span><span class="p">:</span> <span class="s1">'a'</span><span class="p">},</span>
+        <span class="p">{</span><span class="s1">'col_a'</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">'col_b'</span><span class="p">:</span> <span class="s1">'b'</span><span class="p">}</span>
+    <span class="p">]</span>
+    <span class="n">models_manager</span><span class="o">.</span><span class="n">input</span><span class="p">(</span><span class="s1">'temp_model'</span><span class="p">,</span> <span class="n">train_data</span><span class="p">)</span>
+
+    <span class="c1"># Load model instance if possible</span>
+    <span class="n">models_manager</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">'temp_model'</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+</section>
+<section id="output">
+<h3 id="output">output<a class="headerlink" href="#output" title="Permalink to this headline">¶</a></h3>
+<dl class="py method">
+<dt class="sig sig-object py" id="msdss_models_api.managers.ModelsManager.output">
+<span class="sig-prename descclassname"><span class="pre">ModelsManager.</span></span><span class="sig-name descname"><span class="pre">output</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">settings</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">load_settings</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msdss_models_api/managers.html#ModelsManager.output"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msdss_models_api.managers.ModelsManager.output" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the output of a model instance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Unique name of the model instance. The instance is stored in <code class="docutils literal notranslate"><span class="pre">.instances[name]</span></code>.</p></li>
+<li><p><strong>data</strong> (dict or list or <code class="xref py py-class docutils literal notranslate"><span class="pre">pandas:pandas.DataFrame</span></code>) – Data to use for obtaining the model instance output. Should accept a <code class="docutils literal notranslate"><span class="pre">list</span></code> or <code class="docutils literal notranslate"><span class="pre">dict</span></code> to be input in a <code class="xref py py-class docutils literal notranslate"><span class="pre">pandas:pandas.DataFrame</span></code> or the dataframe itself.</p></li>
+<li><p><strong>settings</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a>) – Keyword arguments passed to the <a class="reference internal" href="models.html#msdss_models_api.models.Model.output" title="msdss_models_api.models.Model.output"><code class="xref py py-meth docutils literal notranslate"><span class="pre">msdss_models_api.models.Model.output()</span></code></a>.</p></li>
+<li><p><strong>load_settings</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a>) – Keyword arguments passed to the <a class="reference internal" href="models.html#msdss_models_api.models.Model.load" title="msdss_models_api.models.Model.load"><code class="xref py py-meth docutils literal notranslate"><span class="pre">msdss_models_api.models.Model.load()</span></code></a>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Output data from the <code class="docutils literal notranslate"><span class="pre">name</span></code> model instance using the input data from parameter <code class="docutils literal notranslate"><span class="pre">data</span></code>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">pandas:pandas.DataFrame</span></code></p>
+</dd>
+</dl>
+<p class="rubric">Author</p>
+<p>Richard Wen &lt;<a class="reference external" href="mailto:rrwen.dev%40gmail.com">rrwen<span>.</span>dev<span>@</span>gmail<span>.</span>com</a>&gt;</p>
+<p class="rubric">Example</p>
+<div class="jupyter_cell jupyter_container docutils container">
+<div class="cell_input code_cell docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">tempfile</span>
+<span class="kn">from</span> <span class="nn">msdss_models_api.models</span> <span class="kn">import</span> <span class="n">Model</span>
+<span class="kn">from</span> <span class="nn">msdss_models_api.managers</span> <span class="kn">import</span> <span class="n">ModelsManager</span>
+
+<span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryDirectory</span><span class="p">()</span> <span class="k">as</span> <span class="n">folder_path</span><span class="p">:</span>
+
+    <span class="c1"># Setup available models</span>
+    <span class="n">models</span> <span class="o">=</span> <span class="p">[</span><span class="n">Model</span><span class="p">]</span>
+
+    <span class="c1"># Create manager</span>
+    <span class="n">models_manager</span> <span class="o">=</span> <span class="n">ModelsManager</span><span class="p">(</span><span class="n">models</span><span class="p">,</span> <span class="n">folder</span><span class="o">=</span><span class="n">folder_path</span><span class="p">)</span>
+
+    <span class="c1"># Create model instance</span>
+    <span class="n">models_manager</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s1">'temp_model'</span><span class="p">,</span> <span class="s1">'Model'</span><span class="p">)</span>
+
+    <span class="c1"># Initialize a model instance with inputs</span>
+    <span class="n">train_data</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">{</span><span class="s1">'col_a'</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">'col_b'</span><span class="p">:</span> <span class="s1">'a'</span><span class="p">},</span>
+        <span class="p">{</span><span class="s1">'col_a'</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">'col_b'</span><span class="p">:</span> <span class="s1">'b'</span><span class="p">}</span>
+    <span class="p">]</span>
+    <span class="n">models_manager</span><span class="o">.</span><span class="n">input</span><span class="p">(</span><span class="s1">'temp_model'</span><span class="p">,</span> <span class="n">train_data</span><span class="p">)</span>
+
+    <span class="c1"># Produce output from a model instance</span>
+    <span class="n">test_data</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">{</span><span class="s1">'col_a'</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">'col_b'</span><span class="p">:</span> <span class="s1">'c'</span><span class="p">},</span>
+        <span class="p">{</span><span class="s1">'col_a'</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">'col_b'</span><span class="p">:</span> <span class="s1">'d'</span><span class="p">}</span>
+    <span class="p">]</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="n">models_manager</span><span class="o">.</span><span class="n">output</span><span class="p">(</span><span class="s1">'temp_model'</span><span class="p">,</span> <span class="n">test_data</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+</div>
+</div>
+</dd></dl>
+</section>
+<section id="update">
+<h3 id="update">update<a class="headerlink" href="#update" title="Permalink to this headline">¶</a></h3>
+<dl class="py method">
+<dt class="sig sig-object py" id="msdss_models_api.managers.ModelsManager.update">
+<span class="sig-prename descclassname"><span class="pre">ModelsManager.</span></span><span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">settings</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">load_settings</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msdss_models_api/managers.html#ModelsManager.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msdss_models_api.managers.ModelsManager.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update a model instance with new data.</p>
+<ul class="simple">
+<li><p>Modifies <code class="docutils literal notranslate"><span class="pre">.instance[name]</span></code> by calling the <code class="docutils literal notranslate"><span class="pre">update</span></code> and <code class="docutils literal notranslate"><span class="pre">save</span></code> methods</p></li>
+<li><p>Modifies <code class="docutils literal notranslate"><span class="pre">.states[name]</span></code> with action and results for updating the model instance</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Unique name of the model instance. The instance is stored in <code class="docutils literal notranslate"><span class="pre">.instances[name]</span></code>.</p></li>
+<li><p><strong>data</strong> (dict or list or <code class="xref py py-class docutils literal notranslate"><span class="pre">pandas:pandas.DataFrame</span></code>) – Data to use for updating the model instance. Should accept a <code class="docutils literal notranslate"><span class="pre">list</span></code> or <code class="docutils literal notranslate"><span class="pre">dict</span></code> to be input in a <code class="xref py py-class docutils literal notranslate"><span class="pre">pandas:pandas.DataFrame</span></code> or the dataframe itself.</p></li>
+<li><p><strong>settings</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a>) – Keyword arguments passed to the <a class="reference internal" href="models.html#msdss_models_api.models.Model.update" title="msdss_models_api.models.Model.update"><code class="xref py py-meth docutils literal notranslate"><span class="pre">msdss_models_api.models.Model.update()</span></code></a>.</p></li>
+<li><p><strong>load_settings</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a>) – Keyword arguments passed to the <a class="reference internal" href="models.html#msdss_models_api.models.Model.load" title="msdss_models_api.models.Model.load"><code class="xref py py-meth docutils literal notranslate"><span class="pre">msdss_models_api.models.Model.load()</span></code></a>.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Author</p>
+<p>Richard Wen &lt;<a class="reference external" href="mailto:rrwen.dev%40gmail.com">rrwen<span>.</span>dev<span>@</span>gmail<span>.</span>com</a>&gt;</p>
+<p class="rubric">Example</p>
+<div class="jupyter_cell jupyter_container docutils container">
+<div class="cell_input code_cell docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">tempfile</span>
+<span class="kn">from</span> <span class="nn">msdss_models_api.models</span> <span class="kn">import</span> <span class="n">Model</span>
+<span class="kn">from</span> <span class="nn">msdss_models_api.managers</span> <span class="kn">import</span> <span class="n">ModelsManager</span>
+
+<span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryDirectory</span><span class="p">()</span> <span class="k">as</span> <span class="n">folder_path</span><span class="p">:</span>
+
+    <span class="c1"># Setup available models</span>
+    <span class="n">models</span> <span class="o">=</span> <span class="p">[</span><span class="n">Model</span><span class="p">]</span>
+
+    <span class="c1"># Create manager</span>
+    <span class="n">models_manager</span> <span class="o">=</span> <span class="n">ModelsManager</span><span class="p">(</span><span class="n">models</span><span class="p">,</span> <span class="n">folder</span><span class="o">=</span><span class="n">folder_path</span><span class="p">)</span>
+
+    <span class="c1"># Create model instance</span>
+    <span class="n">models_manager</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s1">'temp_model'</span><span class="p">,</span> <span class="s1">'Model'</span><span class="p">)</span>
+
+    <span class="c1"># Initialize a model instance with inputs</span>
+    <span class="n">train_data</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">{</span><span class="s1">'col_a'</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">'col_b'</span><span class="p">:</span> <span class="s1">'a'</span><span class="p">},</span>
+        <span class="p">{</span><span class="s1">'col_a'</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">'col_b'</span><span class="p">:</span> <span class="s1">'b'</span><span class="p">}</span>
+    <span class="p">]</span>
+    <span class="n">models_manager</span><span class="o">.</span><span class="n">input</span><span class="p">(</span><span class="s1">'temp_model'</span><span class="p">,</span> <span class="n">train_data</span><span class="p">)</span>
+
+    <span class="c1"># Update model instance with new data</span>
+    <span class="n">new_data</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">{</span><span class="s1">'col_a'</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">'col_b'</span><span class="p">:</span> <span class="s1">'c'</span><span class="p">},</span>
+        <span class="p">{</span><span class="s1">'col_a'</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">'col_b'</span><span class="p">:</span> <span class="s1">'d'</span><span class="p">}</span>
+    <span class="p">]</span>
+    <span class="n">models_manager</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="s1">'temp_model'</span><span class="p">,</span> <span class="n">new_data</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+</div>
+</div>
+</dd></dl>
+</section>
+</section>
+<section id="modelsbackgroundmanager">
+<h2 id="modelsbackgroundmanager">ModelsBackgroundManager<a class="headerlink" href="#modelsbackgroundmanager" title="Permalink to this headline">¶</a></h2>
+<section id="add-model-task">
+<h3 id="add-model-task">_add_model_task<a class="headerlink" href="#add-model-task" title="Permalink to this headline">¶</a></h3>
+<dl class="py method">
+<dt class="sig sig-object py" id="msdss_models_api.managers.ModelsBackgroundManager._add_model_task">
+<span class="sig-prename descclassname"><span class="pre">ModelsBackgroundManager.</span></span><span class="sig-name descname"><span class="pre">_add_model_task</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msdss_models_api/managers.html#ModelsBackgroundManager._add_model_task"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msdss_models_api.managers.ModelsBackgroundManager._add_model_task" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a background task for a model instance.</p>
+<ul class="simple">
+<li><p>Sets attribute <code class="docutils literal notranslate"><span class="pre">.states</span></code> with a key referring to the model instance <code class="docutils literal notranslate"><span class="pre">name</span></code></p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>task</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – The name of the task in attribute <code class="docutils literal notranslate"><span class="pre">.tasks</span></code>.</p></li>
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – The name of the model instance to add tasks for.</p></li>
+<li><p><strong>*args</strong> – Additional arguments passed to the associated task function in attribute <code class="docutils literal notranslate"><span class="pre">.tasks</span></code>.</p></li>
+<li><p><strong>**kwargs</strong> – Additional arguments passed to the associated task function in attribute <code class="docutils literal notranslate"><span class="pre">.tasks</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Author</p>
+<p>Richard Wen &lt;<a class="reference external" href="mailto:rrwen.dev%40gmail.com">rrwen<span>.</span>dev<span>@</span>gmail<span>.</span>com</a>&gt;</p>
+<p class="rubric">Example</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">tempfile</span>
+<span class="kn">from</span> <span class="nn">celery</span> <span class="kn">import</span> <span class="n">Celery</span>
+<span class="kn">from</span> <span class="nn">msdss_models_api.models</span> <span class="kn">import</span> <span class="n">Model</span>
+<span class="kn">from</span> <span class="nn">msdss_models_api.managers</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryDirectory</span><span class="p">()</span> <span class="k">as</span> <span class="n">folder_path</span><span class="p">:</span>
+
+    <span class="c1"># Setup available models</span>
+    <span class="n">models</span> <span class="o">=</span> <span class="p">[</span><span class="n">Model</span><span class="p">]</span>
+
+    <span class="c1"># Create manager</span>
+    <span class="n">models_manager</span> <span class="o">=</span> <span class="n">ModelsManager</span><span class="p">(</span><span class="n">models</span><span class="p">,</span> <span class="n">folder</span><span class="o">=</span><span class="n">folder_path</span><span class="p">)</span>
+
+    <span class="c1"># Create model instance</span>
+    <span class="n">models_manager</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s1">'temp_model'</span><span class="p">,</span> <span class="s1">'Model'</span><span class="p">)</span>
+
+    <span class="c1"># Create background manager</span>
+    <span class="n">worker</span> <span class="o">=</span> <span class="n">Celery</span><span class="p">(</span><span class="n">broker</span><span class="o">=</span><span class="s1">'amqp://msdss:msdss123@localhost:5672'</span><span class="p">,</span> <span class="n">backend</span><span class="o">=</span><span class="s1">'rpc://'</span><span class="p">)</span> <span class="c1"># rabbitmq</span>
+    <span class="n">bg_manager</span> <span class="o">=</span> <span class="n">ModelsBackgroundManager</span><span class="p">(</span><span class="n">worker</span><span class="p">,</span> <span class="n">models_manager</span><span class="p">)</span>
+
+    <span class="c1"># Initialize a model instance with inputs as a background process</span>
+    <span class="n">train_data</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">{</span><span class="s1">'col_a'</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">'col_b'</span><span class="p">:</span> <span class="s1">'a'</span><span class="p">},</span>
+        <span class="p">{</span><span class="s1">'col_a'</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">'col_b'</span><span class="p">:</span> <span class="s1">'b'</span><span class="p">}</span>
+    <span class="p">]</span>
+    <span class="n">bg_manager</span><span class="o">.</span><span class="n">_add_model_task</span><span class="p">(</span><span class="s1">'input'</span><span class="p">,</span> <span class="s1">'temp_model'</span><span class="p">,</span> <span class="n">train_data</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+</section>
+<section id="cancel">
+<h3 id="cancel">cancel<a class="headerlink" href="#cancel" title="Permalink to this headline">¶</a></h3>
+<dl class="py method">
+<dt class="sig sig-object py" id="msdss_models_api.managers.ModelsBackgroundManager.cancel">
+<span class="sig-prename descclassname"><span class="pre">ModelsBackgroundManager.</span></span><span class="sig-name descname"><span class="pre">cancel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msdss_models_api/managers.html#ModelsBackgroundManager.cancel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msdss_models_api.managers.ModelsBackgroundManager.cancel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cancel background task for model instance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – The name of the model instance to cancel tasks for.</p>
+</dd>
+</dl>
+<p class="rubric">Author</p>
+<p>Richard Wen &lt;<a class="reference external" href="mailto:rrwen.dev%40gmail.com">rrwen<span>.</span>dev<span>@</span>gmail<span>.</span>com</a>&gt;</p>
+<p class="rubric">Example</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">tempfile</span>
+<span class="kn">from</span> <span class="nn">celery</span> <span class="kn">import</span> <span class="n">Celery</span>
+<span class="kn">from</span> <span class="nn">msdss_models_api.models</span> <span class="kn">import</span> <span class="n">Model</span>
+<span class="kn">from</span> <span class="nn">msdss_models_api.managers</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryDirectory</span><span class="p">()</span> <span class="k">as</span> <span class="n">folder_path</span><span class="p">:</span>
+
+    <span class="c1"># Setup available models</span>
+    <span class="n">models</span> <span class="o">=</span> <span class="p">[</span><span class="n">Model</span><span class="p">]</span>
+
+    <span class="c1"># Create manager</span>
+    <span class="n">models_manager</span> <span class="o">=</span> <span class="n">ModelsManager</span><span class="p">(</span><span class="n">models</span><span class="p">,</span> <span class="n">folder</span><span class="o">=</span><span class="n">folder_path</span><span class="p">)</span>
+
+    <span class="c1"># Create model instance</span>
+    <span class="n">models_manager</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s1">'temp_model'</span><span class="p">,</span> <span class="s1">'Model'</span><span class="p">)</span>
+
+    <span class="c1"># Create background manager</span>
+    <span class="n">worker</span> <span class="o">=</span> <span class="n">Celery</span><span class="p">(</span><span class="n">broker</span><span class="o">=</span><span class="s1">'amqp://msdss:msdss123@localhost:5672'</span><span class="p">,</span> <span class="n">backend</span><span class="o">=</span><span class="s1">'rpc://'</span><span class="p">)</span> <span class="c1"># rabbitmq</span>
+    <span class="n">bg_manager</span> <span class="o">=</span> <span class="n">ModelsBackgroundManager</span><span class="p">(</span><span class="n">worker</span><span class="p">,</span> <span class="n">models_manager</span><span class="p">)</span>
+
+    <span class="c1"># Initialize a model instance with inputs as a background process</span>
+    <span class="n">train_data</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">{</span><span class="s1">'col_a'</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">'col_b'</span><span class="p">:</span> <span class="s1">'a'</span><span class="p">},</span>
+        <span class="p">{</span><span class="s1">'col_a'</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">'col_b'</span><span class="p">:</span> <span class="s1">'b'</span><span class="p">}</span>
+    <span class="p">]</span>
+    <span class="n">bg_manager</span><span class="o">.</span><span class="n">input</span><span class="p">(</span><span class="s1">'temp_model'</span><span class="p">,</span> <span class="n">train_data</span><span class="p">)</span>
+
+    <span class="c1"># Cancel any bg tasks for model instance</span>
+    <span class="n">bg_manager</span><span class="o">.</span><span class="n">cancel</span><span class="p">(</span><span class="s1">'temp_model'</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+</section>
+<section id="id1">
+<h3 id="id1">delete<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<dl class="py method">
+<dt class="sig sig-object py" id="msdss_models_api.managers.ModelsBackgroundManager.delete">
+<span class="sig-prename descclassname"><span class="pre">ModelsBackgroundManager.</span></span><span class="sig-name descname"><span class="pre">delete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msdss_models_api/managers.html#ModelsBackgroundManager.delete"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msdss_models_api.managers.ModelsBackgroundManager.delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete a model instance and stop any associated background tasks.</p>
+<ul class="simple">
+<li><p>Runs <a class="reference internal" href="#msdss_models_api.managers.ModelsManager.delete" title="msdss_models_api.managers.ModelsManager.delete"><code class="xref py py-meth docutils literal notranslate"><span class="pre">msdss_models_api.managers.ModelsManager.delete()</span></code></a> and <a class="reference internal" href="#msdss_models_api.managers.ModelsBackgroundManager.cancel" title="msdss_models_api.managers.ModelsBackgroundManager.cancel"><code class="xref py py-meth docutils literal notranslate"><span class="pre">msdss_models_api.managers.ModelsBackgroundManager.cancel()</span></code></a></p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – See parameter <code class="docutils literal notranslate"><span class="pre">name</span></code> in <a class="reference internal" href="#msdss_models_api.managers.ModelsManager.delete" title="msdss_models_api.managers.ModelsManager.delete"><code class="xref py py-meth docutils literal notranslate"><span class="pre">msdss_models_api.managers.ModelsManager.delete()</span></code></a>.</p></li>
+<li><p><strong>*args</strong> – Additional arguments passed to <a class="reference internal" href="#msdss_models_api.managers.ModelsManager.delete" title="msdss_models_api.managers.ModelsManager.delete"><code class="xref py py-meth docutils literal notranslate"><span class="pre">msdss_models_api.managers.ModelsManager.delete()</span></code></a>.</p></li>
+<li><p><strong>**kwargs</strong> – Additional arguments passed to <a class="reference internal" href="#msdss_models_api.managers.ModelsManager.delete" title="msdss_models_api.managers.ModelsManager.delete"><code class="xref py py-meth docutils literal notranslate"><span class="pre">msdss_models_api.managers.ModelsManager.delete()</span></code></a>.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Author</p>
+<p>Richard Wen &lt;<a class="reference external" href="mailto:rrwen.dev%40gmail.com">rrwen<span>.</span>dev<span>@</span>gmail<span>.</span>com</a>&gt;</p>
+<p class="rubric">Example</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">tempfile</span>
+<span class="kn">from</span> <span class="nn">celery</span> <span class="kn">import</span> <span class="n">Celery</span>
+<span class="kn">from</span> <span class="nn">msdss_models_api.models</span> <span class="kn">import</span> <span class="n">Model</span>
+<span class="kn">from</span> <span class="nn">msdss_models_api.managers</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryDirectory</span><span class="p">()</span> <span class="k">as</span> <span class="n">folder_path</span><span class="p">:</span>
+
+    <span class="c1"># Setup available models</span>
+    <span class="n">models</span> <span class="o">=</span> <span class="p">[</span><span class="n">Model</span><span class="p">]</span>
+
+    <span class="c1"># Create manager</span>
+    <span class="n">models_manager</span> <span class="o">=</span> <span class="n">ModelsManager</span><span class="p">(</span><span class="n">models</span><span class="p">,</span> <span class="n">folder</span><span class="o">=</span><span class="n">folder_path</span><span class="p">)</span>
+
+    <span class="c1"># Create model instance</span>
+    <span class="n">models_manager</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s1">'temp_model'</span><span class="p">,</span> <span class="s1">'Model'</span><span class="p">)</span>
+
+    <span class="c1"># Create background manager</span>
+    <span class="n">worker</span> <span class="o">=</span> <span class="n">Celery</span><span class="p">(</span><span class="n">broker</span><span class="o">=</span><span class="s1">'amqp://msdss:msdss123@localhost:5672'</span><span class="p">,</span> <span class="n">backend</span><span class="o">=</span><span class="s1">'rpc://'</span><span class="p">)</span> <span class="c1"># rabbitmq</span>
+    <span class="n">bg_manager</span> <span class="o">=</span> <span class="n">ModelsBackgroundManager</span><span class="p">(</span><span class="n">worker</span><span class="p">,</span> <span class="n">models_manager</span><span class="p">)</span>
+
+    <span class="c1"># Initialize a model instance with inputs as a background process</span>
+    <span class="n">train_data</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">{</span><span class="s1">'col_a'</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">'col_b'</span><span class="p">:</span> <span class="s1">'a'</span><span class="p">},</span>
+        <span class="p">{</span><span class="s1">'col_a'</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">'col_b'</span><span class="p">:</span> <span class="s1">'b'</span><span class="p">}</span>
+    <span class="p">]</span>
+    <span class="n">bg_manager</span><span class="o">.</span><span class="n">input</span><span class="p">(</span><span class="s1">'temp_model'</span><span class="p">,</span> <span class="n">train_data</span><span class="p">)</span>
+
+    <span class="c1"># Delete the model instance and any associated bg tasks</span>
+    <span class="n">bg_manager</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s1">'temp_model'</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+</section>
+<section id="get-status">
+<h3 id="get-status">get_status<a class="headerlink" href="#get-status" title="Permalink to this headline">¶</a></h3>
+<dl class="py method">
+<dt class="sig sig-object py" id="msdss_models_api.managers.ModelsBackgroundManager.get_status">
+<span class="sig-prename descclassname"><span class="pre">ModelsBackgroundManager.</span></span><span class="sig-name descname"><span class="pre">get_status</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msdss_models_api/managers.html#ModelsBackgroundManager.get_status"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msdss_models_api.managers.ModelsBackgroundManager.get_status" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the status of a model instance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – See parameter <code class="docutils literal notranslate"><span class="pre">name</span></code> in <a class="reference internal" href="#msdss_models_api.managers.ModelsManager.load" title="msdss_models_api.managers.ModelsManager.load"><code class="xref py py-meth docutils literal notranslate"><span class="pre">msdss_models_api.managers.ModelsManager.load()</span></code></a>.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>A dictionary representing the status of the model instance with <code class="docutils literal notranslate"><span class="pre">name</span></code>, containing the following keys:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">task</span></code> (str): the processing task of the model instance</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">status</span></code> (str): the processing status of the model instance</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">started_at</span></code> (:class:<a href="#id2"><span class="problematic" id="id3">`</span></a>datetime.datetime): when the process was started</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)">dict</a></p>
+</dd>
+</dl>
+<p class="rubric">Author</p>
+<p>Richard Wen &lt;<a class="reference external" href="mailto:rrwen.dev%40gmail.com">rrwen<span>.</span>dev<span>@</span>gmail<span>.</span>com</a>&gt;</p>
+<p class="rubric">Example</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">tempfile</span>
+<span class="kn">from</span> <span class="nn">celery</span> <span class="kn">import</span> <span class="n">Celery</span>
+<span class="kn">from</span> <span class="nn">msdss_models_api.models</span> <span class="kn">import</span> <span class="n">Model</span>
+<span class="kn">from</span> <span class="nn">msdss_models_api.managers</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span>
+
+<span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryDirectory</span><span class="p">()</span> <span class="k">as</span> <span class="n">folder_path</span><span class="p">:</span>
+
+    <span class="c1"># Setup available models</span>
+    <span class="n">models</span> <span class="o">=</span> <span class="p">[</span><span class="n">Model</span><span class="p">]</span>
+
+    <span class="c1"># Create manager</span>
+    <span class="n">models_manager</span> <span class="o">=</span> <span class="n">ModelsManager</span><span class="p">(</span><span class="n">models</span><span class="p">,</span> <span class="n">folder</span><span class="o">=</span><span class="n">folder_path</span><span class="p">)</span>
+
+    <span class="c1"># Create model instance</span>
+    <span class="n">models_manager</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s1">'temp_model'</span><span class="p">,</span> <span class="s1">'Model'</span><span class="p">)</span>
+
+    <span class="c1"># Create background manager</span>
+    <span class="n">worker</span> <span class="o">=</span> <span class="n">Celery</span><span class="p">(</span><span class="n">broker</span><span class="o">=</span><span class="s1">'amqp://msdss:msdss123@localhost:5672'</span><span class="p">,</span> <span class="n">backend</span><span class="o">=</span><span class="s1">'rpc://'</span><span class="p">)</span> <span class="c1"># rabbitmq</span>
+    <span class="n">bg_manager</span> <span class="o">=</span> <span class="n">ModelsBackgroundManager</span><span class="p">(</span><span class="n">worker</span><span class="p">,</span> <span class="n">models_manager</span><span class="p">)</span>
+
+    <span class="c1"># Initialize a model instance with inputs as a background process</span>
+    <span class="n">train_data</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">{</span><span class="s1">'col_a'</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">'col_b'</span><span class="p">:</span> <span class="s1">'a'</span><span class="p">},</span>
+        <span class="p">{</span><span class="s1">'col_a'</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">'col_b'</span><span class="p">:</span> <span class="s1">'b'</span><span class="p">}</span>
+    <span class="p">]</span>
+    <span class="n">bg_manager</span><span class="o">.</span><span class="n">input</span><span class="p">(</span><span class="s1">'temp_model'</span><span class="p">,</span> <span class="n">train_data</span><span class="p">)</span>
+
+    <span class="c1"># Get the status of the model instance</span>
+    <span class="n">status</span> <span class="o">=</span> <span class="n">bg_manager</span><span class="o">.</span><span class="n">get_status</span><span class="p">(</span><span class="s1">'temp_model'</span><span class="p">)</span>
+    <span class="n">pprint</span><span class="p">(</span><span class="n">status</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+</section>
+<section id="id4">
+<h3 id="id4">input<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<dl class="py method">
+<dt class="sig sig-object py" id="msdss_models_api.managers.ModelsBackgroundManager.input">
+<span class="sig-prename descclassname"><span class="pre">ModelsBackgroundManager.</span></span><span class="sig-name descname"><span class="pre">input</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msdss_models_api/managers.html#ModelsBackgroundManager.input"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msdss_models_api.managers.ModelsBackgroundManager.input" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize a model instance with data as a background task.</p>
+<p>Runs <a class="reference internal" href="#msdss_models_api.managers.ModelsManager.input" title="msdss_models_api.managers.ModelsManager.input"><code class="xref py py-meth docutils literal notranslate"><span class="pre">msdss_models_api.managers.ModelsManager.input()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – See parameter <code class="docutils literal notranslate"><span class="pre">name</span></code> in <a class="reference internal" href="#msdss_models_api.managers.ModelsManager.input" title="msdss_models_api.managers.ModelsManager.input"><code class="xref py py-meth docutils literal notranslate"><span class="pre">msdss_models_api.managers.ModelsManager.input()</span></code></a>.</p></li>
+<li><p><strong>*args</strong> – Additional arguments passed to the <a class="reference internal" href="#msdss_models_api.managers.ModelsManager.input" title="msdss_models_api.managers.ModelsManager.input"><code class="xref py py-meth docutils literal notranslate"><span class="pre">msdss_models_api.managers.ModelsManager.input()</span></code></a>.</p></li>
+<li><p><strong>**kwargs</strong> – Additional arguments passed to the <a class="reference internal" href="#msdss_models_api.managers.ModelsManager.input" title="msdss_models_api.managers.ModelsManager.input"><code class="xref py py-meth docutils literal notranslate"><span class="pre">msdss_models_api.managers.ModelsManager.input()</span></code></a>.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Author</p>
+<p>Richard Wen &lt;<a class="reference external" href="mailto:rrwen.dev%40gmail.com">rrwen<span>.</span>dev<span>@</span>gmail<span>.</span>com</a>&gt;</p>
+<p class="rubric">Example</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">tempfile</span>
+<span class="kn">from</span> <span class="nn">celery</span> <span class="kn">import</span> <span class="n">Celery</span>
+<span class="kn">from</span> <span class="nn">msdss_models_api.models</span> <span class="kn">import</span> <span class="n">Model</span>
+<span class="kn">from</span> <span class="nn">msdss_models_api.managers</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryDirectory</span><span class="p">()</span> <span class="k">as</span> <span class="n">folder_path</span><span class="p">:</span>
+
+    <span class="c1"># Setup available models</span>
+    <span class="n">models</span> <span class="o">=</span> <span class="p">[</span><span class="n">Model</span><span class="p">]</span>
+
+    <span class="c1"># Create manager</span>
+    <span class="n">models_manager</span> <span class="o">=</span> <span class="n">ModelsManager</span><span class="p">(</span><span class="n">models</span><span class="p">,</span> <span class="n">folder</span><span class="o">=</span><span class="n">folder_path</span><span class="p">)</span>
+
+    <span class="c1"># Create model instance</span>
+    <span class="n">models_manager</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s1">'temp_model'</span><span class="p">,</span> <span class="s1">'Model'</span><span class="p">)</span>
+
+    <span class="c1"># Create background manager</span>
+    <span class="n">worker</span> <span class="o">=</span> <span class="n">Celery</span><span class="p">(</span><span class="n">broker</span><span class="o">=</span><span class="s1">'amqp://msdss:msdss123@localhost:5672'</span><span class="p">,</span> <span class="n">backend</span><span class="o">=</span><span class="s1">'rpc://'</span><span class="p">)</span> <span class="c1"># rabbitmq</span>
+    <span class="n">bg_manager</span> <span class="o">=</span> <span class="n">ModelsBackgroundManager</span><span class="p">(</span><span class="n">worker</span><span class="p">,</span> <span class="n">models_manager</span><span class="p">)</span>
+
+    <span class="c1"># Initialize a model instance with inputs as a background process</span>
+    <span class="n">train_data</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">{</span><span class="s1">'col_a'</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">'col_b'</span><span class="p">:</span> <span class="s1">'a'</span><span class="p">},</span>
+        <span class="p">{</span><span class="s1">'col_a'</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">'col_b'</span><span class="p">:</span> <span class="s1">'b'</span><span class="p">}</span>
+    <span class="p">]</span>
+    <span class="n">bg_manager</span><span class="o">.</span><span class="n">input</span><span class="p">(</span><span class="s1">'temp_model'</span><span class="p">,</span> <span class="n">train_data</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+</section>
+<section id="id5">
+<h3 id="id5">load<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
+<dl class="py method">
+<dt class="sig sig-object py" id="msdss_models_api.managers.ModelsBackgroundManager.load">
+<span class="sig-prename descclassname"><span class="pre">ModelsBackgroundManager.</span></span><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msdss_models_api/managers.html#ModelsBackgroundManager.load"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msdss_models_api.managers.ModelsBackgroundManager.load" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load a model instance, only if the instance is not processing.</p>
+<p>Runs <a class="reference internal" href="#msdss_models_api.managers.ModelsManager.load" title="msdss_models_api.managers.ModelsManager.load"><code class="xref py py-meth docutils literal notranslate"><span class="pre">msdss_models_api.managers.ModelsManager.load()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – See parameter <code class="docutils literal notranslate"><span class="pre">name</span></code> in <a class="reference internal" href="#msdss_models_api.managers.ModelsManager.load" title="msdss_models_api.managers.ModelsManager.load"><code class="xref py py-meth docutils literal notranslate"><span class="pre">msdss_models_api.managers.ModelsManager.load()</span></code></a>.</p></li>
+<li><p><strong>*args</strong> – Additional arguments passed to the <a class="reference internal" href="#msdss_models_api.managers.ModelsManager.load" title="msdss_models_api.managers.ModelsManager.load"><code class="xref py py-meth docutils literal notranslate"><span class="pre">msdss_models_api.managers.ModelsManager.load()</span></code></a>.</p></li>
+<li><p><strong>**kwargs</strong> – Additional arguments passed to the <a class="reference internal" href="#msdss_models_api.managers.ModelsManager.load" title="msdss_models_api.managers.ModelsManager.load"><code class="xref py py-meth docutils literal notranslate"><span class="pre">msdss_models_api.managers.ModelsManager.load()</span></code></a>.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Author</p>
+<p>Richard Wen &lt;<a class="reference external" href="mailto:rrwen.dev%40gmail.com">rrwen<span>.</span>dev<span>@</span>gmail<span>.</span>com</a>&gt;</p>
+<p class="rubric">Example</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">tempfile</span>
+<span class="kn">from</span> <span class="nn">celery</span> <span class="kn">import</span> <span class="n">Celery</span>
+<span class="kn">from</span> <span class="nn">msdss_models_api.models</span> <span class="kn">import</span> <span class="n">Model</span>
+<span class="kn">from</span> <span class="nn">msdss_models_api.managers</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryDirectory</span><span class="p">()</span> <span class="k">as</span> <span class="n">folder_path</span><span class="p">:</span>
+
+    <span class="c1"># Setup available models</span>
+    <span class="n">models</span> <span class="o">=</span> <span class="p">[</span><span class="n">Model</span><span class="p">]</span>
+
+    <span class="c1"># Create manager</span>
+    <span class="n">models_manager</span> <span class="o">=</span> <span class="n">ModelsManager</span><span class="p">(</span><span class="n">models</span><span class="p">,</span> <span class="n">folder</span><span class="o">=</span><span class="n">folder_path</span><span class="p">)</span>
+
+    <span class="c1"># Create model instance</span>
+    <span class="n">models_manager</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s1">'temp_model'</span><span class="p">,</span> <span class="s1">'Model'</span><span class="p">)</span>
+
+    <span class="c1"># Create background manager</span>
+    <span class="n">worker</span> <span class="o">=</span> <span class="n">Celery</span><span class="p">(</span><span class="n">broker</span><span class="o">=</span><span class="s1">'amqp://msdss:msdss123@localhost:5672'</span><span class="p">,</span> <span class="n">backend</span><span class="o">=</span><span class="s1">'rpc://'</span><span class="p">)</span> <span class="c1"># rabbitmq</span>
+    <span class="n">bg_manager</span> <span class="o">=</span> <span class="n">ModelsBackgroundManager</span><span class="p">(</span><span class="n">worker</span><span class="p">,</span> <span class="n">models_manager</span><span class="p">)</span>
+
+    <span class="c1"># Initialize a model instance with inputs as a background process</span>
+    <span class="n">train_data</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">{</span><span class="s1">'col_a'</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">'col_b'</span><span class="p">:</span> <span class="s1">'a'</span><span class="p">},</span>
+        <span class="p">{</span><span class="s1">'col_a'</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">'col_b'</span><span class="p">:</span> <span class="s1">'b'</span><span class="p">}</span>
+    <span class="p">]</span>
+    <span class="n">bg_manager</span><span class="o">.</span><span class="n">input</span><span class="p">(</span><span class="s1">'temp_model'</span><span class="p">,</span> <span class="n">train_data</span><span class="p">)</span>
+
+    <span class="c1"># Load model instance as a background process</span>
+    <span class="n">bg_manager</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">'temp_model'</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+</section>
+<section id="id6">
+<h3 id="id6">output<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
+<dl class="py method">
+<dt class="sig sig-object py" id="msdss_models_api.managers.ModelsBackgroundManager.output">
+<span class="sig-prename descclassname"><span class="pre">ModelsBackgroundManager.</span></span><span class="sig-name descname"><span class="pre">output</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msdss_models_api/managers.html#ModelsBackgroundManager.output"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msdss_models_api.managers.ModelsBackgroundManager.output" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get output from a model, only if a model is not processing.</p>
+<p>Runs <a class="reference internal" href="#msdss_models_api.managers.ModelsManager.output" title="msdss_models_api.managers.ModelsManager.output"><code class="xref py py-meth docutils literal notranslate"><span class="pre">msdss_models_api.managers.ModelsManager.output()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – See parameter <code class="docutils literal notranslate"><span class="pre">name</span></code> in <a class="reference internal" href="#msdss_models_api.managers.ModelsManager.output" title="msdss_models_api.managers.ModelsManager.output"><code class="xref py py-meth docutils literal notranslate"><span class="pre">msdss_models_api.managers.ModelsManager.output()</span></code></a>.</p></li>
+<li><p><strong>*args</strong> – Additional arguments passed to the <a class="reference internal" href="#msdss_models_api.managers.ModelsManager.output" title="msdss_models_api.managers.ModelsManager.output"><code class="xref py py-meth docutils literal notranslate"><span class="pre">msdss_models_api.managers.ModelsManager.output()</span></code></a>.</p></li>
+<li><p><strong>**kwargs</strong> – Additional arguments passed to the <a class="reference internal" href="#msdss_models_api.managers.ModelsManager.output" title="msdss_models_api.managers.ModelsManager.output"><code class="xref py py-meth docutils literal notranslate"><span class="pre">msdss_models_api.managers.ModelsManager.output()</span></code></a>.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Author</p>
+<p>Richard Wen &lt;<a class="reference external" href="mailto:rrwen.dev%40gmail.com">rrwen<span>.</span>dev<span>@</span>gmail<span>.</span>com</a>&gt;</p>
+<p class="rubric">Example</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">tempfile</span>
+<span class="kn">from</span> <span class="nn">celery</span> <span class="kn">import</span> <span class="n">Celery</span>
+<span class="kn">from</span> <span class="nn">msdss_models_api.models</span> <span class="kn">import</span> <span class="n">Model</span>
+<span class="kn">from</span> <span class="nn">msdss_models_api.managers</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryDirectory</span><span class="p">()</span> <span class="k">as</span> <span class="n">folder_path</span><span class="p">:</span>
+
+    <span class="c1"># Setup available models</span>
+    <span class="n">models</span> <span class="o">=</span> <span class="p">[</span><span class="n">Model</span><span class="p">]</span>
+
+    <span class="c1"># Create manager</span>
+    <span class="n">models_manager</span> <span class="o">=</span> <span class="n">ModelsManager</span><span class="p">(</span><span class="n">models</span><span class="p">,</span> <span class="n">folder</span><span class="o">=</span><span class="n">folder_path</span><span class="p">)</span>
+
+    <span class="c1"># Create model instance</span>
+    <span class="n">models_manager</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s1">'temp_model'</span><span class="p">,</span> <span class="s1">'Model'</span><span class="p">)</span>
+
+    <span class="c1"># Create background manager</span>
+    <span class="n">worker</span> <span class="o">=</span> <span class="n">Celery</span><span class="p">(</span><span class="n">broker</span><span class="o">=</span><span class="s1">'amqp://msdss:msdss123@localhost:5672'</span><span class="p">,</span> <span class="n">backend</span><span class="o">=</span><span class="s1">'rpc://'</span><span class="p">)</span> <span class="c1"># rabbitmq</span>
+    <span class="n">bg_manager</span> <span class="o">=</span> <span class="n">ModelsBackgroundManager</span><span class="p">(</span><span class="n">worker</span><span class="p">,</span> <span class="n">models_manager</span><span class="p">)</span>
+
+    <span class="c1"># Initialize a model instance with inputs as a background process</span>
+    <span class="n">train_data</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">{</span><span class="s1">'col_a'</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">'col_b'</span><span class="p">:</span> <span class="s1">'a'</span><span class="p">},</span>
+        <span class="p">{</span><span class="s1">'col_a'</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">'col_b'</span><span class="p">:</span> <span class="s1">'b'</span><span class="p">}</span>
+    <span class="p">]</span>
+    <span class="n">bg_manager</span><span class="o">.</span><span class="n">input</span><span class="p">(</span><span class="s1">'temp_model'</span><span class="p">,</span> <span class="n">train_data</span><span class="p">)</span>
+
+    <span class="c1"># Get output from model instance</span>
+    <span class="n">test_data</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">{</span><span class="s1">'col_a'</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">'col_b'</span><span class="p">:</span> <span class="s1">'c'</span><span class="p">},</span>
+        <span class="p">{</span><span class="s1">'col_a'</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">'col_b'</span><span class="p">:</span> <span class="s1">'d'</span><span class="p">}</span>
+    <span class="p">]</span>
+    <span class="n">bg_manager</span><span class="o">.</span><span class="n">output</span><span class="p">(</span><span class="s1">'temp_model'</span><span class="p">,</span> <span class="n">new_data</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+</section>
+<section id="start">
+<h3 id="start">start<a class="headerlink" href="#start" title="Permalink to this headline">¶</a></h3>
+<dl class="py method">
+<dt class="sig sig-object py" id="msdss_models_api.managers.ModelsBackgroundManager.start">
+<span class="sig-prename descclassname"><span class="pre">ModelsBackgroundManager.</span></span><span class="sig-name descname"><span class="pre">start</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">worker_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msdss_models_api/managers.html#ModelsBackgroundManager.start"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msdss_models_api.managers.ModelsBackgroundManager.start" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start the background worker to process background tasks.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>task</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – The name of the task in attribute <code class="docutils literal notranslate"><span class="pre">.tasks</span></code>.</p></li>
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – The name of the model instance to add tasks for.</p></li>
+<li><p><strong>worker_kwargs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a>) – Keyword arguments for <code class="xref py py-class docutils literal notranslate"><span class="pre">celery:celery.apps.worker</span></code>.</p></li>
+<li><p><strong>*args</strong> – Additional arguments passed to <code class="xref py py-meth docutils literal notranslate"><span class="pre">celery:celery.apps.worker.start()</span></code>.</p></li>
+<li><p><strong>**kwargs</strong> – Additional arguments passed to <code class="xref py py-meth docutils literal notranslate"><span class="pre">celery:celery.apps.worker.start()</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Author</p>
+<p>Richard Wen &lt;<a class="reference external" href="mailto:rrwen.dev%40gmail.com">rrwen<span>.</span>dev<span>@</span>gmail<span>.</span>com</a>&gt;</p>
+<p class="rubric">Example</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">tempfile</span>
+<span class="kn">from</span> <span class="nn">celery</span> <span class="kn">import</span> <span class="n">Celery</span>
+<span class="kn">from</span> <span class="nn">msdss_models_api.models</span> <span class="kn">import</span> <span class="n">Model</span>
+<span class="kn">from</span> <span class="nn">msdss_models_api.managers</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryDirectory</span><span class="p">()</span> <span class="k">as</span> <span class="n">folder_path</span><span class="p">:</span>
+
+    <span class="c1"># Setup available models</span>
+    <span class="n">models</span> <span class="o">=</span> <span class="p">[</span><span class="n">Model</span><span class="p">]</span>
+
+    <span class="c1"># Create manager</span>
+    <span class="n">models_manager</span> <span class="o">=</span> <span class="n">ModelsManager</span><span class="p">(</span><span class="n">models</span><span class="p">,</span> <span class="n">folder</span><span class="o">=</span><span class="n">folder_path</span><span class="p">)</span>
+
+    <span class="c1"># Create model instance</span>
+    <span class="n">models_manager</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s1">'temp_model'</span><span class="p">,</span> <span class="s1">'Model'</span><span class="p">)</span>
+
+    <span class="c1"># Create background manager</span>
+    <span class="n">worker</span> <span class="o">=</span> <span class="n">Celery</span><span class="p">(</span><span class="n">broker</span><span class="o">=</span><span class="s1">'amqp://msdss:msdss123@localhost:5672'</span><span class="p">,</span> <span class="n">backend</span><span class="o">=</span><span class="s1">'rpc://'</span><span class="p">)</span> <span class="c1"># rabbitmq</span>
+    <span class="n">bg_manager</span> <span class="o">=</span> <span class="n">ModelsBackgroundManager</span><span class="p">(</span><span class="n">worker</span><span class="p">,</span> <span class="n">models_manager</span><span class="p">)</span>
+
+    <span class="c1"># Initialize a model instance with inputs as a background process</span>
+    <span class="n">train_data</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">{</span><span class="s1">'col_a'</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">'col_b'</span><span class="p">:</span> <span class="s1">'a'</span><span class="p">},</span>
+        <span class="p">{</span><span class="s1">'col_a'</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">'col_b'</span><span class="p">:</span> <span class="s1">'b'</span><span class="p">}</span>
+    <span class="p">]</span>
+    <span class="n">bg_manager</span><span class="o">.</span><span class="n">_add_model_task</span><span class="p">(</span><span class="s1">'input'</span><span class="p">,</span> <span class="s1">'temp_model'</span><span class="p">,</span> <span class="n">train_data</span><span class="p">)</span>
+
+    <span class="c1"># Start worker</span>
+    <span class="n">bg_manager</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+</section>
+<section id="id7">
+<h3 id="id7">update<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
+<dl class="py method">
+<dt class="sig sig-object py" id="msdss_models_api.managers.ModelsBackgroundManager.update">
+<span class="sig-prename descclassname"><span class="pre">ModelsBackgroundManager.</span></span><span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msdss_models_api/managers.html#ModelsBackgroundManager.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msdss_models_api.managers.ModelsBackgroundManager.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update a model instance with new data as a background task.</p>
+<p>Runs <a class="reference internal" href="#msdss_models_api.managers.ModelsManager.update" title="msdss_models_api.managers.ModelsManager.update"><code class="xref py py-meth docutils literal notranslate"><span class="pre">msdss_models_api.managers.ModelsManager.update()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – See parameter <code class="docutils literal notranslate"><span class="pre">name</span></code> in <a class="reference internal" href="#msdss_models_api.managers.ModelsManager.update" title="msdss_models_api.managers.ModelsManager.update"><code class="xref py py-meth docutils literal notranslate"><span class="pre">msdss_models_api.managers.ModelsManager.update()</span></code></a>.</p></li>
+<li><p><strong>*args</strong> – Additional arguments passed to the <a class="reference internal" href="#msdss_models_api.managers.ModelsManager.update" title="msdss_models_api.managers.ModelsManager.update"><code class="xref py py-meth docutils literal notranslate"><span class="pre">msdss_models_api.managers.ModelsManager.update()</span></code></a>.</p></li>
+<li><p><strong>**kwargs</strong> – Additional arguments passed to the <a class="reference internal" href="#msdss_models_api.managers.ModelsManager.update" title="msdss_models_api.managers.ModelsManager.update"><code class="xref py py-meth docutils literal notranslate"><span class="pre">msdss_models_api.managers.ModelsManager.update()</span></code></a>.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Author</p>
+<p>Richard Wen &lt;<a class="reference external" href="mailto:rrwen.dev%40gmail.com">rrwen<span>.</span>dev<span>@</span>gmail<span>.</span>com</a>&gt;</p>
+<p class="rubric">Example</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">tempfile</span>
+<span class="kn">from</span> <span class="nn">celery</span> <span class="kn">import</span> <span class="n">Celery</span>
+<span class="kn">from</span> <span class="nn">msdss_models_api.models</span> <span class="kn">import</span> <span class="n">Model</span>
+<span class="kn">from</span> <span class="nn">msdss_models_api.managers</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryDirectory</span><span class="p">()</span> <span class="k">as</span> <span class="n">folder_path</span><span class="p">:</span>
+
+    <span class="c1"># Setup available models</span>
+    <span class="n">models</span> <span class="o">=</span> <span class="p">[</span><span class="n">Model</span><span class="p">]</span>
+
+    <span class="c1"># Create manager</span>
+    <span class="n">models_manager</span> <span class="o">=</span> <span class="n">ModelsManager</span><span class="p">(</span><span class="n">models</span><span class="p">,</span> <span class="n">folder</span><span class="o">=</span><span class="n">folder_path</span><span class="p">)</span>
+
+    <span class="c1"># Create model instance</span>
+    <span class="n">models_manager</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s1">'temp_model'</span><span class="p">,</span> <span class="s1">'Model'</span><span class="p">)</span>
+
+    <span class="c1"># Create background manager</span>
+    <span class="n">worker</span> <span class="o">=</span> <span class="n">Celery</span><span class="p">(</span><span class="n">broker</span><span class="o">=</span><span class="s1">'amqp://msdss:msdss123@localhost:5672'</span><span class="p">,</span> <span class="n">backend</span><span class="o">=</span><span class="s1">'rpc://'</span><span class="p">)</span> <span class="c1"># rabbitmq</span>
+    <span class="n">bg_manager</span> <span class="o">=</span> <span class="n">ModelsBackgroundManager</span><span class="p">(</span><span class="n">worker</span><span class="p">,</span> <span class="n">models_manager</span><span class="p">)</span>
+
+    <span class="c1"># Initialize a model instance with inputs as a background process</span>
+    <span class="n">train_data</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">{</span><span class="s1">'col_a'</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">'col_b'</span><span class="p">:</span> <span class="s1">'a'</span><span class="p">},</span>
+        <span class="p">{</span><span class="s1">'col_a'</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">'col_b'</span><span class="p">:</span> <span class="s1">'b'</span><span class="p">}</span>
+    <span class="p">]</span>
+    <span class="n">bg_manager</span><span class="o">.</span><span class="n">input</span><span class="p">(</span><span class="s1">'temp_model'</span><span class="p">,</span> <span class="n">train_data</span><span class="p">)</span>
+
+    <span class="c1"># Update model instance with new data as background process</span>
+    <span class="n">new_data</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">{</span><span class="s1">'col_a'</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">'col_b'</span><span class="p">:</span> <span class="s1">'c'</span><span class="p">},</span>
+        <span class="p">{</span><span class="s1">'col_a'</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">'col_b'</span><span class="p">:</span> <span class="s1">'d'</span><span class="p">}</span>
+    <span class="p">]</span>
+    <span class="n">bg_manager</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="s1">'temp_model'</span><span class="p">,</span> <span class="n">new_data</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+</section>
+</section>
+</section>
+
+
+          </article>
+        </div>
+      </div>
+    </main>
+  </div>
+  <footer class="md-footer">
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid">
+          
+            <a href="core.html" title="core"
+               class="md-flex md-footer-nav__link md-footer-nav__link--prev"
+               rel="prev">
+              <div class="md-flex__cell md-flex__cell--shrink">
+                <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
+              </div>
+              <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+                <span class="md-flex__ellipsis">
+                  <span
+                      class="md-footer-nav__direction"> Previous </span> core </span>
+              </div>
+            </a>
+          
+          
+            <a href="models.html" title="models"
+               class="md-flex md-footer-nav__link md-footer-nav__link--next"
+               rel="next">
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title"><span
+                class="md-flex__ellipsis"> <span
+                class="md-footer-nav__direction"> Next </span> models </span>
+            </div>
+            <div class="md-flex__cell md-flex__cell--shrink"><i
+                class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
+            </div>
+          
+        </a>
+        
+      </nav>
+    </div>
+    <div class="md-footer-meta md-typeset">
+      <div class="md-footer-meta__inner md-grid">
+        <div class="md-footer-copyright">
+          <div class="md-footer-copyright__highlight">
+              &#169; Copyright 2021, Richard Wen.
+              
+          </div>
+            Created using
+            <a href="http://www.sphinx-doc.org/">Sphinx</a> 4.3.1.
+             and
+            <a href="https://github.com/bashtage/sphinx-material/">Material for
+              Sphinx</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <script src="../_static/javascripts/application.js"></script>
+  <script>app.initialize({version: "1.0.4", url: {base: ".."}})</script>
+  </body>
+</html>

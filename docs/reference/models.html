@@ -1,0 +1,800 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="lang:clipboard.copy" content="Copy to clipboard">
+  <meta name="lang:clipboard.copied" content="Copied to clipboard">
+  <meta name="lang:search.language" content="en">
+  <meta name="lang:search.pipeline.stopwords" content="True">
+  <meta name="lang:search.pipeline.trimmer" content="True">
+  <meta name="lang:search.result.none" content="No matching documents">
+  <meta name="lang:search.result.one" content="1 matching document">
+  <meta name="lang:search.result.other" content="# matching documents">
+  <meta name="lang:search.tokenizer" content="[\s\-]+">
+
+  
+    <link href="https://fonts.gstatic.com/" rel="preconnect" crossorigin>
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Mono:400,500,700|Roboto:300,400,400i,700&display=fallback" rel="stylesheet">
+
+    <style>
+      body,
+      input {
+        font-family: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif
+      }
+
+      code,
+      kbd,
+      pre {
+        font-family: "Roboto Mono", "Courier New", Courier, monospace
+      }
+    </style>
+  
+
+  <link rel="stylesheet" href="../_static/stylesheets/application.css"/>
+  <link rel="stylesheet" href="../_static/stylesheets/application-palette.css"/>
+  <link rel="stylesheet" href="../_static/stylesheets/application-fixes.css"/>
+  
+  <link rel="stylesheet" href="../_static/fonts/material-icons.css"/>
+  
+  <meta name="theme-color" content="#3f51b5">
+  <script src="../_static/javascripts/modernizr.js"></script>
+  
+  
+  
+    <title>models &#8212; 0.0.0</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/material.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/jupyter-sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/thebelab.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/thebelab-helper.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="managers" href="managers.html" />
+  
+   
+
+  </head>
+  <body dir=ltr
+        data-md-color-primary=indigo data-md-color-accent=light-blue>
+  
+  <svg class="md-svg">
+    <defs data-children-count="0">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448" viewBox="0 0 416 448" id="__github"><path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19T128 352t-18.125-8.5-10.75-19T96 304t3.125-20.5 10.75-19T128 256t18.125 8.5 10.75 19T160 304zm160 0q0 10-3.125 20.5t-10.75 19T288 352t-18.125-8.5-10.75-19T256 304t3.125-20.5 10.75-19T288 256t18.125 8.5 10.75 19T320 304zm40 0q0-30-17.25-51T296 232q-10.25 0-48.75 5.25Q229.5 240 208 240t-39.25-2.75Q130.75 232 120 232q-29.5 0-46.75 21T56 304q0 22 8 38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0 37.25-1.75t35-7.375 30.5-15 20.25-25.75T360 304zm56-44q0 51.75-15.25 82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5T212 416q-19.5 0-35.5-.75t-36.875-3.125-38.125-7.5-34.25-12.875T37 371.5t-21.5-28.75Q0 312 0 260q0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25 30.875Q171.5 96 212 96q37 0 70 8 26.25-20.5 46.75-30.25T376 64q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34 99.5z"/></svg>
+      
+    </defs>
+  </svg>
+  
+  <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer">
+  <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search">
+  <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
+  <a href="#reference/models" tabindex="1" class="md-skip"> Skip to content </a>
+  <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid">
+    <div class="md-flex navheader">
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <a href="../index.html" title="0.0.0"
+           class="md-header-nav__button md-logo">
+          
+              <img src="../_static/logo.svg" height="26"
+                   alt="0.0.0 logo">
+          
+        </a>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--menu md-header-nav__button" for="__drawer"></label>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch">
+        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
+          <span class="md-header-nav__topic">msdss-models-api</span>
+          <span class="md-header-nav__topic"> models </span>
+        </div>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
+        
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" action="../search.html" method="get" name="search">
+      <input type="text" class="md-search__input" name="q" placeholder="Search"
+             autocapitalize="off" autocomplete="off" spellcheck="false"
+             data-md-component="query" data-md-state="active">
+      <label class="md-icon md-search__icon" for="__search"></label>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
+        &#xE5CD;
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="result">
+          <div class="md-search-result__meta">
+            Type to start searching
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+      </div>
+      
+        <div class="md-flex__cell md-flex__cell--shrink">
+          <div class="md-header-nav__source">
+            <a href="https://github.com/rrwen/msdss-models-api/" title="Go to repository" class="md-source" data-md-source="github">
+
+    <div class="md-source__icon">
+      <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 24 24" width="28" height="28">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    msdss-models-api
+  </div>
+</a>
+          </div>
+        </div>
+      
+      
+  
+  <script src="../_static/javascripts/version_dropdown.js"></script>
+  <script>
+    var json_loc = "../"versions.json"",
+        target_loc = "../../",
+        text = "Versions";
+    $( document ).ready( add_version_dropdown(json_loc, target_loc, text));
+  </script>
+  
+
+    </div>
+  </nav>
+</header>
+
+  
+  <div class="md-container">
+    
+    
+    
+  <nav class="md-tabs" data-md-component="tabs">
+    <div class="md-tabs__inner md-grid">
+      <ul class="md-tabs__list">
+          <li class="md-tabs__item"><a href="../index.html" class="md-tabs__link">0.0.0</a></li>
+          <li class="md-tabs__item"><a href="index.html" class="md-tabs__link">API Reference</a></li>
+      </ul>
+    </div>
+  </nav>
+    <main class="md-main">
+      <div class="md-main__inner md-grid" data-md-component="container">
+        
+          <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+            <div class="md-sidebar__scrollwrap">
+              <div class="md-sidebar__inner">
+                <nav class="md-nav md-nav--primary" data-md-level="0">
+  <label class="md-nav__title md-nav__title--site" for="__drawer">
+    <a href="../index.html" title="0.0.0" class="md-nav__button md-logo">
+      
+        <img src="../_static/logo.svg" alt=" logo" width="48" height="48">
+      
+    </a>
+    <a href="../index.html"
+       title="0.0.0">msdss-models-api</a>
+  </label>
+    <div class="md-nav__source">
+      <a href="https://github.com/rrwen/msdss-models-api/" title="Go to repository" class="md-source" data-md-source="github">
+
+    <div class="md-source__icon">
+      <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 24 24" width="28" height="28">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    msdss-models-api
+  </div>
+</a>
+    </div>
+  
+  
+
+  
+  <ul class="md-nav__list">
+    <li class="md-nav__item">
+    
+    
+      <a href="../install.html" class="md-nav__link">Install</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="../quickstart.html" class="md-nav__link">Quick Start</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="../howitworks.html" class="md-nav__link">How it Works</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="index.html" class="md-nav__link">API Reference</a>
+      
+    
+    </li>
+  </ul>
+  
+
+</nav>
+              </div>
+            </div>
+          </div>
+          <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+            <div class="md-sidebar__scrollwrap">
+              <div class="md-sidebar__inner">
+                
+<nav class="md-nav md-nav--secondary">
+    <label class="md-nav__title" for="__toc">Contents</label>
+  <ul class="md-nav__list" data-md-scrollfix="">
+        <li class="md-nav__item"><a href="#reference-models--page-root" class="md-nav__link">models</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#model" class="md-nav__link">Model</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#can-load" class="md-nav__link">can_load</a>
+        </li>
+        <li class="md-nav__item"><a href="#delete" class="md-nav__link">delete</a>
+        </li>
+        <li class="md-nav__item"><a href="#input" class="md-nav__link">input</a>
+        </li>
+        <li class="md-nav__item"><a href="#load" class="md-nav__link">load</a>
+        </li>
+        <li class="md-nav__item"><a href="#needs-load" class="md-nav__link">needs_load</a>
+        </li>
+        <li class="md-nav__item"><a href="#output" class="md-nav__link">output</a>
+        </li>
+        <li class="md-nav__item"><a href="#save" class="md-nav__link">save</a>
+        </li>
+        <li class="md-nav__item"><a href="#update" class="md-nav__link">update</a>
+        </li></ul>
+            </nav>
+        </li></ul>
+            </nav>
+        </li>
+    
+<li class="md-nav__item"><a class="md-nav__extra_link" href="../_sources/reference/models.rst.txt">Show Source</a> </li>
+
+<li id="searchbox" class="md-nav__item"></li>
+
+  </ul>
+</nav>
+              </div>
+            </div>
+          </div>
+        
+        <div class="md-content">
+          <article class="md-content__inner md-typeset" role="main">
+            
+  <section id="module-msdss_models_api.models">
+<span id="models"></span><h1 id="reference-models--page-root">models<a class="headerlink" href="#reference-models--page-root" title="Permalink to this headline">¶</a></h1>
+<section id="model">
+<h2 id="model">Model<a class="headerlink" href="#model" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="msdss_models_api.models.Model">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">msdss_models_api.models.</span></span><span class="sig-name descname"><span class="pre">Model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'./model'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_ext</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'pickle'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msdss_models_api/models.html#Model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msdss_models_api.models.Model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Template class to standardize modelling.</p>
+<ul class="simple">
+<li><p>Methods <code class="docutils literal notranslate"><span class="pre">delete</span></code>, <code class="docutils literal notranslate"><span class="pre">load</span></code>, and <code class="docutils literal notranslate"><span class="pre">save</span></code> are handled by default using <code class="xref py py-class docutils literal notranslate"><span class="pre">pickle</span></code> and do not need to be defined if there is no need for custom model saving and loading.</p></li>
+<li><p>Methods <code class="docutils literal notranslate"><span class="pre">input</span></code>, <code class="docutils literal notranslate"><span class="pre">output</span></code> and <code class="docutils literal notranslate"><span class="pre">update</span></code> need to be defined as they are placeholders for standardized functions of the model</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Path to save, load, and delete the model for persistence without the extension. Can be used in methods as <code class="docutils literal notranslate"><span class="pre">self.file</span></code>.</p></li>
+<li><p><strong>file_ext</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – File extension to save the model in.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="msdss_models_api.models.Model.instance">
+<span class="sig-name descname"><span class="pre">instance</span></span><a class="headerlink" href="#msdss_models_api.models.Model.instance" title="Permalink to this definition">¶</a></dt>
+<dd><p>An instance of the model initialized with method <a class="reference internal" href="#msdss_models_api.models.Model.input" title="msdss_models_api.models.Model.input"><code class="xref py py-meth docutils literal notranslate"><span class="pre">msdss_models_api.models.Model.input()</span></code></a>. Initial value is <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>obj or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)">None</a></p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="msdss_models_api.models.Model.file">
+<span class="sig-name descname"><span class="pre">file</span></span><a class="headerlink" href="#msdss_models_api.models.Model.file" title="Permalink to this definition">¶</a></dt>
+<dd><p>File path to save the model for persistence in. Includes the <code class="docutils literal notranslate"><span class="pre">file_ext</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="msdss_models_api.models.Model.last_loaded">
+<span class="sig-name descname"><span class="pre">last_loaded</span></span><a class="headerlink" href="#msdss_models_api.models.Model.last_loaded" title="Permalink to this definition">¶</a></dt>
+<dd><p>The date and time that the model was last loaded. If <code class="docutils literal notranslate"><span class="pre">None</span></code>, model has not been loaded. Useful for lazy loading.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/datetime.html#datetime.datetime" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">datetime.datetime</span></code></a> or None</p>
+</dd>
+</dl>
+</dd></dl>
+<p class="rubric">Author</p>
+<p>Richard Wen &lt;<a class="reference external" href="mailto:rrwen.dev%40gmail.com">rrwen<span>.</span>dev<span>@</span>gmail<span>.</span>com</a>&gt;</p>
+<p class="rubric">Example</p>
+<div class="jupyter_cell jupyter_container docutils container">
+<div class="cell_input code_cell docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">tempfile</span>
+<span class="kn">from</span> <span class="nn">msdss_models_api.models</span> <span class="kn">import</span> <span class="n">Model</span>
+
+<span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">NamedTemporaryFile</span><span class="p">()</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+
+    <span class="c1"># Create template model</span>
+    <span class="c1"># Note - typically, you want to set all of the following:</span>
+    <span class="c1"># Model(model=obj, file_path='path/to/model')</span>
+    <span class="n">model_path</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">name</span>
+    <span class="n">blank_model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">file_path</span><span class="o">=</span><span class="n">model_path</span><span class="p">)</span>
+
+    <span class="c1"># Not saved yet, should be False</span>
+    <span class="n">can_load_before</span> <span class="o">=</span> <span class="n">blank_model</span><span class="o">.</span><span class="n">can_load</span><span class="p">()</span>
+
+    <span class="c1"># Save the model</span>
+    <span class="n">blank_model</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+    <span class="c1"># Saved, should be True</span>
+    <span class="n">can_load_after</span> <span class="o">=</span> <span class="n">blank_model</span><span class="o">.</span><span class="n">can_load</span><span class="p">()</span>
+    <span class="n">blank_model</span><span class="o">.</span><span class="n">load</span><span class="p">()</span> <span class="c1"># loading works after save</span>
+
+    <span class="c1"># To use the model, .input() and .output() needs to be defined</span>
+    <span class="c1"># To update the model, .update() needs to be defined</span>
+    <span class="c1"># The template model does nothing for these methods</span>
+    <span class="c1"># It is recommended to extend this model and redefine these methods</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">]</span>
+    <span class="n">blank_model</span><span class="o">.</span><span class="n">input</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="n">blank_model</span><span class="o">.</span><span class="n">output</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="n">blank_model</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+    <span class="c1"># After saving, you can delete the saved model</span>
+    <span class="c1"># This will also set .instance to None</span>
+    <span class="n">blank_model</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+</div>
+</div>
+</dd></dl>
+<section id="can-load">
+<h3 id="can-load">can_load<a class="headerlink" href="#can-load" title="Permalink to this headline">¶</a></h3>
+<dl class="py method">
+<dt class="sig sig-object py" id="msdss_models_api.models.Model.can_load">
+<span class="sig-prename descclassname"><span class="pre">Model.</span></span><span class="sig-name descname"><span class="pre">can_load</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msdss_models_api/models.html#Model.can_load"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msdss_models_api.models.Model.can_load" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks if a model can be loaded using the save file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Whether the model can be loaded from the save file or not.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></p>
+</dd>
+</dl>
+<p class="rubric">Author</p>
+<p>Richard Wen &lt;<a class="reference external" href="mailto:rrwen.dev%40gmail.com">rrwen<span>.</span>dev<span>@</span>gmail<span>.</span>com</a>&gt;</p>
+<p class="rubric">Example</p>
+<div class="jupyter_cell jupyter_container docutils container">
+<div class="cell_input code_cell docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">tempfile</span>
+<span class="kn">from</span> <span class="nn">msdss_models_api.models</span> <span class="kn">import</span> <span class="n">Model</span>
+
+<span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">NamedTemporaryFile</span><span class="p">()</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+
+    <span class="c1"># Create template model</span>
+    <span class="n">model_path</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">name</span>
+    <span class="n">blank_model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">file_path</span><span class="o">=</span><span class="n">model_path</span><span class="p">)</span>
+
+    <span class="c1"># Check if model can be loaded</span>
+    <span class="n">blank_model</span><span class="o">.</span><span class="n">can_load</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+</div>
+</div>
+</dd></dl>
+</section>
+<section id="delete">
+<h3 id="delete">delete<a class="headerlink" href="#delete" title="Permalink to this headline">¶</a></h3>
+<dl class="py method">
+<dt class="sig sig-object py" id="msdss_models_api.models.Model.delete">
+<span class="sig-prename descclassname"><span class="pre">Model.</span></span><span class="sig-name descname"><span class="pre">delete</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msdss_models_api/models.html#Model.delete"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msdss_models_api.models.Model.delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deletes the saved model and sets the attribute <code class="docutils literal notranslate"><span class="pre">.instance</span></code> to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
+<p class="rubric">Author</p>
+<p>Richard Wen &lt;<a class="reference external" href="mailto:rrwen.dev%40gmail.com">rrwen<span>.</span>dev<span>@</span>gmail<span>.</span>com</a>&gt;</p>
+<p class="rubric">Example</p>
+<div class="jupyter_cell jupyter_container docutils container">
+<div class="cell_input code_cell docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">tempfile</span>
+<span class="kn">from</span> <span class="nn">msdss_models_api.models</span> <span class="kn">import</span> <span class="n">Model</span>
+
+<span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">NamedTemporaryFile</span><span class="p">()</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+
+    <span class="c1"># Create template model</span>
+    <span class="n">model_path</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">name</span>
+    <span class="n">blank_model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">file_path</span><span class="o">=</span><span class="n">model_path</span><span class="p">)</span>
+
+    <span class="c1"># Save model</span>
+    <span class="n">blank_model</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+    <span class="c1"># Delete saved model</span>
+    <span class="n">blank_model</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+</div>
+</div>
+</dd></dl>
+</section>
+<section id="input">
+<h3 id="input">input<a class="headerlink" href="#input" title="Permalink to this headline">¶</a></h3>
+<dl class="py method">
+<dt class="sig sig-object py" id="msdss_models_api.models.Model.input">
+<span class="sig-prename descclassname"><span class="pre">Model.</span></span><span class="sig-name descname"><span class="pre">input</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msdss_models_api/models.html#Model.input"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msdss_models_api.models.Model.input" title="Permalink to this definition">¶</a></dt>
+<dd><p>Template method for input data to initialize model.</p>
+<p>Requirements:</p>
+<ul class="simple">
+<li><p>The first argument should be the input data seen in the parameters</p></li>
+<li><p>Other arguments can be defined as any for the model after the first argument</p></li>
+<li><p>Should set <code class="docutils literal notranslate"><span class="pre">self.instance</span></code> to the initialized model</p></li>
+</ul>
+<p>Notes:</p>
+<ul class="simple">
+<li><p>Does nothing but act as a template reference for class extension</p></li>
+<li><p>This method should be re-defined using a class extension</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>data</strong> (dict or list or <code class="xref py py-class docutils literal notranslate"><span class="pre">pandas:pandas.DataFrame</span></code>) – Data to use for initializing the model. Should accept a <code class="docutils literal notranslate"><span class="pre">list</span></code> or <code class="docutils literal notranslate"><span class="pre">dict</span></code> to be input in a <code class="xref py py-class docutils literal notranslate"><span class="pre">pandas:pandas.DataFrame</span></code> or the dataframe itself.</p>
+</dd>
+</dl>
+<p class="rubric">Author</p>
+<p>Richard Wen &lt;<a class="reference external" href="mailto:rrwen.dev%40gmail.com">rrwen<span>.</span>dev<span>@</span>gmail<span>.</span>com</a>&gt;</p>
+<p class="rubric">Example</p>
+<div class="jupyter_cell jupyter_container docutils container">
+<div class="cell_input code_cell docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">tempfile</span>
+<span class="kn">from</span> <span class="nn">msdss_models_api.models</span> <span class="kn">import</span> <span class="n">Model</span>
+
+<span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">NamedTemporaryFile</span><span class="p">()</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+
+    <span class="c1"># Create template model</span>
+    <span class="n">model_path</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">name</span>
+    <span class="n">blank_model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">file_path</span><span class="o">=</span><span class="n">model_path</span><span class="p">)</span>
+
+    <span class="c1"># Calling this should initialize the model instance</span>
+    <span class="c1"># blank_model.instance should be set</span>
+    <span class="n">train_data</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">{</span><span class="s1">'col_a'</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">'col_b'</span><span class="p">:</span> <span class="s1">'a'</span><span class="p">},</span>
+        <span class="p">{</span><span class="s1">'col_a'</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">'col_b'</span><span class="p">:</span> <span class="s1">'b'</span><span class="p">}</span>
+    <span class="p">]</span>
+    <span class="n">blank_model</span><span class="o">.</span><span class="n">input</span><span class="p">(</span><span class="n">train_data</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+</div>
+</div>
+</dd></dl>
+</section>
+<section id="load">
+<h3 id="load">load<a class="headerlink" href="#load" title="Permalink to this headline">¶</a></h3>
+<dl class="py method">
+<dt class="sig sig-object py" id="msdss_models_api.models.Model.load">
+<span class="sig-prename descclassname"><span class="pre">Model.</span></span><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">force</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msdss_models_api/models.html#Model.load"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msdss_models_api.models.Model.load" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads a saved model.</p>
+<p>If the model file has not been changed, skips loading based on <code class="docutils literal notranslate"><span class="pre">last_loaded</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>force</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – Whether to force loading whether the saved model has been changed or not.</p>
+</dd>
+</dl>
+<p class="rubric">Author</p>
+<p>Richard Wen &lt;<a class="reference external" href="mailto:rrwen.dev%40gmail.com">rrwen<span>.</span>dev<span>@</span>gmail<span>.</span>com</a>&gt;</p>
+<p class="rubric">Example</p>
+<div class="jupyter_cell jupyter_container docutils container">
+<div class="cell_input code_cell docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">tempfile</span>
+<span class="kn">from</span> <span class="nn">msdss_models_api.models</span> <span class="kn">import</span> <span class="n">Model</span>
+
+<span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">NamedTemporaryFile</span><span class="p">()</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+
+    <span class="c1"># Create template model</span>
+    <span class="n">model_path</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">name</span>
+    <span class="n">blank_model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">file_path</span><span class="o">=</span><span class="n">model_path</span><span class="p">)</span>
+
+    <span class="c1"># Save model</span>
+    <span class="n">blank_model</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+    <span class="c1"># Load model</span>
+    <span class="n">blank_model</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+</div>
+</div>
+</dd></dl>
+</section>
+<section id="needs-load">
+<h3 id="needs-load">needs_load<a class="headerlink" href="#needs-load" title="Permalink to this headline">¶</a></h3>
+<dl class="py method">
+<dt class="sig sig-object py" id="msdss_models_api.models.Model.needs_load">
+<span class="sig-prename descclassname"><span class="pre">Model.</span></span><span class="sig-name descname"><span class="pre">needs_load</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msdss_models_api/models.html#Model.needs_load"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msdss_models_api.models.Model.needs_load" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if model needs to be loaded again.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Whether the model needs to be loaded again based on whether the save <code class="docutils literal notranslate"><span class="pre">file</span></code> has changed.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></p>
+</dd>
+</dl>
+<p class="rubric">Author</p>
+<p>Richard Wen &lt;<a class="reference external" href="mailto:rrwen.dev%40gmail.com">rrwen<span>.</span>dev<span>@</span>gmail<span>.</span>com</a>&gt;</p>
+<p class="rubric">Example</p>
+<div class="jupyter_cell jupyter_container docutils container">
+<div class="cell_input code_cell docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">tempfile</span>
+<span class="kn">from</span> <span class="nn">msdss_models_api.models</span> <span class="kn">import</span> <span class="n">Model</span>
+
+<span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">NamedTemporaryFile</span><span class="p">()</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+
+    <span class="c1"># Create template model</span>
+    <span class="n">model_path</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">name</span>
+    <span class="n">blank_model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">file_path</span><span class="o">=</span><span class="n">model_path</span><span class="p">)</span>
+
+    <span class="c1"># Save model</span>
+    <span class="n">blank_model</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+    <span class="c1"># Check if needs load</span>
+    <span class="n">blank_model</span><span class="o">.</span><span class="n">needs_load</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+</div>
+</div>
+</dd></dl>
+</section>
+<section id="output">
+<h3 id="output">output<a class="headerlink" href="#output" title="Permalink to this headline">¶</a></h3>
+<dl class="py method">
+<dt class="sig sig-object py" id="msdss_models_api.models.Model.output">
+<span class="sig-prename descclassname"><span class="pre">Model.</span></span><span class="sig-name descname"><span class="pre">output</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msdss_models_api/models.html#Model.output"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msdss_models_api.models.Model.output" title="Permalink to this definition">¶</a></dt>
+<dd><p>Template method for a model to output data such as predictions or clusters.</p>
+<p>Requirements:</p>
+<ul class="simple">
+<li><p>The first argument should be the input data seen in the parameters</p></li>
+<li><p>Other arguments can be defined as any for the model output after the first argument</p></li>
+<li><p>Ideally, should use <code class="docutils literal notranslate"><span class="pre">self.instance</span></code> to produce the output</p></li>
+</ul>
+<p>Notes:</p>
+<ul class="simple">
+<li><p>Does nothing but act as a template reference for class extension</p></li>
+<li><p>This method should be re-defined using a class extension</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>data</strong> (dict or list or <code class="xref py py-class docutils literal notranslate"><span class="pre">pandas:pandas.DataFrame</span></code>) – Data to use as input for the model. Should accept a <code class="docutils literal notranslate"><span class="pre">list</span></code> or <code class="docutils literal notranslate"><span class="pre">dict</span></code> to be input in a <code class="xref py py-class docutils literal notranslate"><span class="pre">pandas:pandas.DataFrame</span></code> or the dataframe itself.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Output data from the model using the input data from parameter <code class="docutils literal notranslate"><span class="pre">data</span></code>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">pandas:pandas.DataFrame</span></code></p>
+</dd>
+</dl>
+<p class="rubric">Author</p>
+<p>Richard Wen &lt;<a class="reference external" href="mailto:rrwen.dev%40gmail.com">rrwen<span>.</span>dev<span>@</span>gmail<span>.</span>com</a>&gt;</p>
+<p class="rubric">Example</p>
+<div class="jupyter_cell jupyter_container docutils container">
+<div class="cell_input code_cell docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">tempfile</span>
+<span class="kn">from</span> <span class="nn">msdss_models_api.models</span> <span class="kn">import</span> <span class="n">Model</span>
+
+<span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">NamedTemporaryFile</span><span class="p">()</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+
+    <span class="c1"># Create template model</span>
+    <span class="n">model_path</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">name</span>
+    <span class="n">blank_model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">file_path</span><span class="o">=</span><span class="n">model_path</span><span class="p">)</span>
+
+    <span class="c1"># Calling this should initialize the model instance</span>
+    <span class="c1"># blank_model.instance should be set</span>
+    <span class="n">train_data</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">{</span><span class="s1">'col_a'</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">'col_b'</span><span class="p">:</span> <span class="s1">'a'</span><span class="p">},</span>
+        <span class="p">{</span><span class="s1">'col_a'</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">'col_b'</span><span class="p">:</span> <span class="s1">'b'</span><span class="p">}</span>
+    <span class="p">]</span>
+    <span class="n">blank_model</span><span class="o">.</span><span class="n">input</span><span class="p">(</span><span class="n">train_data</span><span class="p">)</span>
+
+    <span class="c1"># Calling this will produce model outputs but only after .input() is used</span>
+    <span class="c1"># blank_model.instance should be used to produce the outputs</span>
+    <span class="n">test_data</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">{</span><span class="s1">'col_a'</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">'col_b'</span><span class="p">:</span> <span class="s1">'c'</span><span class="p">},</span>
+        <span class="p">{</span><span class="s1">'col_a'</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">'col_b'</span><span class="p">:</span> <span class="s1">'d'</span><span class="p">}</span>
+    <span class="p">]</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">blank_model</span><span class="o">.</span><span class="n">output</span><span class="p">(</span><span class="n">test_data</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+</div>
+</div>
+</dd></dl>
+</section>
+<section id="save">
+<h3 id="save">save<a class="headerlink" href="#save" title="Permalink to this headline">¶</a></h3>
+<dl class="py method">
+<dt class="sig sig-object py" id="msdss_models_api.models.Model.save">
+<span class="sig-prename descclassname"><span class="pre">Model.</span></span><span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msdss_models_api/models.html#Model.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msdss_models_api.models.Model.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>Saves the model to a file to be loaded.</p>
+<p class="rubric">Author</p>
+<p>Richard Wen &lt;<a class="reference external" href="mailto:rrwen.dev%40gmail.com">rrwen<span>.</span>dev<span>@</span>gmail<span>.</span>com</a>&gt;</p>
+<p class="rubric">Example</p>
+<div class="jupyter_cell jupyter_container docutils container">
+<div class="cell_input code_cell docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">tempfile</span>
+<span class="kn">from</span> <span class="nn">msdss_models_api.models</span> <span class="kn">import</span> <span class="n">Model</span>
+
+<span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">NamedTemporaryFile</span><span class="p">()</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+
+    <span class="c1"># Create template model</span>
+    <span class="n">model_path</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">name</span>
+    <span class="n">blank_model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">file_path</span><span class="o">=</span><span class="n">model_path</span><span class="p">)</span>
+
+    <span class="c1"># Save model</span>
+    <span class="n">blank_model</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+</div>
+</div>
+</dd></dl>
+</section>
+<section id="update">
+<h3 id="update">update<a class="headerlink" href="#update" title="Permalink to this headline">¶</a></h3>
+<dl class="py method">
+<dt class="sig sig-object py" id="msdss_models_api.models.Model.update">
+<span class="sig-prename descclassname"><span class="pre">Model.</span></span><span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msdss_models_api/models.html#Model.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msdss_models_api.models.Model.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Template method for updating a model with new data.</p>
+<p>Requirements:</p>
+<ul class="simple">
+<li><p>The first argument should be the input data seen in the parameters</p></li>
+<li><p>Other arguments can be defined as any for the model output after the first argument</p></li>
+<li><p>Ideally, should update <code class="docutils literal notranslate"><span class="pre">self.instance</span></code></p></li>
+</ul>
+<p>Notes:</p>
+<ul class="simple">
+<li><p>Does nothing but act as a template reference for class extension</p></li>
+<li><p>This method should be re-defined using a class extension</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>data</strong> (dict or list or <code class="xref py py-class docutils literal notranslate"><span class="pre">pandas:pandas.DataFrame</span></code>) – Data to use for updating the model. Should accept a <code class="docutils literal notranslate"><span class="pre">list</span></code> or <code class="docutils literal notranslate"><span class="pre">dict</span></code> to be input in a <code class="xref py py-class docutils literal notranslate"><span class="pre">pandas:pandas.DataFrame</span></code> or the dataframe itself.</p>
+</dd>
+</dl>
+<p class="rubric">Author</p>
+<p>Richard Wen &lt;<a class="reference external" href="mailto:rrwen.dev%40gmail.com">rrwen<span>.</span>dev<span>@</span>gmail<span>.</span>com</a>&gt;</p>
+<p class="rubric">Example</p>
+<div class="jupyter_cell jupyter_container docutils container">
+<div class="cell_input code_cell docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">tempfile</span>
+<span class="kn">from</span> <span class="nn">msdss_models_api.models</span> <span class="kn">import</span> <span class="n">Model</span>
+
+<span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">NamedTemporaryFile</span><span class="p">()</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+
+    <span class="c1"># Create template model</span>
+    <span class="n">model_path</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">name</span>
+    <span class="n">blank_model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">file_path</span><span class="o">=</span><span class="n">model_path</span><span class="p">)</span>
+
+    <span class="c1"># Calling this should initialize the model instance</span>
+    <span class="c1"># blank_model.instance should be set</span>
+    <span class="n">train_data</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">{</span><span class="s1">'col_a'</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">'col_b'</span><span class="p">:</span> <span class="s1">'a'</span><span class="p">},</span>
+        <span class="p">{</span><span class="s1">'col_a'</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">'col_b'</span><span class="p">:</span> <span class="s1">'b'</span><span class="p">}</span>
+    <span class="p">]</span>
+    <span class="n">blank_model</span><span class="o">.</span><span class="n">input</span><span class="p">(</span><span class="n">train_data</span><span class="p">)</span>
+
+    <span class="c1"># Calling this will update the model but only after .input() is used</span>
+    <span class="c1"># blank_model.instance should be updated with the new data</span>
+    <span class="n">new_data</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">{</span><span class="s1">'col_a'</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">'col_b'</span><span class="p">:</span> <span class="s1">'c'</span><span class="p">},</span>
+        <span class="p">{</span><span class="s1">'col_a'</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">'col_b'</span><span class="p">:</span> <span class="s1">'d'</span><span class="p">}</span>
+    <span class="p">]</span>
+    <span class="n">blank_model</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">new_data</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+</div>
+</div>
+</dd></dl>
+</section>
+</section>
+</section>
+
+
+          </article>
+        </div>
+      </div>
+    </main>
+  </div>
+  <footer class="md-footer">
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid">
+          
+            <a href="managers.html" title="managers"
+               class="md-flex md-footer-nav__link md-footer-nav__link--prev"
+               rel="prev">
+              <div class="md-flex__cell md-flex__cell--shrink">
+                <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
+              </div>
+              <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+                <span class="md-flex__ellipsis">
+                  <span
+                      class="md-footer-nav__direction"> Previous </span> managers </span>
+              </div>
+            </a>
+          
+          
+        </a>
+        
+      </nav>
+    </div>
+    <div class="md-footer-meta md-typeset">
+      <div class="md-footer-meta__inner md-grid">
+        <div class="md-footer-copyright">
+          <div class="md-footer-copyright__highlight">
+              &#169; Copyright 2021, Richard Wen.
+              
+          </div>
+            Created using
+            <a href="http://www.sphinx-doc.org/">Sphinx</a> 4.3.1.
+             and
+            <a href="https://github.com/bashtage/sphinx-material/">Material for
+              Sphinx</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <script src="../_static/javascripts/application.js"></script>
+  <script>app.initialize({version: "1.0.4", url: {base: ".."}})</script>
+  </body>
+</html>

@@ -272,7 +272,6 @@
 <span></span><span class="kn">from</span> <span class="nn">celery</span> <span class="kn">import</span> <span class="n">Celery</span>
 <span class="kn">from</span> <span class="nn">fastapi</span> <span class="kn">import</span> <span class="n">FastAPI</span>
 <span class="kn">from</span> <span class="nn">msdss_base_api</span> <span class="kn">import</span> <span class="n">API</span>
-<span class="kn">from</span> <span class="nn">multiprocessing</span> <span class="kn">import</span> <span class="n">Process</span>
 
 <span class="kn">from</span> <span class="nn">.env</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">.managers</span> <span class="kn">import</span> <span class="o">*</span>
@@ -295,9 +294,9 @@
 <span class="sd">        List of available ``Model`` objects to use for creating and managing model instances.</span>
 <span class="sd">        Ensure that the class names are unique, otherwise the last object in the list takes priority.</span>
 <span class="sd">    broker_url : str or None</span>
-<span class="sd">        Link to connect to a `RabbitMQ &lt;https://www.rabbitmq.com/&gt;`_ broker. Env vars will take priority - see parameter ``env``.</span>
+<span class="sd">        Link to connect to a `Redis &lt;https://redis.io/&gt;`_ broker. Env vars will take priority - see parameter ``env``.</span>
 <span class="sd">    backend_url : str or None</span>
-<span class="sd">        Link to connect to a `RabbitMQ &lt;https://www.rabbitmq.com/&gt;`_ backend. Env vars will take priority - see parameter ``env``.</span>
+<span class="sd">        Link to connect to a `Redis &lt;https://redis.io/&gt;`_ backend. Env vars will take priority - see parameter ``env``.</span>
 <span class="sd">    folder : str</span>
 <span class="sd">        The folder path to store models in. The folder will be created if it does not exist. Env vars will take priority - see parameter ``env``.</span>
 <span class="sd">    models_router_settings : dict</span>
@@ -408,6 +407,9 @@
 <span class="sd">            backend_url='redis://localhost:6379/0'</span>
 <span class="sd">        )</span>
 
+<span class="sd">        # Add users routes</span>
+<span class="sd">        app.add_app(users_api)</span>
+
 <span class="sd">        # Run the app with app.start()</span>
 <span class="sd">        # Try API at http://localhost:8000/docs</span>
 <span class="sd">        # app.start()</span>
@@ -443,14 +445,7 @@
 <span class="sd">        )</span>
 
 <span class="sd">        # Create a data api with users</span>
-<span class="sd">        data_users_api = UsersAPI(</span>
-<span class="sd">            'cookie-secret',</span>
-<span class="sd">            'jwt-secret',</span>
-<span class="sd">            'reset-secret',</span>
-<span class="sd">            'verification-secret',</span>
-<span class="sd">            database=database</span>
-<span class="sd">        )</span>
-<span class="sd">        data_api = DataAPI(data_users_api, database=database)</span>
+<span class="sd">        data_api = DataAPI(users_api, database=database)</span>
 
 <span class="sd">        # Create a models api with users and data management</span>
 <span class="sd">        app = ModelsAPI(</span>
@@ -460,7 +455,9 @@
 <span class="sd">            broker_url='redis://localhost:6379/0',</span>
 <span class="sd">            backend_url='redis://localhost:6379/0'</span>
 <span class="sd">        )</span>
-<span class="sd">        app.add_app(data_api)</span>
+
+<span class="sd">        # Add users and data routes</span>
+<span class="sd">        app.add_apps(users_api, data_api)</span>
 
 <span class="sd">        # Run the app with app.start()</span>
 <span class="sd">        # Try API at http://localhost:8000/docs</span>
@@ -500,7 +497,6 @@
         <span class="c1"># (ModelsAPI_users) Add users app if specified</span>
         <span class="k">if</span> <span class="n">users_api</span><span class="p">:</span>
             <span class="n">models_router_settings</span><span class="p">[</span><span class="s1">'users_api'</span><span class="p">]</span> <span class="o">=</span> <span class="n">users_api</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">add_apps</span><span class="p">(</span><span class="n">users_api</span><span class="p">)</span>
 
         <span class="c1"># (ModelsAPI_router_models) Add models router</span>
         <span class="n">models_router</span> <span class="o">=</span> <span class="n">get_models_router</span><span class="p">(</span><span class="o">**</span><span class="n">models_router_settings</span><span class="p">)</span>

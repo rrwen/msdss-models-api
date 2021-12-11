@@ -2,8 +2,8 @@ Install
 =======
 
 1. Install `Anaconda 3 <https://www.anaconda.com/>`_ for Python
-2. Install `PostgreSQL <https://www.postgresql.org/>`_
-3. Install `RabbitMQ <https://www.rabbitmq.com/>`_
+2. Install `PostgreSQL <https://www.postgresql.org/>`_ or your preferred database
+3. Install `Redis <https://redis.io/`_
 4. Install ``msdss-models-api`` via pip or through a conda environment
 
 .. code::

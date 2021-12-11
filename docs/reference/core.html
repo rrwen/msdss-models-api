@@ -288,7 +288,7 @@
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">msdss_models_api.core.</span></span><span class="sig-name descname"><span class="pre">ModelsAPI</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">users_api=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">database=&lt;msdss_base_database.core.Database</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">models=[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">broker_url='redis://localhost:6379/0'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">backend_url='redis://localhost:6379/0'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">folder='./models'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">models_router_settings={}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">load_env=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">env=&lt;msdss_models_api.env.ModelsDotEnv</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">api=&lt;fastapi.applications.FastAPI</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msdss_models_api/core.html#ModelsAPI"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msdss_models_api.core.ModelsAPI" title="Permalink to this definition">¶</a></dt>
 <dd><p>Models API class for managing models.</p>
 <ul class="simple">
-<li><p>Extends the <code class="xref py py-class docutils literal notranslate"><span class="pre">msdss_base_api:msdss_base_api.core.API</span></code> class</p></li>
+<li><p>Extends the <a class="reference external" href="https://rrwen.github.io/msdss-base-api/reference/api.html#msdss_base_api.core.API" title="(in msdss_base_api v0.1.2)"><code class="docutils literal notranslate"><span class="pre">msdss_base_api.core.API</span></code></a> class</p></li>
 </ul>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -298,8 +298,8 @@ If <code class="docutils literal notranslate"><span class="pre">None</span></cod
 <li><p><strong>database</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">msdss_base_database:msdss_base_database.core.Database</span></code>) – A database object for using models with data from the database.</p></li>
 <li><p><strong>models</strong> (list(<a class="reference internal" href="models.html#msdss_models_api.models.Model" title="msdss_models_api.models.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">msdss_models_api.models.Model</span></code></a>)) – List of available <code class="docutils literal notranslate"><span class="pre">Model</span></code> objects to use for creating and managing model instances.
 Ensure that the class names are unique, otherwise the last object in the list takes priority.</p></li>
-<li><p><strong>broker_url</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><em>None</em></a>) – Link to connect to a <a class="reference external" href="https://www.rabbitmq.com/">RabbitMQ</a> broker. Env vars will take priority - see parameter <code class="docutils literal notranslate"><span class="pre">env</span></code>.</p></li>
-<li><p><strong>backend_url</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><em>None</em></a>) – <p>Link to connect to a <a class="reference external" href="https://www.rabbitmq.com/">RabbitMQ</a> backend. Env vars will take priority - see parameter <code class="docutils literal notranslate"><span class="pre">env</span></code>.</p>
+<li><p><strong>broker_url</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><em>None</em></a>) – Link to connect to a <a class="reference external" href="https://redis.io/">Redis</a> broker. Env vars will take priority - see parameter <code class="docutils literal notranslate"><span class="pre">env</span></code>.</p></li>
+<li><p><strong>backend_url</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><em>None</em></a>) – <p>Link to connect to a <a class="reference external" href="https://redis.io/">Redis</a> backend. Env vars will take priority - see parameter <code class="docutils literal notranslate"><span class="pre">env</span></code>.</p>
 </p></li>
 <li><p><strong>folder</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – The folder path to store models in. The folder will be created if it does not exist. Env vars will take priority - see parameter <code class="docutils literal notranslate"><span class="pre">env</span></code>.</p></li>
 <li><p><strong>models_router_settings</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a>) – Keyword arguments passed to <code class="xref py py-func docutils literal notranslate"><span class="pre">msdss_models_api.routers.get_models_router()</span></code> except <code class="docutils literal notranslate"><span class="pre">bg_manager</span></code>.</p></li>
@@ -320,8 +320,8 @@ folder = MSDSS_MODELS_FOLDER
 </div>
 </p></li>
 <li><p><strong>api</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">fastapi:fastapi.FastAPI</span></code>) – API object for creating routes.</p></li>
-<li><p><strong>*args</strong> – Additional arguments passed to <code class="xref py py-class docutils literal notranslate"><span class="pre">msdss_base_api:msdss_base_api.core.API</span></code>.</p></li>
-<li><p><strong>**kwargs</strong> – Additional arguments passed to <code class="xref py py-class docutils literal notranslate"><span class="pre">msdss_base_api:msdss_base_api.core.API</span></code>.</p></li>
+<li><p><strong>*args</strong> – Additional arguments passed to <a class="reference external" href="https://rrwen.github.io/msdss-base-api/reference/api.html#msdss_base_api.core.API" title="(in msdss_base_api v0.1.2)"><code class="docutils literal notranslate"><span class="pre">msdss_base_api.core.API</span></code></a>.</p></li>
+<li><p><strong>**kwargs</strong> – Additional arguments passed to <a class="reference external" href="https://rrwen.github.io/msdss-base-api/reference/api.html#msdss_base_api.core.API" title="(in msdss_base_api v0.1.2)"><code class="docutils literal notranslate"><span class="pre">msdss_base_api.core.API</span></code></a>.</p></li>
 </ul>
 </dd>
 </dl>
@@ -422,6 +422,9 @@ folder = MSDSS_MODELS_FOLDER
     <span class="n">backend_url</span><span class="o">=</span><span class="s1">'redis://localhost:6379/0'</span>
 <span class="p">)</span>
 
+<span class="c1"># Add users routes</span>
+<span class="n">app</span><span class="o">.</span><span class="n">add_app</span><span class="p">(</span><span class="n">users_api</span><span class="p">)</span>
+
 <span class="c1"># Run the app with app.start()</span>
 <span class="c1"># Try API at http://localhost:8000/docs</span>
 <span class="c1"># app.start()</span>
@@ -461,14 +464,7 @@ folder = MSDSS_MODELS_FOLDER
 <span class="p">)</span>
 
 <span class="c1"># Create a data api with users</span>
-<span class="n">data_users_api</span> <span class="o">=</span> <span class="n">UsersAPI</span><span class="p">(</span>
-    <span class="s1">'cookie-secret'</span><span class="p">,</span>
-    <span class="s1">'jwt-secret'</span><span class="p">,</span>
-    <span class="s1">'reset-secret'</span><span class="p">,</span>
-    <span class="s1">'verification-secret'</span><span class="p">,</span>
-    <span class="n">database</span><span class="o">=</span><span class="n">database</span>
-<span class="p">)</span>
-<span class="n">data_api</span> <span class="o">=</span> <span class="n">DataAPI</span><span class="p">(</span><span class="n">data_users_api</span><span class="p">,</span> <span class="n">database</span><span class="o">=</span><span class="n">database</span><span class="p">)</span>
+<span class="n">data_api</span> <span class="o">=</span> <span class="n">DataAPI</span><span class="p">(</span><span class="n">users_api</span><span class="p">,</span> <span class="n">database</span><span class="o">=</span><span class="n">database</span><span class="p">)</span>
 
 <span class="c1"># Create a models api with users and data management</span>
 <span class="n">app</span> <span class="o">=</span> <span class="n">ModelsAPI</span><span class="p">(</span>
@@ -478,7 +474,9 @@ folder = MSDSS_MODELS_FOLDER
     <span class="n">broker_url</span><span class="o">=</span><span class="s1">'redis://localhost:6379/0'</span><span class="p">,</span>
     <span class="n">backend_url</span><span class="o">=</span><span class="s1">'redis://localhost:6379/0'</span>
 <span class="p">)</span>
-<span class="n">app</span><span class="o">.</span><span class="n">add_app</span><span class="p">(</span><span class="n">data_api</span><span class="p">)</span>
+
+<span class="c1"># Add users and data routes</span>
+<span class="n">app</span><span class="o">.</span><span class="n">add_apps</span><span class="p">(</span><span class="n">users_api</span><span class="p">,</span> <span class="n">data_api</span><span class="p">)</span>
 
 <span class="c1"># Run the app with app.start()</span>
 <span class="c1"># Try API at http://localhost:8000/docs</span>

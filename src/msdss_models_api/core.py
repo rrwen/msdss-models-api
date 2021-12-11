@@ -1,7 +1,6 @@
 from celery import Celery
 from fastapi import FastAPI
 from msdss_base_api import API
-from multiprocessing import Process
 
 from .env import *
 from .managers import *
@@ -24,9 +23,9 @@ class ModelsAPI(API):
         List of available ``Model`` objects to use for creating and managing model instances.
         Ensure that the class names are unique, otherwise the last object in the list takes priority.
     broker_url : str or None
-        Link to connect to a `RabbitMQ <https://www.rabbitmq.com/>`_ broker. Env vars will take priority - see parameter ``env``.
+        Link to connect to a `Redis <https://redis.io/>`_ broker. Env vars will take priority - see parameter ``env``.
     backend_url : str or None
-        Link to connect to a `RabbitMQ <https://www.rabbitmq.com/>`_ backend. Env vars will take priority - see parameter ``env``.
+        Link to connect to a `Redis <https://redis.io/>`_ backend. Env vars will take priority - see parameter ``env``.
     folder : str
         The folder path to store models in. The folder will be created if it does not exist. Env vars will take priority - see parameter ``env``.
     models_router_settings : dict
@@ -175,14 +174,7 @@ class ModelsAPI(API):
         )
 
         # Create a data api with users
-        data_users_api = UsersAPI(
-            'cookie-secret',
-            'jwt-secret',
-            'reset-secret',
-            'verification-secret',
-            database=database
-        )
-        data_api = DataAPI(data_users_api, database=database)
+        data_api = DataAPI(users_api, database=database)
 
         # Create a models api with users and data management
         app = ModelsAPI(
@@ -192,7 +184,9 @@ class ModelsAPI(API):
             broker_url='redis://localhost:6379/0',
             backend_url='redis://localhost:6379/0'
         )
-        app.add_app(data_api)
+
+        # Add users and data routes
+        app.add_apps(users_api, data_api)
 
         # Run the app with app.start()
         # Try API at http://localhost:8000/docs

@@ -53,7 +53,8 @@ extensions = [
 ]
 intersphinx_mapping = {
     'python': ('https://docs.python.org/3/', None),
-    'celery': ('https://docs.celeryproject.org/en/stable/index.html', None)
+    'celery': ('https://docs.celeryproject.org/en/stable/index.html', None),
+    'msdss_base_api': ('https://rrwen.github.io/msdss-base-api/', None),
 }
 napoleon_custom_sections = ['Author', 'Authors']
 napoleon_include_private_with_doc = True

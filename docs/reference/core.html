@@ -72,7 +72,7 @@
 
   </head>
   <body dir=ltr
-        data-md-color-primary=indigo data-md-color-accent=light-blue>
+        data-md-color-primary=blue data-md-color-accent=light-blue>
   
   <svg class="md-svg">
     <defs data-children-count="0">
@@ -285,8 +285,211 @@
 <h2 id="modelsapi">ModelsAPI<a class="headerlink" href="#modelsapi" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="msdss_models_api.core.ModelsAPI">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">msdss_models_api.core.</span></span><span class="sig-name descname"><span class="pre">ModelsAPI</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">users_api=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">models=[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">folder='./models'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">broker_url='amqp://msdss:msdss123@localhost:5672'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">backend_url='rpc://'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">models_router_settings={}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">load_env=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">env=&lt;msdss_models_api.env.ModelsDotEnv</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">api=&lt;fastapi.applications.FastAPI</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msdss_models_api/core.html#ModelsAPI"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msdss_models_api.core.ModelsAPI" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">msdss_models_api.core.</span></span><span class="sig-name descname"><span class="pre">ModelsAPI</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">users_api=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">database=&lt;msdss_base_database.core.Database</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">models=[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">broker_url='redis://localhost:6379/0'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">backend_url='redis://localhost:6379/0'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">folder='./models'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">models_router_settings={}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">load_env=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">env=&lt;msdss_models_api.env.ModelsDotEnv</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">api=&lt;fastapi.applications.FastAPI</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msdss_models_api/core.html#ModelsAPI"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msdss_models_api.core.ModelsAPI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Models API class for managing models.</p>
+<ul class="simple">
+<li><p>Extends the <code class="xref py py-class docutils literal notranslate"><span class="pre">msdss_base_api:msdss_base_api.core.API</span></code> class</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>users_api</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">msdss_users_api:msdss_users_api.core.UsersAPI</span></code> or None) – Users API object to enable user authentication for models routes.
+If <code class="docutils literal notranslate"><span class="pre">None</span></code>, user authentication will not be used for models routes.</p></li>
+<li><p><strong>database</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">msdss_base_database:msdss_base_database.core.Database</span></code>) – A database object for using models with data from the database.</p></li>
+<li><p><strong>models</strong> (list(<a class="reference internal" href="models.html#msdss_models_api.models.Model" title="msdss_models_api.models.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">msdss_models_api.models.Model</span></code></a>)) – List of available <code class="docutils literal notranslate"><span class="pre">Model</span></code> objects to use for creating and managing model instances.
+Ensure that the class names are unique, otherwise the last object in the list takes priority.</p></li>
+<li><p><strong>broker_url</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><em>None</em></a>) – Link to connect to a <a class="reference external" href="https://www.rabbitmq.com/">RabbitMQ</a> broker. Env vars will take priority - see parameter <code class="docutils literal notranslate"><span class="pre">env</span></code>.</p></li>
+<li><p><strong>backend_url</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><em>None</em></a>) – <p>Link to connect to a <a class="reference external" href="https://www.rabbitmq.com/">RabbitMQ</a> backend. Env vars will take priority - see parameter <code class="docutils literal notranslate"><span class="pre">env</span></code>.</p>
+</p></li>
+<li><p><strong>folder</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – The folder path to store models in. The folder will be created if it does not exist. Env vars will take priority - see parameter <code class="docutils literal notranslate"><span class="pre">env</span></code>.</p></li>
+<li><p><strong>models_router_settings</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a>) – Keyword arguments passed to <code class="xref py py-func docutils literal notranslate"><span class="pre">msdss_models_api.routers.get_models_router()</span></code> except <code class="docutils literal notranslate"><span class="pre">bg_manager</span></code>.</p></li>
+<li><p><strong>load_env</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – Whether to load variables from a file with environmental variables at <code class="docutils literal notranslate"><span class="pre">env_file</span></code> or not.</p></li>
+<li><p><strong>env</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">msdss_users_api.env.ModelsDotEnv</span></code>) – <p>An object to set environment variables related to users configuration.
+These environment variables will overwrite the parameters above if they exist.</p>
+<p>By default, the related parameters above are assigned to each of the environment variables seen below if <code class="docutils literal notranslate"><span class="pre">load_env</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code>:</p>
+<div class="jupyter_cell docutils container">
+<div class="cell_output docutils container">
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;parameter&gt; = &lt;environment variable&gt;
+
+broker_url = MSDSS_MODELS_BROKER_URL
+backend_url = MSDSS_MODELS_BACKEND_URL
+folder = MSDSS_MODELS_FOLDER
+</pre></div>
+</div>
+</div>
+</div>
+</p></li>
+<li><p><strong>api</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">fastapi:fastapi.FastAPI</span></code>) – API object for creating routes.</p></li>
+<li><p><strong>*args</strong> – Additional arguments passed to <code class="xref py py-class docutils literal notranslate"><span class="pre">msdss_base_api:msdss_base_api.core.API</span></code>.</p></li>
+<li><p><strong>**kwargs</strong> – Additional arguments passed to <code class="xref py py-class docutils literal notranslate"><span class="pre">msdss_base_api:msdss_base_api.core.API</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="msdss_models_api.core.ModelsAPI.users_api_database">
+<span class="sig-name descname"><span class="pre">users_api_database</span></span><a class="headerlink" href="#msdss_models_api.core.ModelsAPI.users_api_database" title="Permalink to this definition">¶</a></dt>
+<dd><p>Database object for users API.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">msdss_base_database:msdss_base_database.core.Database</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="msdss_models_api.core.ModelsAPI.misc">
+<span class="sig-name descname"><span class="pre">misc</span></span><a class="headerlink" href="#msdss_models_api.core.ModelsAPI.misc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dictionary of miscellaneous values:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">fastapi_users_objects</span></code> (dict): dict of values returned from <code class="xref py py-func docutils literal notranslate"><span class="pre">msdss_users_api.tools.create_fastapi_users_objects()</span></code></p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)">dict</a></p>
+</dd>
+</dl>
+</dd></dl>
+<p class="rubric">Author</p>
+<p>Richard Wen &lt;<a class="reference external" href="mailto:rrwen.dev%40gmail.com">rrwen<span>.</span>dev<span>@</span>gmail<span>.</span>com</a>&gt;</p>
+<p class="rubric">Example</p>
+<p>Create models api without users:</p>
+<div class="jupyter_cell jupyter_container docutils container">
+<div class="cell_input code_cell docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">msdss_base_database</span> <span class="kn">import</span> <span class="n">Database</span>
+<span class="kn">from</span> <span class="nn">msdss_models_api.models</span> <span class="kn">import</span> <span class="n">Model</span>
+<span class="kn">from</span> <span class="nn">msdss_models_api</span> <span class="kn">import</span> <span class="n">ModelsAPI</span>
+
+<span class="c1"># Create database object</span>
+<span class="n">database</span> <span class="o">=</span> <span class="n">Database</span><span class="p">(</span>
+    <span class="n">driver</span><span class="o">=</span><span class="s1">'postgresql'</span><span class="p">,</span>
+    <span class="n">user</span><span class="o">=</span><span class="s1">'msdss'</span><span class="p">,</span>
+    <span class="n">password</span><span class="o">=</span><span class="s1">'msdss123'</span><span class="p">,</span>
+    <span class="n">host</span><span class="o">=</span><span class="s1">'localhost'</span><span class="p">,</span>
+    <span class="n">port</span><span class="o">=</span><span class="s1">'5432'</span><span class="p">,</span>
+    <span class="n">database</span><span class="o">=</span><span class="s1">'msdss'</span>
+<span class="p">)</span>
+
+<span class="c1"># Create models api without users</span>
+<span class="n">app</span> <span class="o">=</span> <span class="n">ModelsAPI</span><span class="p">(</span>
+    <span class="n">models</span><span class="o">=</span><span class="p">[</span><span class="n">Model</span><span class="p">],</span>
+    <span class="n">database</span><span class="o">=</span><span class="n">database</span><span class="p">,</span>
+    <span class="n">broker_url</span><span class="o">=</span><span class="s1">'redis://localhost:6379/0'</span><span class="p">,</span>
+    <span class="n">backend_url</span><span class="o">=</span><span class="s1">'redis://localhost:6379/0'</span>
+<span class="p">)</span>
+
+<span class="c1"># Run the app with app.start()</span>
+<span class="c1"># Try API at http://localhost:8000/docs</span>
+<span class="c1"># app.start()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+</div>
+</div>
+<p>Create Models API with users:</p>
+<div class="jupyter_cell jupyter_container docutils container">
+<div class="cell_input code_cell docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">msdss_base_database</span> <span class="kn">import</span> <span class="n">Database</span>
+<span class="kn">from</span> <span class="nn">msdss_models_api.models</span> <span class="kn">import</span> <span class="n">Model</span>
+<span class="kn">from</span> <span class="nn">msdss_models_api</span> <span class="kn">import</span> <span class="n">ModelsAPI</span>
+<span class="kn">from</span> <span class="nn">msdss_users_api</span> <span class="kn">import</span> <span class="n">UsersAPI</span>
+
+<span class="c1"># Create database object</span>
+<span class="n">database</span> <span class="o">=</span> <span class="n">Database</span><span class="p">(</span>
+    <span class="n">driver</span><span class="o">=</span><span class="s1">'postgresql'</span><span class="p">,</span>
+    <span class="n">user</span><span class="o">=</span><span class="s1">'msdss'</span><span class="p">,</span>
+    <span class="n">password</span><span class="o">=</span><span class="s1">'msdss123'</span><span class="p">,</span>
+    <span class="n">host</span><span class="o">=</span><span class="s1">'localhost'</span><span class="p">,</span>
+    <span class="n">port</span><span class="o">=</span><span class="s1">'5432'</span><span class="p">,</span>
+    <span class="n">database</span><span class="o">=</span><span class="s1">'msdss'</span>
+<span class="p">)</span>
+
+<span class="c1"># Create a users api</span>
+<span class="c1"># CHANGE SECRETS TO STRONG PHRASES</span>
+<span class="n">users_api</span> <span class="o">=</span> <span class="n">UsersAPI</span><span class="p">(</span>
+    <span class="s1">'cookie-secret'</span><span class="p">,</span>
+    <span class="s1">'jwt-secret'</span><span class="p">,</span>
+    <span class="s1">'reset-secret'</span><span class="p">,</span>
+    <span class="s1">'verification-secret'</span><span class="p">,</span>
+    <span class="n">database</span><span class="o">=</span><span class="n">database</span>
+<span class="p">)</span>
+
+<span class="c1"># Create a models api with users</span>
+<span class="n">app</span> <span class="o">=</span> <span class="n">ModelsAPI</span><span class="p">(</span>
+    <span class="n">users_api</span><span class="p">,</span>
+    <span class="n">models</span><span class="o">=</span><span class="p">[</span><span class="n">Model</span><span class="p">],</span>
+    <span class="n">database</span><span class="o">=</span><span class="n">database</span><span class="p">,</span>
+    <span class="n">broker_url</span><span class="o">=</span><span class="s1">'redis://localhost:6379/0'</span><span class="p">,</span>
+    <span class="n">backend_url</span><span class="o">=</span><span class="s1">'redis://localhost:6379/0'</span>
+<span class="p">)</span>
+
+<span class="c1"># Run the app with app.start()</span>
+<span class="c1"># Try API at http://localhost:8000/docs</span>
+<span class="c1"># app.start()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+</div>
+</div>
+<p>Create Models API with users and data management:</p>
+<div class="jupyter_cell jupyter_container docutils container">
+<div class="cell_input code_cell docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">msdss_base_database</span> <span class="kn">import</span> <span class="n">Database</span>
+<span class="kn">from</span> <span class="nn">msdss_models_api.models</span> <span class="kn">import</span> <span class="n">Model</span>
+<span class="kn">from</span> <span class="nn">msdss_models_api</span> <span class="kn">import</span> <span class="n">ModelsAPI</span>
+<span class="kn">from</span> <span class="nn">msdss_users_api</span> <span class="kn">import</span> <span class="n">UsersAPI</span>
+<span class="kn">from</span> <span class="nn">msdss_data_api</span> <span class="kn">import</span> <span class="n">DataAPI</span>
+
+<span class="c1"># Create database object</span>
+<span class="n">database</span> <span class="o">=</span> <span class="n">Database</span><span class="p">(</span>
+    <span class="n">driver</span><span class="o">=</span><span class="s1">'postgresql'</span><span class="p">,</span>
+    <span class="n">user</span><span class="o">=</span><span class="s1">'msdss'</span><span class="p">,</span>
+    <span class="n">password</span><span class="o">=</span><span class="s1">'msdss123'</span><span class="p">,</span>
+    <span class="n">host</span><span class="o">=</span><span class="s1">'localhost'</span><span class="p">,</span>
+    <span class="n">port</span><span class="o">=</span><span class="s1">'5432'</span><span class="p">,</span>
+    <span class="n">database</span><span class="o">=</span><span class="s1">'msdss'</span>
+<span class="p">)</span>
+
+<span class="c1"># Create a users api</span>
+<span class="c1"># CHANGE SECRETS TO STRONG PHRASES</span>
+<span class="n">users_api</span> <span class="o">=</span> <span class="n">UsersAPI</span><span class="p">(</span>
+    <span class="s1">'cookie-secret'</span><span class="p">,</span>
+    <span class="s1">'jwt-secret'</span><span class="p">,</span>
+    <span class="s1">'reset-secret'</span><span class="p">,</span>
+    <span class="s1">'verification-secret'</span><span class="p">,</span>
+    <span class="n">database</span><span class="o">=</span><span class="n">database</span>
+<span class="p">)</span>
+
+<span class="c1"># Create a data api with users</span>
+<span class="n">data_users_api</span> <span class="o">=</span> <span class="n">UsersAPI</span><span class="p">(</span>
+    <span class="s1">'cookie-secret'</span><span class="p">,</span>
+    <span class="s1">'jwt-secret'</span><span class="p">,</span>
+    <span class="s1">'reset-secret'</span><span class="p">,</span>
+    <span class="s1">'verification-secret'</span><span class="p">,</span>
+    <span class="n">database</span><span class="o">=</span><span class="n">database</span>
+<span class="p">)</span>
+<span class="n">data_api</span> <span class="o">=</span> <span class="n">DataAPI</span><span class="p">(</span><span class="n">data_users_api</span><span class="p">,</span> <span class="n">database</span><span class="o">=</span><span class="n">database</span><span class="p">)</span>
+
+<span class="c1"># Create a models api with users and data management</span>
+<span class="n">app</span> <span class="o">=</span> <span class="n">ModelsAPI</span><span class="p">(</span>
+    <span class="n">users_api</span><span class="p">,</span>
+    <span class="n">models</span><span class="o">=</span><span class="p">[</span><span class="n">Model</span><span class="p">],</span>
+    <span class="n">database</span><span class="o">=</span><span class="n">database</span><span class="p">,</span>
+    <span class="n">broker_url</span><span class="o">=</span><span class="s1">'redis://localhost:6379/0'</span><span class="p">,</span>
+    <span class="n">backend_url</span><span class="o">=</span><span class="s1">'redis://localhost:6379/0'</span>
+<span class="p">)</span>
+<span class="n">app</span><span class="o">.</span><span class="n">add_app</span><span class="p">(</span><span class="n">data_api</span><span class="p">)</span>
+
+<span class="c1"># Run the app with app.start()</span>
+<span class="c1"># Try API at http://localhost:8000/docs</span>
+<span class="c1"># app.start()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+</div>
+</div>
+</dd></dl>
 </section>
 </section>
 

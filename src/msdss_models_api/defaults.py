@@ -24,9 +24,49 @@ DEFAULT_MODELS_COLUMNS = [
 ]
 
 DEFAULT_MODELS_ROUTE_SETTINGS = dict(
+    cancel=dict(
+        path='/{name}/cancel',
+        _enable=True,
+        _get_user={'superuser': True}
+    ),
     create=dict(
         path='/',
         _enable=True,
         _get_user={'superuser': True}
     ),
+    delete=dict(
+        path='/',
+        _enable=True,
+        _get_user={'superuser': True}
+    ),
+    status=dict(
+        path='/{name}/status',
+        _enable=True,
+        _get_user={}
+    ),
+    input=dict(
+        path='/{name}',
+        _enable=True,
+        _get_user={'superuser': True}
+    ),
+    input_db=dict(
+        path='/{name}/data/{dataset}',
+        _enable=True,
+        _get_user={'superuser': True}
+    ),
+    output=dict(
+        path='/{name}',
+        _enable=True,
+        _get_user={}
+    ),
+    update=dict(
+        path='/{name}',
+        _enable=True,
+        _get_user={'superuser': True}
+    ),
+    update_db=dict(
+        path='/{name}/data/{dataset}',
+        _enable=True,
+        _get_user={'superuser': True}
+    )
 )

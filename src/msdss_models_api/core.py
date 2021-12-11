@@ -7,11 +7,6 @@ from .env import *
 from .managers import *
 from .routers import *
 
-try:
-    from msdss_users_api import UsersAPI
-except ImportError:
-    pass
-
 class ModelsAPI(API):
     """
     Models API class for managing models.
@@ -23,6 +18,8 @@ class ModelsAPI(API):
     users_api : :class:`msdss_users_api:msdss_users_api.core.UsersAPI` or None
         Users API object to enable user authentication for models routes.
         If ``None``, user authentication will not be used for models routes.
+    database : :class:`msdss_base_database:msdss_base_database.core.Database`
+        A database object for using models with data from the database.
     models : list(:class:`msdss_models_api.models.Model`)
         List of available ``Model`` objects to use for creating and managing model instances.
         Ensure that the class names are unique, otherwise the last object in the list takes priority.
@@ -71,8 +68,40 @@ class ModelsAPI(API):
 
     Example
     -------
+
+    Create models api without users:
+
     .. jupyter-execute::
-        :hide-output:
+
+        from msdss_base_database import Database
+        from msdss_models_api.models import Model
+        from msdss_models_api import ModelsAPI
+
+        # Create database object
+        database = Database(
+            driver='postgresql',
+            user='msdss',
+            password='msdss123',
+            host='localhost',
+            port='5432',
+            database='msdss'
+        )
+
+        # Create models api without users
+        app = ModelsAPI(
+            models=[Model],
+            database=database,
+            broker_url='redis://localhost:6379/0',
+            backend_url='redis://localhost:6379/0'
+        )
+
+        # Run the app with app.start()
+        # Try API at http://localhost:8000/docs
+        # app.start()
+
+    Create Models API with users:
+
+    .. jupyter-execute::
 
         from msdss_base_database import Database
         from msdss_models_api.models import Model
@@ -89,14 +118,7 @@ class ModelsAPI(API):
             database='msdss'
         )
 
-        # Create models api without users
-        app = ModelsAPI(
-            models=[Model],
-            broker_url='amqp://msdss:msdss123@localhost:5672',
-            backend_url='rpc://'
-        )
-
-        # Create a models api with users
+        # Create a users api
         # CHANGE SECRETS TO STRONG PHRASES
         users_api = UsersAPI(
             'cookie-secret',
@@ -105,21 +127,78 @@ class ModelsAPI(API):
             'verification-secret',
             database=database
         )
+
+        # Create a models api with users
         app = ModelsAPI(
             users_api,
             models=[Model],
-            broker_url='amqp://msdss:msdss123@localhost:5672',
-            backend_url='rpc://'
+            database=database,
+            broker_url='redis://localhost:6379/0',
+            backend_url='redis://localhost:6379/0'
         )
 
         # Run the app with app.start()
         # Try API at http://localhost:8000/docs
         # app.start()
+
+    Create Models API with users and data management:
+
+    .. jupyter-execute::
+
+        from msdss_base_database import Database
+        from msdss_models_api.models import Model
+        from msdss_models_api import ModelsAPI
+        from msdss_users_api import UsersAPI
+        from msdss_data_api import DataAPI
+
+        # Create database object
+        database = Database(
+            driver='postgresql',
+            user='msdss',
+            password='msdss123',
+            host='localhost',
+            port='5432',
+            database='msdss'
+        )
+
+        # Create a users api
+        # CHANGE SECRETS TO STRONG PHRASES
+        users_api = UsersAPI(
+            'cookie-secret',
+            'jwt-secret',
+            'reset-secret',
+            'verification-secret',
+            database=database
+        )
+
+        # Create a data api with users
+        data_users_api = UsersAPI(
+            'cookie-secret',
+            'jwt-secret',
+            'reset-secret',
+            'verification-secret',
+            database=database
+        )
+        data_api = DataAPI(data_users_api, database=database)
+
+        # Create a models api with users and data management
+        app = ModelsAPI(
+            users_api,
+            models=[Model],
+            database=database,
+            broker_url='redis://localhost:6379/0',
+            backend_url='redis://localhost:6379/0'
+        )
+        app.add_app(data_api)
+
+        # Run the app with app.start()
+        # Try API at http://localhost:8000/docs
+        # app.start()
     """
-    
     def __init__(
         self,
         users_api=None,
+        database=Database(),
         models=[],
         broker_url=DEFAULT_BROKER_URL,
         backend_url=DEFAULT_BACKEND_URL,
@@ -142,9 +221,9 @@ class ModelsAPI(API):
             folder = env.get('folder', folder)
 
         # (ModelsAPI_bg) Create background manager for models
-        models_manager = ModelsManager(models=models, folder=folder)
+        models_manager = ModelsDBManager(models=models, database=database, folder=folder)
         worker = Celery(broker=broker_url, backend=backend_url)
-        bg_manager = ModelsBackgroundManager(worker=worker, models_manager=models_manager)
+        bg_manager = ModelsDBBackgroundManager(worker=worker, models_manager=models_manager)
         models_router_settings['bg_manager'] = bg_manager
         
         # (ModelsAPI_users) Add users app if specified
@@ -158,4 +237,33 @@ class ModelsAPI(API):
 
         # (ModelsAPI_router_attr) Set attributes
         self.misc = {}
-        self.bg_manager = bg_manager
+        self.misc['bg_manager'] = bg_manager
+
+    def start_worker(self):
+        """
+        Start the background worker to process background tasks.
+
+        This should be run in a separate terminal instance from the app.
+
+        Author
+        ------
+        Richard Wen <rrwen.dev@gmail.com>
+        
+        Example
+        -------
+        .. code::
+
+            from msdss_models_api.models import Model
+            from msdss_models_api import ModelsAPI
+
+            # Create models api without users
+            app = ModelsAPI(
+                models=[Model],
+                broker_url='redis://localhost:6379/0',
+                backend_url='redis://localhost:6379/0'
+            )
+
+            # Run the background worker in a separate terminal
+            app.start_worker()
+        """
+        self.misc['bg_manager'].start()

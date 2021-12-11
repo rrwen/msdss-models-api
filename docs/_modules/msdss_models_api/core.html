@@ -69,7 +69,7 @@
 
   </head>
   <body dir=ltr
-        data-md-color-primary=indigo data-md-color-accent=light-blue>
+        data-md-color-primary=blue data-md-color-accent=light-blue>
   
   <svg class="md-svg">
     <defs data-children-count="0">
@@ -271,25 +271,209 @@
   <h1 id="modules-msdss-models-api-core--page-root">Source code for msdss_models_api.core</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">celery</span> <span class="kn">import</span> <span class="n">Celery</span>
 <span class="kn">from</span> <span class="nn">fastapi</span> <span class="kn">import</span> <span class="n">FastAPI</span>
+<span class="kn">from</span> <span class="nn">msdss_base_api</span> <span class="kn">import</span> <span class="n">API</span>
+<span class="kn">from</span> <span class="nn">multiprocessing</span> <span class="kn">import</span> <span class="n">Process</span>
 
 <span class="kn">from</span> <span class="nn">.env</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">.managers</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">.routers</span> <span class="kn">import</span> <span class="o">*</span>
 
-<span class="k">try</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">msdss_users_api</span> <span class="kn">import</span> <span class="n">UsersAPI</span>
-<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-    <span class="k">pass</span>
+<div class="viewcode-block" id="ModelsAPI"><a class="viewcode-back" href="../../reference/core.html#msdss_models_api.core.ModelsAPI">[docs]</a><span class="k">class</span> <span class="nc">ModelsAPI</span><span class="p">(</span><span class="n">API</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    Models API class for managing models.</span>
+<span class="sd">    </span>
+<span class="sd">    * Extends the :class:`msdss_base_api:msdss_base_api.core.API` class</span>
 
-<div class="viewcode-block" id="ModelsAPI"><a class="viewcode-back" href="../../reference/core.html#msdss_models_api.core.ModelsAPI">[docs]</a><span class="k">class</span> <span class="nc">ModelsAPI</span><span class="p">:</span>
-    
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    users_api : :class:`msdss_users_api:msdss_users_api.core.UsersAPI` or None</span>
+<span class="sd">        Users API object to enable user authentication for models routes.</span>
+<span class="sd">        If ``None``, user authentication will not be used for models routes.</span>
+<span class="sd">    database : :class:`msdss_base_database:msdss_base_database.core.Database`</span>
+<span class="sd">        A database object for using models with data from the database.</span>
+<span class="sd">    models : list(:class:`msdss_models_api.models.Model`)</span>
+<span class="sd">        List of available ``Model`` objects to use for creating and managing model instances.</span>
+<span class="sd">        Ensure that the class names are unique, otherwise the last object in the list takes priority.</span>
+<span class="sd">    broker_url : str or None</span>
+<span class="sd">        Link to connect to a `RabbitMQ &lt;https://www.rabbitmq.com/&gt;`_ broker. Env vars will take priority - see parameter ``env``.</span>
+<span class="sd">    backend_url : str or None</span>
+<span class="sd">        Link to connect to a `RabbitMQ &lt;https://www.rabbitmq.com/&gt;`_ backend. Env vars will take priority - see parameter ``env``.</span>
+<span class="sd">    folder : str</span>
+<span class="sd">        The folder path to store models in. The folder will be created if it does not exist. Env vars will take priority - see parameter ``env``.</span>
+<span class="sd">    models_router_settings : dict</span>
+<span class="sd">        Keyword arguments passed to :func:`msdss_models_api.routers.get_models_router` except ``bg_manager``.</span>
+<span class="sd">    load_env : bool</span>
+<span class="sd">        Whether to load variables from a file with environmental variables at ``env_file`` or not.</span>
+<span class="sd">    env : :class:`msdss_users_api.env.ModelsDotEnv`</span>
+<span class="sd">        An object to set environment variables related to users configuration.</span>
+<span class="sd">        These environment variables will overwrite the parameters above if they exist.</span>
+
+<span class="sd">        By default, the related parameters above are assigned to each of the environment variables seen below if ``load_env`` is ``True``:</span>
+
+<span class="sd">        .. jupyter-execute::</span>
+<span class="sd">            :hide-code:</span>
+
+<span class="sd">            from msdss_models_api.defaults import DEFAULT_DOTENV_KWARGS</span>
+<span class="sd">            defaults = {k:v for k, v in DEFAULT_DOTENV_KWARGS.items() if k not in ['defaults', 'env_file', 'key_path']}</span>
+<span class="sd">            print('&lt;parameter&gt; = &lt;environment variable&gt;\\n')</span>
+<span class="sd">            for k, v in defaults.items():</span>
+<span class="sd">                print(k + ' = ' + v)</span>
+
+<span class="sd">    api : :class:`fastapi:fastapi.FastAPI`</span>
+<span class="sd">        API object for creating routes.</span>
+<span class="sd">    *args, **kwargs</span>
+<span class="sd">        Additional arguments passed to :class:`msdss_base_api:msdss_base_api.core.API`.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    users_api_database : :class:`msdss_base_database:msdss_base_database.core.Database`</span>
+<span class="sd">        Database object for users API.</span>
+<span class="sd">    misc : dict</span>
+<span class="sd">        Dictionary of miscellaneous values:</span>
+
+<span class="sd">        * ``fastapi_users_objects`` (dict): dict of values returned from :func:`msdss_users_api.tools.create_fastapi_users_objects`</span>
+
+<span class="sd">    Author</span>
+<span class="sd">    ------</span>
+<span class="sd">    Richard Wen &lt;rrwen.dev@gmail.com&gt;</span>
+
+<span class="sd">    Example</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    Create models api without users:</span>
+
+<span class="sd">    .. jupyter-execute::</span>
+
+<span class="sd">        from msdss_base_database import Database</span>
+<span class="sd">        from msdss_models_api.models import Model</span>
+<span class="sd">        from msdss_models_api import ModelsAPI</span>
+
+<span class="sd">        # Create database object</span>
+<span class="sd">        database = Database(</span>
+<span class="sd">            driver='postgresql',</span>
+<span class="sd">            user='msdss',</span>
+<span class="sd">            password='msdss123',</span>
+<span class="sd">            host='localhost',</span>
+<span class="sd">            port='5432',</span>
+<span class="sd">            database='msdss'</span>
+<span class="sd">        )</span>
+
+<span class="sd">        # Create models api without users</span>
+<span class="sd">        app = ModelsAPI(</span>
+<span class="sd">            models=[Model],</span>
+<span class="sd">            database=database,</span>
+<span class="sd">            broker_url='redis://localhost:6379/0',</span>
+<span class="sd">            backend_url='redis://localhost:6379/0'</span>
+<span class="sd">        )</span>
+
+<span class="sd">        # Run the app with app.start()</span>
+<span class="sd">        # Try API at http://localhost:8000/docs</span>
+<span class="sd">        # app.start()</span>
+
+<span class="sd">    Create Models API with users:</span>
+
+<span class="sd">    .. jupyter-execute::</span>
+
+<span class="sd">        from msdss_base_database import Database</span>
+<span class="sd">        from msdss_models_api.models import Model</span>
+<span class="sd">        from msdss_models_api import ModelsAPI</span>
+<span class="sd">        from msdss_users_api import UsersAPI</span>
+
+<span class="sd">        # Create database object</span>
+<span class="sd">        database = Database(</span>
+<span class="sd">            driver='postgresql',</span>
+<span class="sd">            user='msdss',</span>
+<span class="sd">            password='msdss123',</span>
+<span class="sd">            host='localhost',</span>
+<span class="sd">            port='5432',</span>
+<span class="sd">            database='msdss'</span>
+<span class="sd">        )</span>
+
+<span class="sd">        # Create a users api</span>
+<span class="sd">        # CHANGE SECRETS TO STRONG PHRASES</span>
+<span class="sd">        users_api = UsersAPI(</span>
+<span class="sd">            'cookie-secret',</span>
+<span class="sd">            'jwt-secret',</span>
+<span class="sd">            'reset-secret',</span>
+<span class="sd">            'verification-secret',</span>
+<span class="sd">            database=database</span>
+<span class="sd">        )</span>
+
+<span class="sd">        # Create a models api with users</span>
+<span class="sd">        app = ModelsAPI(</span>
+<span class="sd">            users_api,</span>
+<span class="sd">            models=[Model],</span>
+<span class="sd">            database=database,</span>
+<span class="sd">            broker_url='redis://localhost:6379/0',</span>
+<span class="sd">            backend_url='redis://localhost:6379/0'</span>
+<span class="sd">        )</span>
+
+<span class="sd">        # Run the app with app.start()</span>
+<span class="sd">        # Try API at http://localhost:8000/docs</span>
+<span class="sd">        # app.start()</span>
+
+<span class="sd">    Create Models API with users and data management:</span>
+
+<span class="sd">    .. jupyter-execute::</span>
+
+<span class="sd">        from msdss_base_database import Database</span>
+<span class="sd">        from msdss_models_api.models import Model</span>
+<span class="sd">        from msdss_models_api import ModelsAPI</span>
+<span class="sd">        from msdss_users_api import UsersAPI</span>
+<span class="sd">        from msdss_data_api import DataAPI</span>
+
+<span class="sd">        # Create database object</span>
+<span class="sd">        database = Database(</span>
+<span class="sd">            driver='postgresql',</span>
+<span class="sd">            user='msdss',</span>
+<span class="sd">            password='msdss123',</span>
+<span class="sd">            host='localhost',</span>
+<span class="sd">            port='5432',</span>
+<span class="sd">            database='msdss'</span>
+<span class="sd">        )</span>
+
+<span class="sd">        # Create a users api</span>
+<span class="sd">        # CHANGE SECRETS TO STRONG PHRASES</span>
+<span class="sd">        users_api = UsersAPI(</span>
+<span class="sd">            'cookie-secret',</span>
+<span class="sd">            'jwt-secret',</span>
+<span class="sd">            'reset-secret',</span>
+<span class="sd">            'verification-secret',</span>
+<span class="sd">            database=database</span>
+<span class="sd">        )</span>
+
+<span class="sd">        # Create a data api with users</span>
+<span class="sd">        data_users_api = UsersAPI(</span>
+<span class="sd">            'cookie-secret',</span>
+<span class="sd">            'jwt-secret',</span>
+<span class="sd">            'reset-secret',</span>
+<span class="sd">            'verification-secret',</span>
+<span class="sd">            database=database</span>
+<span class="sd">        )</span>
+<span class="sd">        data_api = DataAPI(data_users_api, database=database)</span>
+
+<span class="sd">        # Create a models api with users and data management</span>
+<span class="sd">        app = ModelsAPI(</span>
+<span class="sd">            users_api,</span>
+<span class="sd">            models=[Model],</span>
+<span class="sd">            database=database,</span>
+<span class="sd">            broker_url='redis://localhost:6379/0',</span>
+<span class="sd">            backend_url='redis://localhost:6379/0'</span>
+<span class="sd">        )</span>
+<span class="sd">        app.add_app(data_api)</span>
+
+<span class="sd">        # Run the app with app.start()</span>
+<span class="sd">        # Try API at http://localhost:8000/docs</span>
+<span class="sd">        # app.start()</span>
+<span class="sd">    """</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">users_api</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">database</span><span class="o">=</span><span class="n">Database</span><span class="p">(),</span>
         <span class="n">models</span><span class="o">=</span><span class="p">[],</span>
-        <span class="n">folder</span><span class="o">=</span><span class="n">DEFAULT_MODELS_FOLDER</span><span class="p">,</span>
         <span class="n">broker_url</span><span class="o">=</span><span class="n">DEFAULT_BROKER_URL</span><span class="p">,</span>
         <span class="n">backend_url</span><span class="o">=</span><span class="n">DEFAULT_BACKEND_URL</span><span class="p">,</span>
+        <span class="n">folder</span><span class="o">=</span><span class="n">DEFAULT_MODELS_FOLDER</span><span class="p">,</span>
         <span class="n">models_router_settings</span><span class="o">=</span><span class="p">{},</span>
         <span class="n">load_env</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="n">env</span><span class="o">=</span><span class="n">ModelsDotEnv</span><span class="p">(),</span>
@@ -308,9 +492,9 @@
             <span class="n">folder</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'folder'</span><span class="p">,</span> <span class="n">folder</span><span class="p">)</span>
 
         <span class="c1"># (ModelsAPI_bg) Create background manager for models</span>
-        <span class="n">models_manager</span> <span class="o">=</span> <span class="n">ModelsManager</span><span class="p">(</span><span class="n">models</span><span class="o">=</span><span class="n">models</span><span class="p">,</span> <span class="n">folder</span><span class="o">=</span><span class="n">folder</span><span class="p">)</span>
+        <span class="n">models_manager</span> <span class="o">=</span> <span class="n">ModelsDBManager</span><span class="p">(</span><span class="n">models</span><span class="o">=</span><span class="n">models</span><span class="p">,</span> <span class="n">database</span><span class="o">=</span><span class="n">database</span><span class="p">,</span> <span class="n">folder</span><span class="o">=</span><span class="n">folder</span><span class="p">)</span>
         <span class="n">worker</span> <span class="o">=</span> <span class="n">Celery</span><span class="p">(</span><span class="n">broker</span><span class="o">=</span><span class="n">broker_url</span><span class="p">,</span> <span class="n">backend</span><span class="o">=</span><span class="n">backend_url</span><span class="p">)</span>
-        <span class="n">bg_manager</span> <span class="o">=</span> <span class="n">ModelsBackgroundManager</span><span class="p">(</span><span class="n">worker</span><span class="o">=</span><span class="n">worker</span><span class="p">,</span> <span class="n">models_manager</span><span class="o">=</span><span class="n">models_manager</span><span class="p">)</span>
+        <span class="n">bg_manager</span> <span class="o">=</span> <span class="n">ModelsDBBackgroundManager</span><span class="p">(</span><span class="n">worker</span><span class="o">=</span><span class="n">worker</span><span class="p">,</span> <span class="n">models_manager</span><span class="o">=</span><span class="n">models_manager</span><span class="p">)</span>
         <span class="n">models_router_settings</span><span class="p">[</span><span class="s1">'bg_manager'</span><span class="p">]</span> <span class="o">=</span> <span class="n">bg_manager</span>
         
         <span class="c1"># (ModelsAPI_users) Add users app if specified</span>
@@ -320,7 +504,40 @@
 
         <span class="c1"># (ModelsAPI_router_models) Add models router</span>
         <span class="n">models_router</span> <span class="o">=</span> <span class="n">get_models_router</span><span class="p">(</span><span class="o">**</span><span class="n">models_router_settings</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_router</span><span class="p">(</span><span class="n">models_router</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_router</span><span class="p">(</span><span class="n">models_router</span><span class="p">)</span>
+
+        <span class="c1"># (ModelsAPI_router_attr) Set attributes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">misc</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">misc</span><span class="p">[</span><span class="s1">'bg_manager'</span><span class="p">]</span> <span class="o">=</span> <span class="n">bg_manager</span>
+
+    <span class="k">def</span> <span class="nf">start_worker</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">"""</span>
+<span class="sd">        Start the background worker to process background tasks.</span>
+
+<span class="sd">        This should be run in a separate terminal instance from the app.</span>
+
+<span class="sd">        Author</span>
+<span class="sd">        ------</span>
+<span class="sd">        Richard Wen &lt;rrwen.dev@gmail.com&gt;</span>
+<span class="sd">        </span>
+<span class="sd">        Example</span>
+<span class="sd">        -------</span>
+<span class="sd">        .. code::</span>
+
+<span class="sd">            from msdss_models_api.models import Model</span>
+<span class="sd">            from msdss_models_api import ModelsAPI</span>
+
+<span class="sd">            # Create models api without users</span>
+<span class="sd">            app = ModelsAPI(</span>
+<span class="sd">                models=[Model],</span>
+<span class="sd">                broker_url='redis://localhost:6379/0',</span>
+<span class="sd">                backend_url='redis://localhost:6379/0'</span>
+<span class="sd">            )</span>
+
+<span class="sd">            # Run the background worker in a separate terminal</span>
+<span class="sd">            app.start_worker()</span>
+<span class="sd">        """</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">misc</span><span class="p">[</span><span class="s1">'bg_manager'</span><span class="p">]</span><span class="o">.</span><span class="n">start</span><span class="p">()</span></div>
 </pre></div>
 
           </article>

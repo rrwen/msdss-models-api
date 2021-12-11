@@ -72,7 +72,7 @@
 
   </head>
   <body dir=ltr
-        data-md-color-primary=indigo data-md-color-accent=light-blue>
+        data-md-color-primary=blue data-md-color-accent=light-blue>
   
   <svg class="md-svg">
     <defs data-children-count="0">
@@ -295,7 +295,22 @@
 <li class="toctree-l2"><a class="reference internal" href="env.html#modelsdotenv">ModelsDotEnv</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="handlers.html">handlers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="handlers.html">handlers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="handlers.html#modelshandler">ModelsHandler</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="handlers.html#handle-create">handle_create</a></li>
+<li class="toctree-l3"><a class="reference internal" href="handlers.html#handle-load">handle_load</a></li>
+<li class="toctree-l3"><a class="reference internal" href="handlers.html#handle-read">handle_read</a></li>
+<li class="toctree-l3"><a class="reference internal" href="handlers.html#handle-write">handle_write</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="handlers.html#modelsbackgroundhandler">ModelsBackgroundHandler</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="handlers.html#handle-cancel">handle_cancel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="handlers.html#handle-processing">handle_processing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="handlers.html#handle-read-state">handle_read_state</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="managers.html">managers</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="managers.html#modelsmanager">ModelsManager</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="managers.html#get-file">_get_file</a></li>
@@ -317,10 +332,19 @@
 <li class="toctree-l3"><a class="reference internal" href="managers.html#id1">delete</a></li>
 <li class="toctree-l3"><a class="reference internal" href="managers.html#get-status">get_status</a></li>
 <li class="toctree-l3"><a class="reference internal" href="managers.html#id4">input</a></li>
-<li class="toctree-l3"><a class="reference internal" href="managers.html#id5">load</a></li>
-<li class="toctree-l3"><a class="reference internal" href="managers.html#id6">output</a></li>
+<li class="toctree-l3"><a class="reference internal" href="managers.html#id5">output</a></li>
 <li class="toctree-l3"><a class="reference internal" href="managers.html#start">start</a></li>
-<li class="toctree-l3"><a class="reference internal" href="managers.html#id7">update</a></li>
+<li class="toctree-l3"><a class="reference internal" href="managers.html#id6">update</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="managers.html#modelsdbmanager">ModelsDBManager</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="managers.html#input-db">input_db</a></li>
+<li class="toctree-l3"><a class="reference internal" href="managers.html#update-db">update_db</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="managers.html#modelsdbbackgroundmanager">ModelsDBBackgroundManager</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="managers.html#id7">input_db</a></li>
+<li class="toctree-l3"><a class="reference internal" href="managers.html#id8">update_db</a></li>
 </ul>
 </li>
 </ul>
@@ -337,6 +361,11 @@
 <li class="toctree-l3"><a class="reference internal" href="models.html#update">update</a></li>
 </ul>
 </li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tools.html">tools</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tools.html#create-models-bg-manager-func">create_models_bg_manager_func</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tools.html#create-models-db-bg-manager-func">create_models_db_bg_manager_func</a></li>
 </ul>
 </li>
 </ul>

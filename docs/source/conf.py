@@ -108,7 +108,7 @@ html_sidebars = {
 html_theme_options = {
     'nav_title': 'msdss-models-api',
     'base_url': 'https://rrwen.github.io/msdss-models-api',
-    'color_primary': 'indigo',
+    'color_primary': 'blue',
     'color_accent': 'light-blue',
     'repo_url': 'https://github.com/rrwen/msdss-models-api/',
     'repo_name': 'msdss-models-api'

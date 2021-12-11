@@ -49,7 +49,7 @@ class ModelsDotEnv(DotEnv):
         )
 
         # Set secret
-        alt_env.set('broker_url', 'amqp://msdss:msdss123@localhost:5672')
+        alt_env.set('broker_url', 'redis://localhost:6379/0')
 
         # Set folder
         alt_env.set('folder', './path/to/folder')

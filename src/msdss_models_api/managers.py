@@ -3,8 +3,9 @@ import os
 import pickle
 import shutil
 
-from celery import Celery
 from msdss_base_database import Database
+from msdss_data_api.managers import DataManager
+from shlex import split
 
 from .defaults import *
 from .handlers import *
@@ -242,11 +243,16 @@ class ModelsManager:
         out = os.path.join(folder, name)
         return out
 
-    def _load_base(self):
+    def _load_base(self, force=False):
         """
         Load all base models.
 
         Sets attribute ``.instances`` to be initialized :class:`msdss_models_api.models.Model` instances based on the subfolders in attribute ``folders``
+
+        Parameters
+        ----------
+        force : bool
+            Whether to force loading whether instance is in ``.instances`` attribute or not.
 
         Author
         ------
@@ -276,9 +282,10 @@ class ModelsManager:
         """
         names = [name for name in os.listdir(self.folder) if os.path.isdir(os.path.join(self.folder, name))]
         for name in names:
-            path = self._get_file(name)
-            with open(path, 'rb') as file:
-                self.instances[name] = pickle.load(file)
+            if name not in self.instances or force:
+                path = self._get_file(name)
+                with open(path, 'rb') as file:
+                    self.instances[name] = pickle.load(file)
 
     def create(self, name, model, settings={}):
         """
@@ -532,7 +539,7 @@ class ModelsManager:
         self.handler.handle_load(instance)
         instance.load(**settings)
 
-    def output(self, name, data, settings={}, load_settings={}):
+    def output(self, name, data, settings={}):
         """
         Get the output of a model instance.
 
@@ -544,8 +551,6 @@ class ModelsManager:
             Data to use for obtaining the model instance output. Should accept a ``list`` or ``dict`` to be input in a :class:`pandas:pandas.DataFrame` or the dataframe itself.
         settings : dict
             Keyword arguments passed to the :meth:`msdss_models_api.models.Model.output`.
-        load_settings : dict
-            Keyword arguments passed to the :meth:`msdss_models_api.models.Model.load`.
 
         Returns
         -------
@@ -593,7 +598,7 @@ class ModelsManager:
         out = instance.output(data, **settings)
         return out
     
-    def update(self, name, data, settings={}, load_settings={}):
+    def update(self, name, data, settings={}):
         """
         Update a model instance with new data.
 
@@ -608,8 +613,6 @@ class ModelsManager:
             Data to use for updating the model instance. Should accept a ``list`` or ``dict`` to be input in a :class:`pandas:pandas.DataFrame` or the dataframe itself.
         settings : dict
             Keyword arguments passed to the :meth:`msdss_models_api.models.Model.update`.
-        load_settings : dict
-            Keyword arguments passed to the :meth:`msdss_models_api.models.Model.load`.
 
         Author
         ------
@@ -664,6 +667,7 @@ class ModelsBackgroundManager:
         A ``celery`` app object to manage background tasks.
     models_manager : :class:`msdss_models_api.managers.ModelsManager` or None
         A models manager object to manage models. If ``None``, a default manager will be created.
+        The handler for the models manager will be disabled as model operations will be handled with parameter ``handler`` instead.
     handler : :class:`msdss_models_api.handlers.ModelsBackgroundHandler`
         Handler object to manage background operations.
 
@@ -678,13 +682,12 @@ class ModelsBackgroundManager:
 
         * ``create`` (func): background task to create a model instance
         * ``input`` (func): background task to initialize models with input data
-        * ``load`` (func): background task to load saved models
         * ``update`` (func): background task to update models
 
     states : dict
         Dictionary of processing states for each instance, consisting of the following keys:
 
-        * ``task`` (str): the action that the process is performing - one of: ``CREATE``, ``INPUT``, ``LOAD``, ``UPDATE``
+        * ``task`` (str): the action that the process is performing - one of: ``CREATE``, ``INPUT``, ``UPDATE``
         * ``result`` (:class:`celery:celery.result.AsyncResult`): celery async object for getting states, ids, etc (see `celery.result <https://docs.celeryproject.org/en/stable/reference/celery.result.html#celery.result.AsyncResult>`_)
         * ``started_at`` (:class:`datetime.datetime`): datetime object for when the task was started
 
@@ -717,7 +720,7 @@ class ModelsBackgroundManager:
             models_manager.create('temp_model', 'Model')
 
             # Create background manager
-            worker = Celery(broker='amqp://msdss:msdss123@localhost:5672', backend='rpc://') # rabbitmq
+            worker = Celery(broker='redis://localhost:6379/0', backend='redis://localhost:6379/0') # rabbitmq
             bg_manager = ModelsBackgroundManager(worker, models_manager)
 
             # Initialize a model instance with inputs as a background process
@@ -752,10 +755,11 @@ class ModelsBackgroundManager:
 
         # (ModelsBackgroundManager_attr) Set attributes
         self.models_manager = models_manager if models_manager else ModelsManager()
+        self.models_manager.handler.enable = False
         self.worker = worker
         self.tasks = {}
         self.states = {}
-        self.handler = handler if handler else ModelsBackgroundHandler(models_manager=models_manager)
+        self.handler = handler if handler else ModelsBackgroundHandler()
 
         # (ModelsBackgroundManager_task_create) Define create task
         @self.worker.task
@@ -769,15 +773,10 @@ class ModelsBackgroundManager:
             models_manager.input(name, data, settings)
         self.tasks['input'] = input
 
-        # (ModelsBackgroundManager_task_load) Define load task
-        @self.worker.task
-        def load(name, settings={}):
-            models_manager.load(name, settings)
-        self.tasks['load'] = load
-
         # (ModelsBackgroundManager_task_update) Define update task
         @self.worker.task
         def update(name, data, settings={}):
+            models_manager.load(name)
             models_manager.update(name, data, settings)
         self.tasks['update'] = update
 
@@ -821,7 +820,7 @@ class ModelsBackgroundManager:
                 models_manager.create('temp_model', 'Model')
 
                 # Create background manager
-                worker = Celery(broker='amqp://msdss:msdss123@localhost:5672', backend='rpc://') # rabbitmq
+                worker = Celery(broker='redis://localhost:6379/0', backend='redis://localhost:6379/0') # rabbitmq
                 bg_manager = ModelsBackgroundManager(worker, models_manager)
 
                 # Initialize a model instance with inputs as a background process
@@ -872,7 +871,7 @@ class ModelsBackgroundManager:
                 models_manager.create('temp_model', 'Model')
 
                 # Create background manager
-                worker = Celery(broker='amqp://msdss:msdss123@localhost:5672', backend='rpc://') # rabbitmq
+                worker = Celery(broker='redis://localhost:6379/0', backend='redis://localhost:6379/0') # rabbitmq
                 bg_manager = ModelsBackgroundManager(worker, models_manager)
 
                 # Initialize a model instance with inputs as a background process
@@ -926,13 +925,14 @@ class ModelsBackgroundManager:
                 models_manager = ModelsManager(models, folder=folder_path)
 
                 # Create background manager
-                worker = Celery(broker='amqp://msdss:msdss123@localhost:5672', backend='rpc://') # rabbitmq
+                worker = Celery(broker='redis://localhost:6379/0', backend='redis://localhost:6379/0') # rabbitmq
                 bg_manager = ModelsBackgroundManager(worker, models_manager)
 
                 # Create model instance
                 bg_manager.create('temp_model', 'Model')
         """
-        self.models_manager.handler.handle_create(name, model, self.models_manager.instances, self.models_manager.models)
+        self.models_manager._load_base()
+        self.handler.handle_create(name, model, self.models_manager.instances, self.models_manager.models)
         self._add_model_task('create', name, model, *args, **kwargs)
 
     def delete(self, name, *args, **kwargs):
@@ -973,7 +973,7 @@ class ModelsBackgroundManager:
                 models_manager.create('temp_model', 'Model')
 
                 # Create background manager
-                worker = Celery(broker='amqp://msdss:msdss123@localhost:5672', backend='rpc://') # rabbitmq
+                worker = Celery(broker='redis://localhost:6379/0', backend='redis://localhost:6379/0') # rabbitmq
                 bg_manager = ModelsBackgroundManager(worker, models_manager)
 
                 # Initialize a model instance with inputs as a background process
@@ -1008,6 +1008,8 @@ class ModelsBackgroundManager:
             * ``status`` (str): the processing status of the model instance 
             * ``started_at`` (:class:`datetime.datetime): when the process was started
 
+            If the model instance is not processing, it will return a dict of the status only ``{'status': 'NOT_PROCESSING'}``.
+
         Author
         ------
         Richard Wen <rrwen.dev@gmail.com>
@@ -1034,7 +1036,7 @@ class ModelsBackgroundManager:
                 models_manager.create('temp_model', 'Model')
 
                 # Create background manager
-                worker = Celery(broker='amqp://msdss:msdss123@localhost:5672', backend='rpc://') # rabbitmq
+                worker = Celery(broker='redis://localhost:6379/0', backend='redis://localhost:6379/0') # rabbitmq
                 bg_manager = ModelsBackgroundManager(worker, models_manager)
 
                 # Initialize a model instance with inputs as a background process
@@ -1049,12 +1051,17 @@ class ModelsBackgroundManager:
                 pprint(status)
         """
         self.handler.handle_read_state(name, self.states)
-        state = self.states[name]
-        out = {
-            'task': state['task'],
-            'status': state['result'].state,
-            'started_at': state['started_at']
-        }
+        if name in self.states:
+            state = self.states[name]
+            out = {
+                'task': state['task'],
+                'status': state['result'].state,
+                'started_at': state['started_at']
+            }
+        else:
+            out = {
+                'status': 'NOT_PROCESSING'
+            }
         return out
 
     def input(self, name, *args, **kwargs):
@@ -1095,7 +1102,7 @@ class ModelsBackgroundManager:
                 models_manager.create('temp_model', 'Model')
 
                 # Create background manager
-                worker = Celery(broker='amqp://msdss:msdss123@localhost:5672', backend='rpc://') # rabbitmq
+                worker = Celery(broker='redis://localhost:6379/0', backend='redis://localhost:6379/0') # rabbitmq
                 bg_manager = ModelsBackgroundManager(worker, models_manager)
 
                 # Initialize a model instance with inputs as a background process
@@ -1105,65 +1112,10 @@ class ModelsBackgroundManager:
                 ]
                 bg_manager.input('temp_model', train_data)
         """
-        self.models_manager.handler.handle_read(name, self.models_manager.instances)
+        self.models_manager._load_base()
+        self.handler.handle_read(name, self.models_manager.instances)
         self.handler.handle_processing(name, self.states)
         self._add_model_task('input', name, *args, **kwargs)
-
-    def load(self, name, *args, **kwargs):
-        """
-        Load a model instance, only if the instance is not processing.
-
-        Runs :meth:`msdss_models_api.managers.ModelsManager.load`.
-
-        Parameters
-        ----------
-        name : str
-            See parameter ``name`` in :meth:`msdss_models_api.managers.ModelsManager.load`.
-        *args, **kwargs
-            Additional arguments passed to the :meth:`msdss_models_api.managers.ModelsManager.load`.
-
-        Author
-        ------
-        Richard Wen <rrwen.dev@gmail.com>
-        
-        Example
-        -------
-        .. code::
-
-            import tempfile
-            from celery import Celery
-            from msdss_models_api.models import Model
-            from msdss_models_api.managers import *
-
-            with tempfile.TemporaryDirectory() as folder_path:
-
-                # Setup available models
-                models = [Model]
-                
-                # Create manager
-                models_manager = ModelsManager(models, folder=folder_path)
-
-                # Create model instance
-                models_manager.create('temp_model', 'Model')
-
-                # Create background manager
-                worker = Celery(broker='amqp://msdss:msdss123@localhost:5672', backend='rpc://') # rabbitmq
-                bg_manager = ModelsBackgroundManager(worker, models_manager)
-
-                # Initialize a model instance with inputs as a background process
-                train_data = [
-                    {'col_a': 1, 'col_b': 'a'},
-                    {'col_a': 2, 'col_b': 'b'}
-                ]
-                bg_manager.input('temp_model', train_data)
-                
-                # Load model instance as a background process
-                bg_manager.load('temp_model')
-        """
-        self.models_manager.handler.handle_read(name, self.models_manager.instances)
-        self.models_manager.handler.handle_load(self.models_manager.instance)
-        self.handler.handle_processing(name, self.states)
-        self._add_model_task('load', name, *args, **kwargs)
 
     def output(self, name, *args, **kwargs):
         """
@@ -1203,7 +1155,7 @@ class ModelsBackgroundManager:
                 models_manager.create('temp_model', 'Model')
 
                 # Create background manager
-                worker = Celery(broker='amqp://msdss:msdss123@localhost:5672', backend='rpc://') # rabbitmq
+                worker = Celery(broker='redis://localhost:6379/0', backend='redis://localhost:6379/0') # rabbitmq
                 bg_manager = ModelsBackgroundManager(worker, models_manager)
 
                 # Initialize a model instance with inputs as a background process
@@ -1220,8 +1172,10 @@ class ModelsBackgroundManager:
                 ]
                 bg_manager.output('temp_model', new_data)
         """
-        self.models_manager.handler.handle_read(name, self.models_manager.instances)
+        self.models_manager._load_base()
+        self.handler.handle_read(name, self.models_manager.instances)
         self.handler.handle_processing(name, self.states)
+        self.models_manager.load(name)
         return self.models_manager.output(name, *args, **kwargs)
 
     def start(self, *args, worker_kwargs={}, **kwargs):
@@ -1230,10 +1184,6 @@ class ModelsBackgroundManager:
 
         Parameters
         ----------
-        task : str
-            The name of the task in attribute ``.tasks``.
-        name : str
-            The name of the model instance to add tasks for.
         worker_kwargs : dict
             Keyword arguments for :class:`celery:celery.apps.worker`.
         *args, **kwargs
@@ -1264,7 +1214,7 @@ class ModelsBackgroundManager:
                 models_manager.create('temp_model', 'Model')
 
                 # Create background manager
-                worker = Celery(broker='amqp://msdss:msdss123@localhost:5672', backend='rpc://') # rabbitmq
+                worker = Celery(broker='redis://localhost:6379/0', backend='redis://localhost:6379/0') # rabbitmq
                 bg_manager = ModelsBackgroundManager(worker, models_manager)
 
                 # Initialize a model instance with inputs as a background process
@@ -1278,60 +1228,6 @@ class ModelsBackgroundManager:
                 bg_manager.start()
         """
         self.worker.Worker(**worker_kwargs).start(*args, **kwargs)
-
-    def shutdown(self, *args, **kwargs):
-        """
-        Shutdown all workers and tasks.
-
-        Parameters
-        ----------
-        *args, **kwargs
-            Additional arguments passed to :meth:`celery:celery.app.control.shutdown`.
-
-        Author
-        ------
-        Richard Wen <rrwen.dev@gmail.com>
-        
-        Example
-        -------
-        .. code::
-
-            import tempfile
-            from celery import Celery
-            from msdss_models_api.models import Model
-            from msdss_models_api.managers import *
-
-            with tempfile.TemporaryDirectory() as folder_path:
-
-                # Setup available models
-                models = [Model]
-                
-                # Create manager
-                models_manager = ModelsManager(models, folder=folder_path)
-
-                # Create model instance
-                models_manager.create('temp_model', 'Model')
-
-                # Create background manager
-                worker = Celery(broker='amqp://msdss:msdss123@localhost:5672', backend='rpc://') # rabbitmq
-                bg_manager = ModelsBackgroundManager(worker, models_manager)
-
-                # Initialize a model instance with inputs as a background process
-                train_data = [
-                    {'col_a': 1, 'col_b': 'a'},
-                    {'col_a': 2, 'col_b': 'b'}
-                ]
-                bg_manager._add_model_task('input', 'temp_model', train_data)
-
-                # Start worker
-                bg_manager.start()
-
-                # In another thread
-                bg_manager.shutdown()
-        """
-        for name in self.states:
-            self.cancel(name)
-        self.worker.control.shutdown(*args, **kwargs)
     
     def update(self, name, *args, **kwargs):
         """
@@ -1371,7 +1267,7 @@ class ModelsBackgroundManager:
                 models_manager.create('temp_model', 'Model')
 
                 # Create background manager
-                worker = Celery(broker='amqp://msdss:msdss123@localhost:5672', backend='rpc://') # rabbitmq
+                worker = Celery(broker='redis://localhost:6379/0', backend='redis://localhost:6379/0') # rabbitmq
                 bg_manager = ModelsBackgroundManager(worker, models_manager)
 
                 # Initialize a model instance with inputs as a background process
@@ -1388,9 +1284,445 @@ class ModelsBackgroundManager:
                 ]
                 bg_manager.update('temp_model', new_data)
         """
-        self.models_manager.handler.handle_read(name, self.models_manager.instances)
+        self.models_manager._load_base()
+        self.handler.handle_read(name, self.models_manager.instances)
         self.handler.handle_processing(name, self.states)
         self._add_model_task('update', name, *args, **kwargs)
+
+class ModelsDBManager(ModelsManager):
+    """
+    Class to manage :class:`msdss_models_api.models.Model` objects with added methods for processing models with data from a database.
+
+    * Inherits from :class:`msdss_models_api.models.ModelsManager`
+    
+    Parameters
+    ----------
+    models : list(:class:`msdss_models_api.models.Model`)
+        List of available ``Model`` objects to use for creating and managing model instances.
+        Ensure that the class names are unique, otherwise the last object takes priority.
+    database : :class:`msdss_base_database:msdss_base_database.core.Database`
+        A database object for using models with data from the database.
+    data_manager : :class:`msdss_data_api.managers.DataManager` or None
+        A data manager object for managing data in and out of a database.
+        If ``None``, one will be configured from parameter ``database``.
+    *args, **kwargs
+        Additional arguments for :class:`msdss_models_api.models.ModelsManager`
+    
+    Author
+    ------
+    Richard Wen <rrwen.dev@gmail.com>
+    
+    Example
+    -------
+    .. jupyter-execute::
+
+        import tempfile
+        from msdss_base_database import Database
+        from msdss_models_api.models import Model
+        from msdss_models_api.managers import ModelsDBManager
+
+        with tempfile.TemporaryDirectory() as folder_path:
+
+            # Setup available models and database
+            database = Database()
+            models = [Model]
+            
+            # Create manager
+            models_manager = ModelsDBManager(models, database, folder=folder_path)
+
+            # Create model instance
+            models_manager.create('temp_model', 'Model')
+
+            # Add training data to database
+            train_data = [
+                {'col_a': 1, 'col_b': 'a'},
+                {'col_a': 2, 'col_b': 'b'}
+            ]
+            database.insert('models_test', train_data)
+
+            # Initialize a model instance with inputs from database
+            models_manager.input_db('temp_model', 'models_test')
+            
+            # Update model instance with new data
+            new_data = [
+                {'col_a': 3, 'col_b': 'c'},
+                {'col_a': 4, 'col_b': 'd'}
+            ]
+            database.insert('models_test', new_data)
+            models_manager.update_db('temp_model', 'models_test', where=['col_a > 2'])
+
+            # Delete test table
+            database.drop_table('models_test')
+    """
+    def __init__(self, models=[], database=Database(), data_manager=None, *args, **kwargs):
+        super().__init__(models=models, *args, **kwargs)
+        self.database = database
+        self.data_manager = data_manager if data_manager else DataManager(database=database)
+    
+    def input_db(self, name, dataset, settings={}, *args, **kwargs):
+        """
+        Initialize a model instance with data from the database.
+
+        Parameters
+        ----------
+        name : str
+            Unique name of the model instance. The instance is stored in ``.instances[name]``.
+        dataset : str
+            Name of the table from the database. See parameter ``dataset`` :meth:`msdss_data_api.managers.DataManager.get`.
+        settings : dict
+            Keyword arguments passed to the :meth:`msdss_models_api.models.Model.input`.
+        *args, **kwargs
+            Additional arguments passed to :meth:`msdss_data_api.managers.DataManager.get`.
+
+        Author
+        ------
+        Richard Wen <rrwen.dev@gmail.com>
+        
+        Example
+        -------
+        .. jupyter-execute::
+
+            import tempfile
+            from msdss_base_database import Database
+            from msdss_models_api.models import Model
+            from msdss_models_api.managers import ModelsDBManager
+
+            with tempfile.TemporaryDirectory() as folder_path:
+
+                # Setup available models and database
+                database = Database()
+                models = [Model]
+                
+                # Create manager
+                models_manager = ModelsDBManager(models, database, folder=folder_path)
+
+                # Create model instance
+                models_manager.create('temp_model', 'Model')
+
+                # Add training data to database
+                train_data = [
+                    {'col_a': 1, 'col_b': 'a'},
+                    {'col_a': 2, 'col_b': 'b'}
+                ]
+                database.insert('models_test', train_data)
+
+                # Initialize a model instance with inputs from database
+                models_manager.input_db('temp_model', 'models_test')
+
+                # Delete test table
+                database.drop_table('models_test')
+        """
+        data = self.data_manager.get(dataset, *args, **kwargs)
+        self.input(name, data, settings)
+
+    def update_db(self, name, dataset, settings={}, *args, **kwargs):
+        """
+        Update a model instance with data from the database.
+
+        Parameters
+        ----------
+        name : str
+            Unique name of the model instance. The instance is stored in ``.instances[name]``.
+        dataset : str
+            Name of the table from the database. See parameter ``dataset`` :meth:`msdss_data_api.managers.DataManager.get`.
+        settings : dict
+            Keyword arguments passed to the :meth:`msdss_models_api.models.Model.update`.
+        *args, **kwargs
+            Additional arguments passed to :meth:`msdss_data_api.managers.DataManager.get`.
+
+        Author
+        ------
+        Richard Wen <rrwen.dev@gmail.com>
+        
+        Example
+        -------
+        .. jupyter-execute::
+
+            import tempfile
+            from msdss_base_database import Database
+            from msdss_models_api.models import Model
+            from msdss_models_api.managers import ModelsDBManager
+
+            with tempfile.TemporaryDirectory() as folder_path:
+
+                # Setup available models and database
+                database = Database()
+                models = [Model]
+                
+                # Create manager
+                models_manager = ModelsDBManager(models, database, folder=folder_path)
+
+                # Create model instance
+                models_manager.create('temp_model', 'Model')
+
+                # Add training data to database
+                train_data = [
+                    {'col_a': 1, 'col_b': 'a'},
+                    {'col_a': 2, 'col_b': 'b'}
+                ]
+                database.insert('models_test', train_data)
+
+                # Update model instance with new data
+                new_data = [
+                    {'col_a': 3, 'col_b': 'c'},
+                    {'col_a': 4, 'col_b': 'd'}
+                ]
+                database.insert('models_test', new_data)
+                models_manager.update_db('temp_model', 'models_test', where=['col_a > 2'])
+
+                # Delete test table
+                database.drop_table('models_test')
+        """
+        data = self.data_manager.get(dataset, *args, **kwargs)
+        self.update(name, data, settings)
+
+class ModelsDBBackgroundManager(ModelsBackgroundManager):
+    """
+    Class to manage :class:`msdss_models_api.models.Model` background processes using a :class:`msdss_models_api.managers.ModelsManager`.
+    
+    * Inherits from :class:`msdss_models_api.managers.ModelsBackgroundManager`
+
+    Parameters
+    ----------
+    database : :class:`msdss_base_database:msdss_base_database.core.Database`
+        A database object for using models with data from the database.
+    models_manager : :class:`msdss_models_api.managers.ModelsDBManager` or None
+        A models DB manager object to manage models that can receive data from a database. If ``None``, a default manager will be created.
+        The handler for the models manager will be disabled as model operations will be handled with parameter ``handler`` instead.
+    *args, **kwargs
+        Additional arguments passed to :class:`msdss_models_api.managers.ModelsBackgroundManager`.
+
+    Attributes
+    ----------
+    models_manager : dict(:class:`msdss_models_api.manager.ModelsDBManager`)
+        Same as parameter ``models_manager``.
+    tasks : dict
+        Dictionary of background tasks from the ``worker`` object with the following keys (in addition to the ones in attribute ``tasks`` of :class:`msdss_models_api.managers.ModelsBackgroundManager`):
+
+        * ``input_db`` (func): background task to initialize models with input data from a database
+        * ``update_db`` (func): background task to update models using data from a database
+    
+    Author
+    ------
+    Richard Wen <rrwen.dev@gmail.com>
+    
+    Example
+    -------
+    .. code::
+
+        import tempfile
+        from celery import Celery
+        from msdss_base_database import Database
+        from msdss_models_api.models import Model
+        from msdss_models_api.managers import *
+        from pprint import pprint
+
+        with tempfile.TemporaryDirectory() as folder_path:
+
+            # Setup available models
+            models = [Model]
+            
+            # Create manager
+            database = Database()
+            models_manager = ModelsDBManager(models, database, folder=folder_path)
+
+            # Create model instance
+            models_manager.create('temp_model', 'Model')
+
+            # Create background manager
+            worker = Celery(broker='redis://localhost:6379/0', backend='redis://localhost:6379/0') # rabbitmq
+            bg_manager = ModelsDBBackgroundManager(worker, models_manager)
+
+             # Add training data to database
+            train_data = [
+                {'col_a': 1, 'col_b': 'a'},
+                {'col_a': 2, 'col_b': 'b'}
+            ]
+            database.insert('models_test', train_data)
+
+            # Initialize a model instance with inputs from database
+            bg_manager.input_db('temp_model', 'models_test')
+            
+            # Update model instance with new data
+            new_data = [
+                {'col_a': 3, 'col_b': 'c'},
+                {'col_a': 4, 'col_b': 'd'}
+            ]
+            database.insert('models_test', new_data)
+            bg_manager.update_db('temp_model', 'models_test', where=['col_a > 2'])
+    """
+    def __init__(self, database=Database(), models_manager=None, *args, **kwargs):
+
+        # (ModelsDBBackgroundManager_init) Initialize inherited class
+        models_manager = models_manager if models_manager else ModelsDBManager(database=database)
+        super().__init__(models_manager=models_manager, *args, **kwargs)
+        
+        # (ModelsDBBackgroundManager_task_input) Define input db task
+        @self.worker.task
+        def input_db(name, dataset, settings={}, *args, **kwargs):
+            models_manager.input_db(name, dataset, settings, *args, **kwargs)
+        self.tasks['input_db'] = input_db
+
+        # (ModelsDBBackgroundManager_task_update) Define update db task
+        @self.worker.task
+        def update_db(name, dataset, settings={}, *args, **kwargs):
+            models_manager.load(name)
+            models_manager.update_db(name, dataset, settings, *args, **kwargs)
+        self.tasks['update_db'] = update_db
+
+    def input_db(self, name, dataset, settings={}, where=None, *args, **kwargs):
+        """
+        Initialize a model instance with data from the database.
+
+        Parameters
+        ----------
+        name : str
+            Unique name of the model instance. The instance is stored in ``.instances[name]``.
+        dataset : str
+            Name of the table from the database. See parameter ``dataset`` :meth:`msdss_data_api.managers.DataManager.get`.
+        settings : dict
+            Keyword arguments passed to the :meth:`msdss_models_api.models.Model.input`.
+        where : list(str)
+            See parameter ``where`` in :meth:`msdss_data_api.managers.DataManager.get`.
+        *args, **kwargs
+            Additional arguments passed to :meth:`msdss_data_api.managers.DataManager.get`.
+
+        Author
+        ------
+        Richard Wen <rrwen.dev@gmail.com>
+        
+        Example
+        -------
+        .. code::
+
+            import tempfile
+            from celery import Celery
+            from msdss_base_database import Database
+            from msdss_models_api.models import Model
+            from msdss_models_api.managers import *
+            from pprint import pprint
+
+            with tempfile.TemporaryDirectory() as folder_path:
+
+                # Setup available models
+                models = [Model]
+                
+                # Create manager
+                database = Database()
+                models_manager = ModelsDBManager(models, database, folder=folder_path)
+
+                # Create model instance
+                models_manager.create('temp_model', 'Model')
+
+                # Create background manager
+                worker = Celery(broker='redis://localhost:6379/0', backend='redis://localhost:6379/0') # rabbitmq
+                bg_manager = ModelsDBBackgroundManager(worker, models_manager)
+
+                # Add training data to database
+                train_data = [
+                    {'col_a': 1, 'col_b': 'a'},
+                    {'col_a': 2, 'col_b': 'b'}
+                ]
+                database.insert('models_test', train_data)
+
+                # Initialize a model instance with inputs from database
+                bg_manager.input_db('temp_model', 'models_test')
+        """
+        self.models_manager._load_base()
+        
+        # (ModelsDBBackgroundManager_input_db_data) Handle database read and query
+        where = [split(w) for w in where] if where else where
+        self.models_manager.data_manager.handler.handle_read(dataset)
+        self.models_manager.data_manager.handler.handle_where(where)
+
+        # (ModelsDBBackgroundManager_input_db_handle) Handle model read and processing
+        self.handler.handle_read(name, self.models_manager.instances)
+        self.handler.handle_processing(name, self.states)
+
+        # (ModelsDBBackgroundManager_input_db_add) Add input db task
+        self._add_model_task('input_db', name, dataset, settings=settings, where=where, *args, **kwargs)
+
+    def update_db(self, name, dataset, settings={}, where=None, *args, **kwargs):
+        """
+        Update a model instance with new data from the database as a background task.
+
+        Runs :meth:`msdss_models_api.managers.ModelsDBManager.update_db`.
+
+        Parameters
+        ----------
+        name : str
+            See parameter ``name`` in :meth:`msdss_models_api.managers.ModelsManager.update`.
+        dataset : str
+            Name of the table from the database. See parameter ``dataset`` :meth:`msdss_data_api.managers.DataManager.get`.
+        settings : dict
+            Keyword arguments passed to the :meth:`msdss_models_api.models.Model.update`.
+        where : list(str)
+            See parameter ``where`` in :meth:`msdss_data_api.managers.DataManager.get`.
+        *args, **kwargs
+            Additional arguments passed to :meth:`msdss_data_api.managers.DataManager.get`.
+
+        Author
+        ------
+        Richard Wen <rrwen.dev@gmail.com>
+        
+        Example
+        -------
+        .. code::
+
+            import tempfile
+            from celery import Celery
+            from msdss_base_database import Database
+            from msdss_models_api.models import Model
+            from msdss_models_api.managers import *
+            from pprint import pprint
+
+            with tempfile.TemporaryDirectory() as folder_path:
+
+                # Setup available models
+                models = [Model]
+                
+                # Create manager
+                database = Database()
+                models_manager = ModelsDBManager(models, database, folder=folder_path)
+
+                # Create model instance
+                models_manager.create('temp_model', 'Model')
+
+                # Create background manager
+                worker = Celery(broker='redis://localhost:6379/0', backend='redis://localhost:6379/0') # rabbitmq
+                bg_manager = ModelsDBBackgroundManager(worker, models_manager)
+
+                # Add training data to database
+                train_data = [
+                    {'col_a': 1, 'col_b': 'a'},
+                    {'col_a': 2, 'col_b': 'b'}
+                ]
+                database.insert('models_test', train_data)
+
+                # Initialize a model instance with inputs from database
+                bg_manager.input_db('temp_model', 'models_test')
+                
+                # Update model instance with new data
+                new_data = [
+                    {'col_a': 3, 'col_b': 'c'},
+                    {'col_a': 4, 'col_b': 'd'}
+                ]
+                database.insert('models_test', new_data)
+                bg_manager.update_db('temp_model', 'models_test', where=['col_a > 2'])
+        """
+        self.models_manager._load_base()
+
+        # (ModelsDBBackgroundManager_update_db_data) Handle database read and query
+        where = [split(w) for w in where] if where else where
+        self.models_manager.data_manager.handler.handle_read(dataset)
+        self.models_manager.data_manager.handler.handle_where(where)
+
+        # (ModelsDBBackgroundManager_update_db_handle) Handle model read and processing
+        self.handler.handle_read(name, self.models_manager.instances)
+        self.handler.handle_processing(name, self.states)
+
+        # (ModelsDBBackgroundManager_update_db_add) Add update db task
+        self._add_model_task('update_db', name, dataset, settings=settings, where=where, *args, **kwargs)
 
 class ModelsMetadataManager:
 

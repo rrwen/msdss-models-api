@@ -66,6 +66,8 @@ update
 ModelsBackgroundManager
 -----------------------
 
+.. autoclass:: msdss_models_api.managers.ModelsBackgroundManager
+
 _add_model_task
 ^^^^^^^^^^^^^^^
 
@@ -81,38 +83,57 @@ delete
 
 .. automethod:: msdss_models_api.managers.ModelsBackgroundManager.delete
 
-
 get_status
 ^^^^^^^^^^
 
 .. automethod:: msdss_models_api.managers.ModelsBackgroundManager.get_status
-
 
 input
 ^^^^^
 
 .. automethod:: msdss_models_api.managers.ModelsBackgroundManager.input
 
-
-load
-^^^^
-
-.. automethod:: msdss_models_api.managers.ModelsBackgroundManager.load
-
-
 output
 ^^^^^^
 
 .. automethod:: msdss_models_api.managers.ModelsBackgroundManager.output
-
 
 start
 ^^^^^
 
 .. automethod:: msdss_models_api.managers.ModelsBackgroundManager.start
 
-
 update
 ^^^^^^
 
 .. automethod:: msdss_models_api.managers.ModelsBackgroundManager.update
+
+ModelsDBManager
+---------------
+
+.. autoclass:: msdss_models_api.managers.ModelsDBManager
+
+input_db
+^^^^^^^^
+
+.. automethod:: msdss_models_api.managers.ModelsDBManager.input_db
+
+update_db
+^^^^^^^^^
+
+.. automethod:: msdss_models_api.managers.ModelsDBManager.update_db
+
+ModelsDBBackgroundManager
+-------------------------
+
+.. autoclass:: msdss_models_api.managers.ModelsDBBackgroundManager
+
+input_db
+^^^^^^^^
+
+.. automethod:: msdss_models_api.managers.ModelsDBBackgroundManager.input_db
+
+update_db
+^^^^^^^^^
+
+.. automethod:: msdss_models_api.managers.ModelsDBBackgroundManager.update_db

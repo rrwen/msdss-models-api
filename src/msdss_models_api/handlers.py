@@ -5,6 +5,12 @@ from fastapi import HTTPException
 class ModelsHandler:
     """
     Class to handle model operations.
+
+    Parameters
+    ----------
+    enable : bool
+        Whether to enable handling or not. If ``False``, then all methods for handling will not raise exceptions.
+        This is useful for allowing higher level control of handling model operations.
     
     Author
     ------
@@ -45,6 +51,8 @@ class ModelsHandler:
             # Should not raise exceptions
             handler.handle_read('temp_model', models_manager.instances)
     """
+    def __init__(self, enable=True):
+        self.enable = enable
     
     def handle_create(self, name, model, instances, models):
         """
@@ -93,54 +101,10 @@ class ModelsHandler:
                 # Should not raise exceptions
                 handler.handle_create('temp_model', 'Model', models_manager.instances, models_manager.models)
         """
-        if model not in models:
-            raise HTTPException(status_code=404, detail='Model not found')
-        self.handle_write(name, instances)
-    
-    def handle_read(self, name, instances):
-        """
-        Handle model read operation.
-
-        Parameters
-        ----------
-        name : str
-            Name of the model instance.
-        instances : dict(:class:`msdss_models_api.models.Model`)
-            Dictionary of loaded model instances.
-        
-        Author
-        ------
-        Richard Wen <rrwen.dev@gmail.com>
-        
-        Example
-        -------
-        .. jupyter-execute::
-
-            import tempfile
-            from msdss_models_api.models import Model
-            from msdss_models_api.managers import ModelsManager
-            from msdss_models_api.handlers import ModelsHandler
-
-            with tempfile.TemporaryDirectory() as folder_path:
-
-                # Setup available models
-                models = [Model]
-
-                # Create handler
-                handler = ModelsHandler()
-                
-                # Create manager
-                models_manager = ModelsManager(models, folder=folder_path, handler=handler)
-
-                # Create model instance
-                models_manager.create('temp_model', 'Model')
-
-                # Check if instance exists to read
-                # Should not raise exceptions
-                handler.handle_read('temp_model', models_manager.instances)
-        """
-        if name not in instances:
-            raise HTTPException(status_code=404, detail='Model instance not found')
+        if self.enable:
+            if model not in models:
+                raise HTTPException(status_code=404, detail='Model not found')
+            self.handle_write(name, instances)
 
     def handle_load(self, instance):
         """
@@ -193,10 +157,57 @@ class ModelsHandler:
                 instance = models_manager.get('temp_model')
                 handler.handle_load(instance)
         """
-        if instance.can_load():
-            raise HTTPException(status_code=400, detail='Model instance has not been initialized')
-        if not instance.needs_load():
-            raise HTTPException(status_code=400, detail='Model instance already loaded')
+        if self.enable:
+            if instance.can_load():
+                raise HTTPException(status_code=400, detail='Model instance has not been initialized')
+            if not instance.needs_load():
+                raise HTTPException(status_code=400, detail='Model instance already loaded')
+    
+    def handle_read(self, name, instances):
+        """
+        Handle model read operation.
+
+        Parameters
+        ----------
+        name : str
+            Name of the model instance.
+        instances : dict(:class:`msdss_models_api.models.Model`)
+            Dictionary of loaded model instances.
+        
+        Author
+        ------
+        Richard Wen <rrwen.dev@gmail.com>
+        
+        Example
+        -------
+        .. jupyter-execute::
+
+            import tempfile
+            from msdss_models_api.models import Model
+            from msdss_models_api.managers import ModelsManager
+            from msdss_models_api.handlers import ModelsHandler
+
+            with tempfile.TemporaryDirectory() as folder_path:
+
+                # Setup available models
+                models = [Model]
+
+                # Create handler
+                handler = ModelsHandler()
+                
+                # Create manager
+                models_manager = ModelsManager(models, folder=folder_path, handler=handler)
+
+                # Create model instance
+                models_manager.create('temp_model', 'Model')
+
+                # Check if instance exists to read
+                # Should not raise exceptions
+                handler.handle_read('temp_model', models_manager.instances)
+        """
+        if self.enable:
+            if name not in instances:
+                raise HTTPException(status_code=404, detail='Model instance not found')
 
     def handle_write(self, name, instances):
         """
@@ -237,12 +248,15 @@ class ModelsHandler:
                 # Should not raise exceptions
                 handler.handle_write('temp_model', models_manager.instances)
         """
-        if name in instances:
-            raise HTTPException(status_code=400, detail='Model instance already exists')
+        if self.enable:
+            if name in instances:
+                raise HTTPException(status_code=400, detail='Model instance already exists')
 
-class ModelsBackgroundHandler:
+class ModelsBackgroundHandler(ModelsHandler):
     """
     Class to handle model background operations.
+
+    * Inherits from :class:`msdss_models_api.handlers.ModelsHandler`
     
     Author
     ------
@@ -250,7 +264,7 @@ class ModelsBackgroundHandler:
     
     Example
     -------
-    .. jupyter-execute::
+    .. code::
 
         import tempfile
         from celery import Celery
@@ -270,7 +284,7 @@ class ModelsBackgroundHandler:
             models_manager = ModelsManager(models, folder=folder_path, handler=handler)
 
             # Create bg manager
-            worker = Celery(broker='amqp://msdss:msdss123@localhost:5672', backend='rpc://') # rabbitmq
+            worker = Celery(broker='redis://localhost:6379/0', backend='redis://localhost:6379/0') # rabbitmq
             bg_manager = ModelsBackgroundManager(worker, models_manager)
 
             # Create model instance
@@ -333,7 +347,7 @@ class ModelsBackgroundHandler:
                 models_manager = ModelsManager(models, folder=folder_path, handler=handler)
 
                 # Create bg manager
-                worker = Celery(broker='amqp://msdss:msdss123@localhost:5672', backend='rpc://') # rabbitmq
+                worker = Celery(broker='redis://localhost:6379/0', backend='redis://localhost:6379/0') # rabbitmq
                 bg_manager = ModelsBackgroundManager(worker, models_manager)
 
                 # Create model instance
@@ -396,7 +410,7 @@ class ModelsBackgroundHandler:
                 models_manager = ModelsManager(models, folder=folder_path, handler=handler)
 
                 # Create bg manager
-                worker = Celery(broker='amqp://msdss:msdss123@localhost:5672', backend='rpc://') # rabbitmq
+                worker = Celery(broker='redis://localhost:6379/0', backend='redis://localhost:6379/0') # rabbitmq
                 bg_manager = ModelsBackgroundManager(worker, models_manager)
 
                 # Create model instance
@@ -460,7 +474,7 @@ class ModelsBackgroundHandler:
                 models_manager = ModelsManager(models, folder=folder_path, handler=handler)
 
                 # Create bg manager
-                worker = Celery(broker='amqp://msdss:msdss123@localhost:5672', backend='rpc://') # rabbitmq
+                worker = Celery(broker='redis://localhost:6379/0', backend='redis://localhost:6379/0') # rabbitmq
                 bg_manager = ModelsBackgroundManager(worker, models_manager)
 
                 # Create model instance

@@ -137,6 +137,9 @@ class ModelsAPI(API):
             backend_url='redis://localhost:6379/0'
         )
 
+        # Add users routes
+        app.add_app(users_api)
+
         # Run the app with app.start()
         # Try API at http://localhost:8000/docs
         # app.start()
@@ -229,7 +232,6 @@ class ModelsAPI(API):
         # (ModelsAPI_users) Add users app if specified
         if users_api:
             models_router_settings['users_api'] = users_api
-            self.add_apps(users_api)
 
         # (ModelsAPI_router_models) Add models router
         models_router = get_models_router(**models_router_settings)

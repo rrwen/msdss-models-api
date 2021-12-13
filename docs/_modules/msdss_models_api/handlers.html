@@ -276,12 +276,6 @@
 <div class="viewcode-block" id="ModelsHandler"><a class="viewcode-back" href="../../reference/handlers.html#msdss_models_api.handlers.ModelsHandler">[docs]</a><span class="k">class</span> <span class="nc">ModelsHandler</span><span class="p">:</span>
     <span class="sd">"""</span>
 <span class="sd">    Class to handle model operations.</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    enable : bool</span>
-<span class="sd">        Whether to enable handling or not. If ``False``, then all methods for handling will not raise exceptions.</span>
-<span class="sd">        This is useful for allowing higher level control of handling model operations.</span>
 <span class="sd">    </span>
 <span class="sd">    Author</span>
 <span class="sd">    ------</span>
@@ -322,8 +316,6 @@
 <span class="sd">            # Should not raise exceptions</span>
 <span class="sd">            handler.handle_read('temp_model', models_manager.instances)</span>
 <span class="sd">    """</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">enable</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">enable</span> <span class="o">=</span> <span class="n">enable</span>
     
     <span class="k">def</span> <span class="nf">handle_create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">instances</span><span class="p">,</span> <span class="n">models</span><span class="p">):</span>
         <span class="sd">"""</span>
@@ -372,19 +364,20 @@
 <span class="sd">                # Should not raise exceptions</span>
 <span class="sd">                handler.handle_create('temp_model', 'Model', models_manager.instances, models_manager.models)</span>
 <span class="sd">        """</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">enable</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">model</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">models</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">404</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="s1">'Model not found'</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">handle_write</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">instances</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">model</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">models</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">404</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="s1">'Model not found'</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">handle_write</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">instances</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">handle_load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">instance</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">handle_input</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">instances</span><span class="p">):</span>
         <span class="sd">"""</span>
-<span class="sd">        Handle model load operation.</span>
+<span class="sd">        Handle model input operation.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        instance : :class:`msdss_models_api.models.Model`</span>
-<span class="sd">            Model instance to be loaded.</span>
+<span class="sd">        name : str</span>
+<span class="sd">            Name of the model instance.</span>
+<span class="sd">        instances : dict(:class:`msdss_models_api.models.Model`)</span>
+<span class="sd">            Dictionary of loaded model instances.</span>
 <span class="sd">        </span>
 <span class="sd">        Author</span>
 <span class="sd">        ------</span>
@@ -413,26 +406,61 @@
 <span class="sd">                # Create model instance</span>
 <span class="sd">                models_manager.create('temp_model', 'Model')</span>
 
-<span class="sd">                # Initialize a model instance with inputs</span>
-<span class="sd">                train_data = [</span>
-<span class="sd">                    {'col_a': 1, 'col_b': 'a'},</span>
-<span class="sd">                    {'col_a': 2, 'col_b': 'b'}</span>
-<span class="sd">                ]</span>
-<span class="sd">                models_manager.input('temp_model', train_data)</span>
+<span class="sd">                # Check if instance exists to read</span>
+<span class="sd">                # Should not raise exceptions</span>
+<span class="sd">                handler.handle_input('temp_model', models_manager.instances)</span>
+<span class="sd">        """</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">handle_read</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">instances</span><span class="p">)</span>
+        <span class="n">instance</span> <span class="o">=</span> <span class="n">instances</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">instance</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">'can_input'</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">403</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="s1">'Model instance does not accept inputs'</span><span class="p">)</span>
 
-<span class="sd">                # Recreate manager where instance is not loaded</span>
+    <span class="k">def</span> <span class="nf">handle_output</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">instances</span><span class="p">):</span>
+        <span class="sd">"""</span>
+<span class="sd">        Handle model output operation.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        name : str</span>
+<span class="sd">            Name of the model instance.</span>
+<span class="sd">        instances : dict(:class:`msdss_models_api.models.Model`)</span>
+<span class="sd">            Dictionary of loaded model instances.</span>
+<span class="sd">        </span>
+<span class="sd">        Author</span>
+<span class="sd">        ------</span>
+<span class="sd">        Richard Wen &lt;rrwen.dev@gmail.com&gt;</span>
+<span class="sd">        </span>
+<span class="sd">        Example</span>
+<span class="sd">        -------</span>
+<span class="sd">        .. jupyter-execute::</span>
+
+<span class="sd">            import tempfile</span>
+<span class="sd">            from msdss_models_api.models import Model</span>
+<span class="sd">            from msdss_models_api.managers import ModelsManager</span>
+<span class="sd">            from msdss_models_api.handlers import ModelsHandler</span>
+
+<span class="sd">            with tempfile.TemporaryDirectory() as folder_path:</span>
+
+<span class="sd">                # Setup available models</span>
+<span class="sd">                models = [Model]</span>
+
+<span class="sd">                # Create handler</span>
+<span class="sd">                handler = ModelsHandler()</span>
+<span class="sd">                </span>
+<span class="sd">                # Create manager</span>
 <span class="sd">                models_manager = ModelsManager(models, folder=folder_path, handler=handler)</span>
 
-<span class="sd">                # Check if instance can be loaded</span>
+<span class="sd">                # Create model instance</span>
+<span class="sd">                models_manager.create('temp_model', 'Model')</span>
+
+<span class="sd">                # Check if instance exists to read</span>
 <span class="sd">                # Should not raise exceptions</span>
-<span class="sd">                instance = models_manager.get('temp_model')</span>
-<span class="sd">                handler.handle_load(instance)</span>
+<span class="sd">                handler.handle_output('temp_model', models_manager.instances)</span>
 <span class="sd">        """</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">enable</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">instance</span><span class="o">.</span><span class="n">can_load</span><span class="p">():</span>
-                <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="s1">'Model instance has not been initialized'</span><span class="p">)</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">instance</span><span class="o">.</span><span class="n">needs_load</span><span class="p">():</span>
-                <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="s1">'Model instance already loaded'</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">handle_read</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">instances</span><span class="p">)</span>
+        <span class="n">instance</span> <span class="o">=</span> <span class="n">instances</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">instance</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">'can_output'</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">403</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="s1">'Model instance does not produce outputs'</span><span class="p">)</span>
     
     <span class="k">def</span> <span class="nf">handle_read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">instances</span><span class="p">):</span>
         <span class="sd">"""</span>
@@ -476,9 +504,55 @@
 <span class="sd">                # Should not raise exceptions</span>
 <span class="sd">                handler.handle_read('temp_model', models_manager.instances)</span>
 <span class="sd">        """</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">enable</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">instances</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">404</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="s1">'Model instance not found'</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">instances</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">404</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="s1">'Model instance not found'</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">handle_update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">instances</span><span class="p">):</span>
+        <span class="sd">"""</span>
+<span class="sd">        Handle model update operation.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        name : str</span>
+<span class="sd">            Name of the model instance.</span>
+<span class="sd">        instances : dict(:class:`msdss_models_api.models.Model`)</span>
+<span class="sd">            Dictionary of loaded model instances.</span>
+<span class="sd">        </span>
+<span class="sd">        Author</span>
+<span class="sd">        ------</span>
+<span class="sd">        Richard Wen &lt;rrwen.dev@gmail.com&gt;</span>
+<span class="sd">        </span>
+<span class="sd">        Example</span>
+<span class="sd">        -------</span>
+<span class="sd">        .. jupyter-execute::</span>
+
+<span class="sd">            import tempfile</span>
+<span class="sd">            from msdss_models_api.models import Model</span>
+<span class="sd">            from msdss_models_api.managers import ModelsManager</span>
+<span class="sd">            from msdss_models_api.handlers import ModelsHandler</span>
+
+<span class="sd">            with tempfile.TemporaryDirectory() as folder_path:</span>
+
+<span class="sd">                # Setup available models</span>
+<span class="sd">                models = [Model]</span>
+
+<span class="sd">                # Create handler</span>
+<span class="sd">                handler = ModelsHandler()</span>
+<span class="sd">                </span>
+<span class="sd">                # Create manager</span>
+<span class="sd">                models_manager = ModelsManager(models, folder=folder_path, handler=handler)</span>
+
+<span class="sd">                # Create model instance</span>
+<span class="sd">                models_manager.create('temp_model', 'Model')</span>
+
+<span class="sd">                # Check if instance exists to read</span>
+<span class="sd">                # Should not raise exceptions</span>
+<span class="sd">                handler.handle_update('temp_model', models_manager.instances)</span>
+<span class="sd">        """</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">handle_read</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">instances</span><span class="p">)</span>
+        <span class="n">instance</span> <span class="o">=</span> <span class="n">instances</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">instance</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">'can_update'</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">403</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="s1">'Model instance does not allow updates'</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">handle_write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">instances</span><span class="p">):</span>
         <span class="sd">"""</span>
@@ -519,15 +593,12 @@
 <span class="sd">                # Should not raise exceptions</span>
 <span class="sd">                handler.handle_write('temp_model', models_manager.instances)</span>
 <span class="sd">        """</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">enable</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">instances</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="s1">'Model instance already exists'</span><span class="p">)</span></div>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">instances</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="s1">'Model instance already exists'</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="ModelsBackgroundHandler"><a class="viewcode-back" href="../../reference/handlers.html#msdss_models_api.handlers.ModelsBackgroundHandler">[docs]</a><span class="k">class</span> <span class="nc">ModelsBackgroundHandler</span><span class="p">(</span><span class="n">ModelsHandler</span><span class="p">):</span>
+<div class="viewcode-block" id="ModelsBackgroundHandler"><a class="viewcode-back" href="../../reference/handlers.html#msdss_models_api.handlers.ModelsBackgroundHandler">[docs]</a><span class="k">class</span> <span class="nc">ModelsBackgroundHandler</span><span class="p">:</span>
     <span class="sd">"""</span>
 <span class="sd">    Class to handle model background operations.</span>
-
-<span class="sd">    * Inherits from :class:`msdss_models_api.handlers.ModelsHandler`</span>
 <span class="sd">    </span>
 <span class="sd">    Author</span>
 <span class="sd">    ------</span>

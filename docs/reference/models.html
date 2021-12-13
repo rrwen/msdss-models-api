@@ -303,7 +303,7 @@
 <h2 id="model">Model<a class="headerlink" href="#model" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="msdss_models_api.models.Model">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">msdss_models_api.models.</span></span><span class="sig-name descname"><span class="pre">Model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'./model'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_ext</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'pickle'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msdss_models_api/models.html#Model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msdss_models_api.models.Model" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">msdss_models_api.models.</span></span><span class="sig-name descname"><span class="pre">Model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'./model'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_ext</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'pickle'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">can_input</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">can_output</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">can_update</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msdss_models_api/models.html#Model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msdss_models_api.models.Model" title="Permalink to this definition">¶</a></dt>
 <dd><p>Template class to standardize modelling.</p>
 <ul class="simple">
 <li><p>Methods <code class="docutils literal notranslate"><span class="pre">delete</span></code>, <code class="docutils literal notranslate"><span class="pre">load</span></code>, and <code class="docutils literal notranslate"><span class="pre">save</span></code> are handled by default using <code class="xref py py-class docutils literal notranslate"><span class="pre">pickle</span></code> and do not need to be defined if there is no need for custom model saving and loading.</p></li>
@@ -314,6 +314,9 @@
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>file_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Path to save, load, and delete the model for persistence without the extension. Can be used in methods as <code class="docutils literal notranslate"><span class="pre">self.file</span></code>.</p></li>
 <li><p><strong>file_ext</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – File extension to save the model in.</p></li>
+<li><p><strong>can_input</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – Whether the method <code class="docutils literal notranslate"><span class="pre">.input</span></code> is defined and available. This is useful for controlling route requests in an API.</p></li>
+<li><p><strong>can_output</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – Whether the method <code class="docutils literal notranslate"><span class="pre">.output</span></code> is defined and available. This is useful for controlling route requests in an API.</p></li>
+<li><p><strong>can_update</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – Whether the method <code class="docutils literal notranslate"><span class="pre">.update</span></code> is defined and available. This is useful for controlling route requests in an API.</p></li>
 </ul>
 </dd>
 </dl>
@@ -344,6 +347,21 @@
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/datetime.html#datetime.datetime" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">datetime.datetime</span></code></a> or None</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="msdss_models_api.models.Model.metadata">
+<span class="sig-name descname"><span class="pre">metadata</span></span><a class="headerlink" href="#msdss_models_api.models.Model.metadata" title="Permalink to this definition">¶</a></dt>
+<dd><p>Single-value metadata for the model based on the user inputs to provide additional info:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">can_input</span></code> (bool): same as parameter <code class="docutils literal notranslate"><span class="pre">can_input</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">can_output</span></code> (bool): same as parameter <code class="docutils literal notranslate"><span class="pre">can_output</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">can_update</span></code> (bool): same as parameter <code class="docutils literal notranslate"><span class="pre">can_update</span></code></p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)">dict</a></p>
 </dd>
 </dl>
 </dd></dl>

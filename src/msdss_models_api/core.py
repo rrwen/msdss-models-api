@@ -1,6 +1,7 @@
 from celery import Celery
 from fastapi import FastAPI
 from msdss_base_api import API
+from msdss_data_api.managers import DataManager
 
 from .env import *
 from .managers import *
@@ -218,7 +219,8 @@ class ModelsAPI(API):
             folder = env.get('folder', folder)
 
         # (ModelsAPI_bg) Create background manager for models
-        models_manager = ModelsDBManager(models=models, database=database, folder=folder)
+        data_manager = DataManager(database=database)
+        models_manager = ModelsDBManager(models=models, data_manager=data_manager, folder=folder)
         worker = Celery(broker=broker_url, backend=backend_url)
         bg_manager = ModelsDBBackgroundManager(worker=worker, models_manager=models_manager)
         models_router_settings['bg_manager'] = bg_manager

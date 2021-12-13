@@ -69,7 +69,7 @@
 
   </head>
   <body dir=ltr
-        data-md-color-primary=indigo data-md-color-accent=light-blue>
+        data-md-color-primary=blue data-md-color-accent=light-blue>
   
   <svg class="md-svg">
     <defs data-children-count="0">
@@ -287,6 +287,12 @@
 <span class="sd">        Path to save, load, and delete the model for persistence without the extension. Can be used in methods as ``self.file``.</span>
 <span class="sd">    file_ext : str</span>
 <span class="sd">        File extension to save the model in.</span>
+<span class="sd">    can_input : bool</span>
+<span class="sd">        Whether the method ``.input`` is defined and available. This is useful for controlling route requests in an API.</span>
+<span class="sd">    can_output : bool</span>
+<span class="sd">        Whether the method ``.output`` is defined and available. This is useful for controlling route requests in an API.</span>
+<span class="sd">    can_update : bool</span>
+<span class="sd">        Whether the method ``.update`` is defined and available. This is useful for controlling route requests in an API.</span>
 
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
@@ -296,6 +302,12 @@
 <span class="sd">        File path to save the model for persistence in. Includes the ``file_ext``.</span>
 <span class="sd">    last_loaded : :class:`datetime.datetime` or None</span>
 <span class="sd">        The date and time that the model was last loaded. If ``None``, model has not been loaded. Useful for lazy loading.</span>
+<span class="sd">    metadata : dict</span>
+<span class="sd">        Single-value metadata for the model based on the user inputs to provide additional info:</span>
+
+<span class="sd">        * ``can_input`` (bool): same as parameter ``can_input``</span>
+<span class="sd">        * ``can_output`` (bool): same as parameter ``can_output``</span>
+<span class="sd">        * ``can_update`` (bool): same as parameter ``can_update``</span>
 
 <span class="sd">    Author</span>
 <span class="sd">    ------</span>
@@ -339,10 +351,22 @@
 <span class="sd">            # This will also set .instance to None</span>
 <span class="sd">            blank_model.delete()</span>
 <span class="sd">    """</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_path</span><span class="o">=</span><span class="s1">'./model'</span><span class="p">,</span> <span class="n">file_ext</span><span class="o">=</span><span class="s1">'pickle'</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">file_path</span><span class="o">=</span><span class="s1">'./model'</span><span class="p">,</span>
+        <span class="n">file_ext</span><span class="o">=</span><span class="s1">'pickle'</span><span class="p">,</span>
+        <span class="n">can_input</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">can_output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">can_update</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">instance</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">file</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="n">file_path</span><span class="si">}</span><span class="s1">.</span><span class="si">{</span><span class="n">file_ext</span><span class="si">}</span><span class="s1">'</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">last_loaded</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">'can_input'</span><span class="p">:</span> <span class="n">can_input</span><span class="p">,</span>
+            <span class="s1">'can_output'</span><span class="p">:</span> <span class="n">can_output</span><span class="p">,</span>
+            <span class="s1">'can_update'</span><span class="p">:</span> <span class="n">can_update</span>
+        <span class="p">}</span>
 
 <div class="viewcode-block" id="Model.can_load"><a class="viewcode-back" href="../../reference/models.html#msdss_models_api.models.Model.can_load">[docs]</a>    <span class="k">def</span> <span class="nf">can_load</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">"""</span>

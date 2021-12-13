@@ -5,12 +5,6 @@ from fastapi import HTTPException
 class ModelsHandler:
     """
     Class to handle model operations.
-
-    Parameters
-    ----------
-    enable : bool
-        Whether to enable handling or not. If ``False``, then all methods for handling will not raise exceptions.
-        This is useful for allowing higher level control of handling model operations.
     
     Author
     ------
@@ -51,8 +45,6 @@ class ModelsHandler:
             # Should not raise exceptions
             handler.handle_read('temp_model', models_manager.instances)
     """
-    def __init__(self, enable=True):
-        self.enable = enable
     
     def handle_create(self, name, model, instances, models):
         """
@@ -101,19 +93,20 @@ class ModelsHandler:
                 # Should not raise exceptions
                 handler.handle_create('temp_model', 'Model', models_manager.instances, models_manager.models)
         """
-        if self.enable:
-            if model not in models:
-                raise HTTPException(status_code=404, detail='Model not found')
-            self.handle_write(name, instances)
+        if model not in models:
+            raise HTTPException(status_code=404, detail='Model not found')
+        self.handle_write(name, instances)
 
-    def handle_load(self, instance):
+    def handle_input(self, name, instances):
         """
-        Handle model load operation.
+        Handle model input operation.
 
         Parameters
         ----------
-        instance : :class:`msdss_models_api.models.Model`
-            Model instance to be loaded.
+        name : str
+            Name of the model instance.
+        instances : dict(:class:`msdss_models_api.models.Model`)
+            Dictionary of loaded model instances.
         
         Author
         ------
@@ -142,26 +135,61 @@ class ModelsHandler:
                 # Create model instance
                 models_manager.create('temp_model', 'Model')
 
-                # Initialize a model instance with inputs
-                train_data = [
-                    {'col_a': 1, 'col_b': 'a'},
-                    {'col_a': 2, 'col_b': 'b'}
-                ]
-                models_manager.input('temp_model', train_data)
+                # Check if instance exists to read
+                # Should not raise exceptions
+                handler.handle_input('temp_model', models_manager.instances)
+        """
+        self.handle_read(name, instances)
+        instance = instances[name]
+        if not instance.metadata['can_input']:
+            raise HTTPException(status_code=403, detail='Model instance does not accept inputs')
 
-                # Recreate manager where instance is not loaded
+    def handle_output(self, name, instances):
+        """
+        Handle model output operation.
+
+        Parameters
+        ----------
+        name : str
+            Name of the model instance.
+        instances : dict(:class:`msdss_models_api.models.Model`)
+            Dictionary of loaded model instances.
+        
+        Author
+        ------
+        Richard Wen <rrwen.dev@gmail.com>
+        
+        Example
+        -------
+        .. jupyter-execute::
+
+            import tempfile
+            from msdss_models_api.models import Model
+            from msdss_models_api.managers import ModelsManager
+            from msdss_models_api.handlers import ModelsHandler
+
+            with tempfile.TemporaryDirectory() as folder_path:
+
+                # Setup available models
+                models = [Model]
+
+                # Create handler
+                handler = ModelsHandler()
+                
+                # Create manager
                 models_manager = ModelsManager(models, folder=folder_path, handler=handler)
 
-                # Check if instance can be loaded
+                # Create model instance
+                models_manager.create('temp_model', 'Model')
+
+                # Check if instance exists to read
                 # Should not raise exceptions
-                instance = models_manager.get('temp_model')
-                handler.handle_load(instance)
+                handler.handle_output('temp_model', models_manager.instances)
         """
-        if self.enable:
-            if instance.can_load():
-                raise HTTPException(status_code=400, detail='Model instance has not been initialized')
-            if not instance.needs_load():
-                raise HTTPException(status_code=400, detail='Model instance already loaded')
+        self.handle_read(name, instances)
+        instance = instances[name]
+        if not instance.metadata['can_output']:
+            raise HTTPException(status_code=403, detail='Model instance does not produce outputs')
     
     def handle_read(self, name, instances):
         """
@@ -205,9 +233,55 @@ class ModelsHandler:
                 # Should not raise exceptions
                 handler.handle_read('temp_model', models_manager.instances)
         """
-        if self.enable:
-            if name not in instances:
-                raise HTTPException(status_code=404, detail='Model instance not found')
+        if name not in instances:
+            raise HTTPException(status_code=404, detail='Model instance not found')
+
+    def handle_update(self, name, instances):
+        """
+        Handle model update operation.
+
+        Parameters
+        ----------
+        name : str
+            Name of the model instance.
+        instances : dict(:class:`msdss_models_api.models.Model`)
+            Dictionary of loaded model instances.
+        
+        Author
+        ------
+        Richard Wen <rrwen.dev@gmail.com>
+        
+        Example
+        -------
+        .. jupyter-execute::
+
+            import tempfile
+            from msdss_models_api.models import Model
+            from msdss_models_api.managers import ModelsManager
+            from msdss_models_api.handlers import ModelsHandler
+
+            with tempfile.TemporaryDirectory() as folder_path:
+
+                # Setup available models
+                models = [Model]
+
+                # Create handler
+                handler = ModelsHandler()
+                
+                # Create manager
+                models_manager = ModelsManager(models, folder=folder_path, handler=handler)
+
+                # Create model instance
+                models_manager.create('temp_model', 'Model')
+
+                # Check if instance exists to read
+                # Should not raise exceptions
+                handler.handle_update('temp_model', models_manager.instances)
+        """
+        self.handle_read(name, instances)
+        instance = instances[name]
+        if not instance.metadata['can_update']:
+            raise HTTPException(status_code=403, detail='Model instance does not allow updates')
 
     def handle_write(self, name, instances):
         """
@@ -248,15 +322,12 @@ class ModelsHandler:
                 # Should not raise exceptions
                 handler.handle_write('temp_model', models_manager.instances)
         """
-        if self.enable:
-            if name in instances:
-                raise HTTPException(status_code=400, detail='Model instance already exists')
+        if name in instances:
+            raise HTTPException(status_code=400, detail='Model instance already exists')
 
-class ModelsBackgroundHandler(ModelsHandler):
+class ModelsBackgroundHandler:
     """
     Class to handle model background operations.
-
-    * Inherits from :class:`msdss_models_api.handlers.ModelsHandler`
     
     Author
     ------

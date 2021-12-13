@@ -16,6 +16,12 @@ class Model:
         Path to save, load, and delete the model for persistence without the extension. Can be used in methods as ``self.file``.
     file_ext : str
         File extension to save the model in.
+    can_input : bool
+        Whether the method ``.input`` is defined and available. This is useful for controlling route requests in an API.
+    can_output : bool
+        Whether the method ``.output`` is defined and available. This is useful for controlling route requests in an API.
+    can_update : bool
+        Whether the method ``.update`` is defined and available. This is useful for controlling route requests in an API.
 
     Attributes
     ----------
@@ -25,6 +31,12 @@ class Model:
         File path to save the model for persistence in. Includes the ``file_ext``.
     last_loaded : :class:`datetime.datetime` or None
         The date and time that the model was last loaded. If ``None``, model has not been loaded. Useful for lazy loading.
+    metadata : dict
+        Single-value metadata for the model based on the user inputs to provide additional info:
+
+        * ``can_input`` (bool): same as parameter ``can_input``
+        * ``can_output`` (bool): same as parameter ``can_output``
+        * ``can_update`` (bool): same as parameter ``can_update``
 
     Author
     ------
@@ -68,10 +80,22 @@ class Model:
             # This will also set .instance to None
             blank_model.delete()
     """
-    def __init__(self, file_path='./model', file_ext='pickle'):
+    def __init__(
+        self,
+        file_path='./model',
+        file_ext='pickle',
+        can_input=True,
+        can_output=True,
+        can_update=True
+    ):
         self.instance = None
         self.file = f'{file_path}.{file_ext}'
         self.last_loaded = None
+        self.metadata = {
+            'can_input': can_input,
+            'can_output': can_output,
+            'can_update': can_update
+        }
 
     def can_load(self):
         """

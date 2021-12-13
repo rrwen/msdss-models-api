@@ -8,25 +8,35 @@ ModelsManager
 
 .. autoclass:: msdss_models_api.managers.ModelsManager
 
-_get_file
-^^^^^^^^^
+_get_base_file
+^^^^^^^^^^^^^^
 
-.. automethod:: msdss_models_api.managers.ModelsManager._get_file
+.. automethod:: msdss_models_api.managers.ModelsManager._get_base_file
 
 _get_folder
 ^^^^^^^^^^^
 
 .. automethod:: msdss_models_api.managers.ModelsManager._get_folder
 
+_get_instance
+^^^^^^^^^^^^^
+
+.. automethod:: msdss_models_api.managers.ModelsManager._get_instance
+
+_get_model_name
+^^^^^^^^^^^^^^^
+
+.. automethod:: msdss_models_api.managers.ModelsManager._get_model_name
+
 _get_save_file
 ^^^^^^^^^^^^^^
 
 .. automethod:: msdss_models_api.managers.ModelsManager._get_save_file
 
-_load_base
-^^^^^^^^^^
+_load_base_files
+^^^^^^^^^^^^^^^^
 
-.. automethod:: msdss_models_api.managers.ModelsManager._load_base
+.. automethod:: msdss_models_api.managers.ModelsManager._load_base_files
 
 create
 ^^^^^^
@@ -38,20 +48,10 @@ delete
 
 .. automethod:: msdss_models_api.managers.ModelsManager.delete
 
-get
-^^^
-
-.. automethod:: msdss_models_api.managers.ModelsManager.get
-
 input
 ^^^^^
 
 .. automethod:: msdss_models_api.managers.ModelsManager.input
-
-load
-^^^^
-
-.. automethod:: msdss_models_api.managers.ModelsManager.load
 
 output
 ^^^^^^
@@ -68,10 +68,10 @@ ModelsBackgroundManager
 
 .. autoclass:: msdss_models_api.managers.ModelsBackgroundManager
 
-_add_model_task
-^^^^^^^^^^^^^^^
+_add_task
+^^^^^^^^^
 
-.. automethod:: msdss_models_api.managers.ModelsBackgroundManager._add_model_task
+.. automethod:: msdss_models_api.managers.ModelsBackgroundManager._add_task
 
 cancel
 ^^^^^^
@@ -137,3 +137,8 @@ update_db
 ^^^^^^^^^
 
 .. automethod:: msdss_models_api.managers.ModelsDBBackgroundManager.update_db
+
+ModelsMetadataManager
+---------------------
+
+.. autoclass:: msdss_models_api.managers.ModelsMetadataManager

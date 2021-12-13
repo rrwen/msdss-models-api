@@ -93,7 +93,7 @@ def get_models_router(
     if enable['input']:
         @out.post(**settings['input'])
         async def model_instance_input(
-            name: str = Query(..., description='Name of the model instance - the request body is used to upload JSON data under the "data" key in the form of "[{col: val, col2: val2, ...}, {col: val, col2: val2, ...}]", where each key represents a variable and its corresponding value. Objects in this list should have the same keys. The "settings" key is used for specific model input settings, where each key is a setting name.'),
+            name: str = Query(..., description='Name of the model instance - the request body is used to upload JSON data under the "data" key in the form of "[{col: val, col2: val2, ...}, {col: val, col2: val2, ...}]", where each key represents a column and its corresponding value. Objects in this list should have the same keys. The "settings" key is used for specific model input settings, where each key is a setting name.'),
             data: List[Dict[str, Any]] = Body(...),
             settings: Dict[str, Any] = {},
             bg_manager = Depends(get_bg_manager),
@@ -110,12 +110,12 @@ def get_models_router(
             name: str = Query(..., description='Name of the model instance - the "settings" key in the response body is used for specific model input settings, where each key is a setting name.'),
             dataset: str = Query(..., description='Dataset name to use for initializing the model instance'),
             settings: Dict[str, Any] = {},
-            select: Optional[List[str]] = Query(None, description='Variables to include'),
-            where: Optional[List[str]] = Query(None, description='Where statements to filter data in the form of "variable operator value" (e.g. "var < 3") - valid operators are: =, !=, >, >=, >, <, <=, !=, LIKE, ILIKE, NOTLIKE, NOTILIKE, CONTAINS, STARTSWITH, ENDSWITH'),
-            group_by: Optional[List[str]] = Query(None, alias='group-by', description='Variable names to group by - should be used with aggregate and aggregate_func parameters'),
-            aggregate: Optional[List[str]] = Query(None, description='Variable names to aggregate with the same order as the aggregate_func parameter'),
+            select: Optional[List[str]] = Query('*', description='Columns to include - "*" means all columns and "None" means to omit selection (useful for aggregate queries)'),
+            where: Optional[List[str]] = Query(None, description='Where statements to filter data in the form of "column operator value" (e.g. "var < 3") - valid operators are: =, !=, >, >=, >, <, <=, !=, LIKE, ILIKE, NOTLIKE, NOTILIKE, CONTAINS, STARTSWITH, ENDSWITH'),
+            group_by: Optional[List[str]] = Query(None, alias='group-by', description='column names to group by - should be used with aggregate and aggregate_func parameters'),
+            aggregate: Optional[List[str]] = Query(None, description='Column names to aggregate with the same order as the aggregate_func parameter'),
             aggregate_func: Optional[List[str]] = Query(None, alias='aggregate-func', description='Aggregate functions in the same order as the aggregate parameter'),
-            order_by: Optional[List[str]] = Query(None, alias='order-by', description='Variable names to order by in the same order as parameter order_by_sort'),
+            order_by: Optional[List[str]] = Query(None, alias='order-by', description='Column names to order by in the same order as parameter order_by_sort'),
             order_by_sort: Optional[List[Literal['asc', 'desc']]] = Query(None, alias='order-by-sort', description='Either "asc" for ascending or "desc" for descending order in the same order as parameter order_by'),
             limit: Optional[int] = Query(None, description='Number of items to return'),
             where_boolean: Literal['AND', 'OR'] = Query('AND', alias='where-boolean', description='Either "AND" or "OR" to combine where statements'),
@@ -140,22 +140,22 @@ def get_models_router(
 
     # (get_models_router_output) Add output route to models router
     if enable['output']:
-        @out.get(**settings['output'])
+        @out.post(**settings['output'])
         async def model_instance_output(
-            name: str = Query(..., description='Name of the model instance - the request body is used to upload JSON data under the "data" key in the form of "[{col: val, col2: val2, ...}, {col: val, col2: val2, ...}]", where each key represents a variable and its corresponding value. Objects in this list should have the same keys. The "settings" key is used for specific model output settings, where each key is a setting name.'),
+            name: str = Query(..., description='Name of the model instance - the request body is used to upload JSON data under the "data" key in the form of "[{col: val, col2: val2, ...}, {col: val, col2: val2, ...}]", where each key represents a column and its corresponding value. Objects in this list should have the same keys. The "settings" key is used for specific model output settings, where each key is a setting name.'),
             data: List[Dict[str, Any]] = Body(...),
             settings: Dict[str, Any] = {},
             bg_manager = Depends(get_bg_manager),
             user = Depends(get_user['output'])
         ):
-            response = bg_manager.output(name, data, settings)
+            response = bg_manager.output(name, data, settings).to_dict('records')
             return response
 
     # (get_models_router_update) Add update route to models router
     if enable['update']:
         @out.put(**settings['update'])
         async def update_model_instance(
-            name: str = Query(..., description='Name of the model instance - the request body is used to upload JSON data under the "data" key in the form of "[{col: val, col2: val2, ...}, {col: val, col2: val2, ...}]", where each key represents a variable and its corresponding value. Objects in this list should have the same keys. The "settings" key is used for specific model update settings, where each key is a setting name.'),
+            name: str = Query(..., description='Name of the model instance - the request body is used to upload JSON data under the "data" key in the form of "[{col: val, col2: val2, ...}, {col: val, col2: val2, ...}]", where each key represents a column and its corresponding value. Objects in this list should have the same keys. The "settings" key is used for specific model update settings, where each key is a setting name.'),
             data: List[Dict[str, Any]] = Body(...),
             settings: Dict[str, Any] = {},
             bg_manager = Depends(get_bg_manager),
@@ -172,14 +172,15 @@ def get_models_router(
             name: str = Query(..., description='Name of the model instance - the "settings" key in the response body is used for specific model update settings, where each key is a setting name.'),
             dataset: str = Query(..., description='Dataset name to use for updating the model instance'),
             settings: Dict[str, Any] = {},
-            select: Optional[List[str]] = Query(None, description='Variables to include'),
-            where: Optional[List[str]] = Query(None, description='Where statements to filter data in the form of "variable operator value" (e.g. "var < 3") - valid operators are: =, !=, >, >=, >, <, <=, !=, LIKE, ILIKE, NOTLIKE, NOTILIKE, CONTAINS, STARTSWITH, ENDSWITH'),
-            group_by: Optional[List[str]] = Query(None, alias='group-by', description='Variable names to group by - should be used with aggregate and aggregate_func parameters'),
-            aggregate: Optional[List[str]] = Query(None, description='Variable names to aggregate with the same order as the aggregate_func parameter'),
+            select: Optional[List[str]] = Query('*', description='Columns to include - "*" means all columns and "None" means to omit selection (useful for aggregate queries)'),
+            where: Optional[List[str]] = Query(None, description='Where statements to filter data in the form of "column operator value" (e.g. "var < 3") - valid operators are: =, !=, >, >=, >, <, <=, !=, LIKE, ILIKE, NOTLIKE, NOTILIKE, CONTAINS, STARTSWITH, ENDSWITH'),
+            group_by: Optional[List[str]] = Query(None, alias='group-by', description='Column names to group by - should be used with aggregate and aggregate_func parameters'),
+            aggregate: Optional[List[str]] = Query(None, description='Column names to aggregate with the same order as the aggregate_func parameter'),
             aggregate_func: Optional[List[str]] = Query(None, alias='aggregate-func', description='Aggregate functions in the same order as the aggregate parameter'),
-            order_by: Optional[List[str]] = Query(None, alias='order-by', description='Variable names to order by in the same order as parameter order_by_sort'),
+            order_by: Optional[List[str]] = Query(None, alias='order-by', description='cClumn names to order by in the same order as parameter order_by_sort'),
             order_by_sort: Optional[List[Literal['asc', 'desc']]] = Query(None, alias='order-by-sort', description='Either "asc" for ascending or "desc" for descending order in the same order as parameter order_by'),
             limit: Optional[int] = Query(None, description='Number of items to return'),
+            offset: Optional[int] = Query(None, description='Number of items to skip'),
             where_boolean: Literal['AND', 'OR'] = Query('AND', alias='where-boolean', description='Either "AND" or "OR" to combine where statements'),
             bg_manager = Depends(get_bg_manager),
             user = Depends(get_user['update_db'])
@@ -196,6 +197,7 @@ def get_models_router(
                 order_by=order_by,
                 order_by_sort=order_by_sort,
                 limit=limit,
+                offset=offset,
                 where_boolean=where_boolean)
             response = bg_manager.get_status(name)
             return response

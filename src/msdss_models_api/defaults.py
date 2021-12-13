@@ -7,16 +7,23 @@ DEFAULT_DOTENV_KWARGS = dict(
 )
 
 DEFAULT_MODELS_FOLDER = './models'
-DEFAULT_MODELS_TABLE = 'model'
 DEFAULT_BROKER_URL = 'redis://localhost:6379/0'
 DEFAULT_BACKEND_URL = 'redis://localhost:6379/0'
 
-DEFAULT_MODELS_COLUMNS = [
+DEFAULT_METADATA_TABLE = 'model'
+DEFAULT_NAME_COLUMN = 'name'
+DEFAULT_UPDATE_COLUMN = 'updated_at'
+DEFAULT_METADATA_COLUMNS = [
     dict(name='id', type_='Integer', primary_key=True),
     dict(name='name', type_='String', unique=True),
     ('title', 'String'),
     ('description', 'String'),
+    ('tags', 'String'),
+    ('source', 'String'),
     ('model', 'String'),
+    ('can_input', 'Boolean'),
+    ('can_output', 'Boolean'),
+    ('can_update', 'Boolean'),
     ('directory', 'String'),
     ('created_by', 'String'),
     ('created_at', 'DateTime'),
@@ -40,7 +47,7 @@ DEFAULT_MODELS_ROUTE_SETTINGS = dict(
         _get_user={'superuser': True}
     ),
     status=dict(
-        path='/{name}/status',
+        path='/{name}',
         _enable=True,
         _get_user={}
     ),
@@ -55,7 +62,7 @@ DEFAULT_MODELS_ROUTE_SETTINGS = dict(
         _get_user={'superuser': True}
     ),
     output=dict(
-        path='/{name}',
+        path='/{name}/output',
         _enable=True,
         _get_user={}
     ),

@@ -275,7 +275,7 @@
 <span class="kn">import</span> <span class="nn">shutil</span>
 
 <span class="kn">from</span> <span class="nn">msdss_base_database</span> <span class="kn">import</span> <span class="n">Database</span>
-<span class="kn">from</span> <span class="nn">msdss_data_api.managers</span> <span class="kn">import</span> <span class="n">DataManager</span>
+<span class="kn">from</span> <span class="nn">msdss_data_api.managers</span> <span class="kn">import</span> <span class="n">DataManager</span><span class="p">,</span> <span class="n">MetadataManager</span>
 <span class="kn">from</span> <span class="nn">shlex</span> <span class="kn">import</span> <span class="n">split</span>
 
 <span class="kn">from</span> <span class="nn">.defaults</span> <span class="kn">import</span> <span class="o">*</span>
@@ -292,8 +292,8 @@
 <span class="sd">        Ensure that the class names are unique, otherwise the last object takes priority.</span>
 <span class="sd">    folder : str</span>
 <span class="sd">        The folder path to store models in. The folder will be created if it does not exist.</span>
-<span class="sd">    handler : :class:`msdss_models_api.handlers.ModelsHandler`</span>
-<span class="sd">        Handler object to manage model operations.</span>
+<span class="sd">    handler : :class:`msdss_models_api.handlers.ModelsHandler` or None</span>
+<span class="sd">        Handler object to manage model operations. If ``None``, then inputs for model operations will not be handled.</span>
 <span class="sd">    suffix : str</span>
 <span class="sd">        Suffix for pickled model object files. These files contain the model objects without inputs or loading.</span>
 
@@ -365,7 +365,7 @@
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">models</span><span class="o">=</span><span class="p">[],</span>
         <span class="n">folder</span><span class="o">=</span><span class="n">DEFAULT_MODELS_FOLDER</span><span class="p">,</span>
-        <span class="n">handler</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">handler</span><span class="o">=</span><span class="n">ModelsHandler</span><span class="p">(),</span>
         <span class="n">suffix</span><span class="o">=</span><span class="s1">'_base.pickle'</span>
     <span class="p">):</span>
 
@@ -377,13 +377,13 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">folder</span> <span class="o">=</span> <span class="n">folder</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">models</span> <span class="o">=</span> <span class="p">{(</span><span class="n">m</span><span class="o">.</span><span class="vm">__name__</span><span class="p">):</span><span class="n">m</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">models</span><span class="p">}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">instances</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">handler</span> <span class="o">=</span> <span class="n">handler</span> <span class="k">if</span> <span class="n">handler</span> <span class="k">else</span> <span class="n">ModelsHandler</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">handler</span> <span class="o">=</span> <span class="n">handler</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">suffix</span> <span class="o">=</span> <span class="n">suffix</span>
 
         <span class="c1"># (ModelsManager_load) Load base model instances</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_load_base</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_load_base_files</span><span class="p">()</span>
 
-<div class="viewcode-block" id="ModelsManager._get_file"><a class="viewcode-back" href="../../reference/managers.html#msdss_models_api.managers.ModelsManager._get_file">[docs]</a>    <span class="k">def</span> <span class="nf">_get_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_get_base_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="sd">"""</span>
 <span class="sd">        Get the path of the base file for the model instance.</span>
 
@@ -421,11 +421,11 @@
 <span class="sd">                models_manager.create('temp_model', 'Model')</span>
 
 <span class="sd">                # Delete model instance</span>
-<span class="sd">                path = models_manager._get_file('temp_model')</span>
+<span class="sd">                path = models_manager._get_base_file('temp_model')</span>
 <span class="sd">        """</span>
         <span class="n">folder</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_folder</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
         <span class="n">out</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">folder</span><span class="p">,</span> <span class="n">name</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">suffix</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">out</span></div>
+        <span class="k">return</span> <span class="n">out</span>
 
 <div class="viewcode-block" id="ModelsManager._get_folder"><a class="viewcode-back" href="../../reference/managers.html#msdss_models_api.managers.ModelsManager._get_folder">[docs]</a>    <span class="k">def</span> <span class="nf">_get_folder</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="sd">"""</span>
@@ -468,6 +468,83 @@
 <span class="sd">                folder_path = models_manager._get_folder('temp_model')</span>
 <span class="sd">        """</span>
         <span class="n">out</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">folder</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+<div class="viewcode-block" id="ModelsManager._get_instance"><a class="viewcode-back" href="../../reference/managers.html#msdss_models_api.managers.ModelsManager._get_instance">[docs]</a>    <span class="k">def</span> <span class="nf">_get_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="sd">"""</span>
+<span class="sd">        Get a model instance by name.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        name : str</span>
+<span class="sd">            Unique name of the model instance. The instance is stored in ``.instances[name]``.</span>
+<span class="sd">        </span>
+<span class="sd">        Author</span>
+<span class="sd">        ------</span>
+<span class="sd">        Richard Wen &lt;rrwen.dev@gmail.com&gt;</span>
+<span class="sd">        </span>
+<span class="sd">        Example</span>
+<span class="sd">        -------</span>
+<span class="sd">        .. jupyter-execute::</span>
+
+<span class="sd">            import tempfile</span>
+<span class="sd">            from msdss_models_api.models import Model</span>
+<span class="sd">            from msdss_models_api.managers import ModelsManager</span>
+
+<span class="sd">            with tempfile.TemporaryDirectory() as folder_path:</span>
+
+<span class="sd">                # Setup available models</span>
+<span class="sd">                models = [Model]</span>
+<span class="sd">                </span>
+<span class="sd">                # Create manager</span>
+<span class="sd">                models_manager = ModelsManager(models, folder=folder_path)</span>
+
+<span class="sd">                # Create model instance</span>
+<span class="sd">                models_manager.create('temp_model', 'Model')</span>
+
+<span class="sd">                # Delete model instance</span>
+<span class="sd">                models_manager._get_instance('temp_model')</span>
+<span class="sd">        """</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">instances</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+<div class="viewcode-block" id="ModelsManager._get_model_name"><a class="viewcode-back" href="../../reference/managers.html#msdss_models_api.managers.ModelsManager._get_model_name">[docs]</a>    <span class="k">def</span> <span class="nf">_get_model_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="sd">"""</span>
+<span class="sd">        Get the model name of a model instance.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        name : str</span>
+<span class="sd">            Unique name of the model instance. The instance is stored in ``.instances[name]``.</span>
+<span class="sd">        </span>
+<span class="sd">        Author</span>
+<span class="sd">        ------</span>
+<span class="sd">        Richard Wen &lt;rrwen.dev@gmail.com&gt;</span>
+<span class="sd">        </span>
+<span class="sd">        Example</span>
+<span class="sd">        -------</span>
+<span class="sd">        .. jupyter-execute::</span>
+
+<span class="sd">            import tempfile</span>
+<span class="sd">            from msdss_models_api.models import Model</span>
+<span class="sd">            from msdss_models_api.managers import ModelsManager</span>
+
+<span class="sd">            with tempfile.TemporaryDirectory() as folder_path:</span>
+
+<span class="sd">                # Setup available models</span>
+<span class="sd">                models = [Model]</span>
+<span class="sd">                </span>
+<span class="sd">                # Create manager</span>
+<span class="sd">                models_manager = ModelsManager(models, folder=folder_path)</span>
+
+<span class="sd">                # Create model instance</span>
+<span class="sd">                models_manager.create('temp_model', 'Model')</span>
+
+<span class="sd">                # Delete model instance</span>
+<span class="sd">                models_manager._get_model_name('temp_model')</span>
+<span class="sd">        """</span>
+        <span class="n">instance</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_instance</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">instance</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span>
         <span class="k">return</span> <span class="n">out</span></div>
 
 <div class="viewcode-block" id="ModelsManager._get_save_file"><a class="viewcode-back" href="../../reference/managers.html#msdss_models_api.managers.ModelsManager._get_save_file">[docs]</a>    <span class="k">def</span> <span class="nf">_get_save_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
@@ -514,7 +591,7 @@
         <span class="n">out</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">folder</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">out</span></div>
 
-<div class="viewcode-block" id="ModelsManager._load_base"><a class="viewcode-back" href="../../reference/managers.html#msdss_models_api.managers.ModelsManager._load_base">[docs]</a>    <span class="k">def</span> <span class="nf">_load_base</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_load_base_files</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">"""</span>
 <span class="sd">        Load all base models.</span>
 
@@ -549,14 +626,14 @@
 <span class="sd">                models_manager.create('temp_model', 'Model')</span>
 
 <span class="sd">                # Load all base models</span>
-<span class="sd">                models_manager._load_base()</span>
+<span class="sd">                models_manager._load_base_files()</span>
 <span class="sd">        """</span>
         <span class="n">names</span> <span class="o">=</span> <span class="p">[</span><span class="n">name</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">folder</span><span class="p">)</span> <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">folder</span><span class="p">,</span> <span class="n">name</span><span class="p">))]</span>
         <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">names</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">instances</span> <span class="ow">or</span> <span class="n">force</span><span class="p">:</span>
-                <span class="n">path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_file</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+                <span class="n">path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_base_file</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
                 <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s1">'rb'</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">instances</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file</span><span class="p">)</span></div>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">instances</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
 
 <div class="viewcode-block" id="ModelsManager.create"><a class="viewcode-back" href="../../reference/managers.html#msdss_models_api.managers.ModelsManager.create">[docs]</a>    <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">settings</span><span class="o">=</span><span class="p">{}):</span>
         <span class="sd">"""</span>
@@ -597,7 +674,10 @@
 <span class="sd">                # Create model instance</span>
 <span class="sd">                models_manager.create('temp_model', 'Model')</span>
 <span class="sd">        """</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">handler</span><span class="o">.</span><span class="n">handle_create</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">instances</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">models</span><span class="p">)</span>
+
+        <span class="c1"># (ModelsMAnager_create_handle) Handle create operation</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">handler</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">handler</span><span class="o">.</span><span class="n">handle_create</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">instances</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">models</span><span class="p">)</span>
         
         <span class="c1"># (ModelsManager_create_subfolder) Create subfolder if not exists for model</span>
         <span class="n">folder</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_folder</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
@@ -609,7 +689,7 @@
         <span class="n">base_model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">models</span><span class="p">[</span><span class="n">model</span><span class="p">](</span><span class="n">file_path</span><span class="o">=</span><span class="n">save_file</span><span class="p">,</span> <span class="o">**</span><span class="n">settings</span><span class="p">)</span>
 
         <span class="c1"># (ModelsManager_create_save) Save base model object</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_file</span><span class="p">(</span><span class="n">name</span><span class="p">),</span> <span class="s1">'wb'</span><span class="p">)</span> <span class="k">as</span> <span class="n">base_file</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_base_file</span><span class="p">(</span><span class="n">name</span><span class="p">),</span> <span class="s1">'wb'</span><span class="p">)</span> <span class="k">as</span> <span class="n">base_file</span><span class="p">:</span>
             <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">base_model</span><span class="p">,</span> <span class="n">base_file</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">instances</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">base_model</span></div>
 
@@ -661,53 +741,18 @@
 <span class="sd">                models_manager.delete('temp_model')</span>
 <span class="sd">        """</span>
 
+        <span class="c1"># (ModelsManager_delete_handle) Handle read operation</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">handler</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">handler</span><span class="o">.</span><span class="n">handle_read</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">instances</span><span class="p">)</span>
+
         <span class="c1"># (ModelsManager_delete_instance) Run instance deletion</span>
-        <span class="n">instance</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">instance</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_instance</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
         <span class="n">instance</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="o">**</span><span class="n">settings</span><span class="p">)</span>
 
         <span class="c1"># (ModelsManager_delete_folder) Delete folder</span>
         <span class="n">folder</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_folder</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
         <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">folder</span><span class="p">)</span>
         <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">instances</span><span class="p">[</span><span class="n">name</span><span class="p">]</span></div>
-
-<div class="viewcode-block" id="ModelsManager.get"><a class="viewcode-back" href="../../reference/managers.html#msdss_models_api.managers.ModelsManager.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
-        <span class="sd">"""</span>
-<span class="sd">        Get a model instance by name.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        name : str</span>
-<span class="sd">            Unique name of the model instance. The instance is stored in ``.instances[name]``.</span>
-<span class="sd">        </span>
-<span class="sd">        Author</span>
-<span class="sd">        ------</span>
-<span class="sd">        Richard Wen &lt;rrwen.dev@gmail.com&gt;</span>
-<span class="sd">        </span>
-<span class="sd">        Example</span>
-<span class="sd">        -------</span>
-<span class="sd">        .. jupyter-execute::</span>
-
-<span class="sd">            import tempfile</span>
-<span class="sd">            from msdss_models_api.models import Model</span>
-<span class="sd">            from msdss_models_api.managers import ModelsManager</span>
-
-<span class="sd">            with tempfile.TemporaryDirectory() as folder_path:</span>
-
-<span class="sd">                # Setup available models</span>
-<span class="sd">                models = [Model]</span>
-<span class="sd">                </span>
-<span class="sd">                # Create manager</span>
-<span class="sd">                models_manager = ModelsManager(models, folder=folder_path)</span>
-
-<span class="sd">                # Create model instance</span>
-<span class="sd">                models_manager.create('temp_model', 'Model')</span>
-
-<span class="sd">                # Delete model instance</span>
-<span class="sd">                models_manager.get('temp_model')</span>
-<span class="sd">        """</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">handler</span><span class="o">.</span><span class="n">handle_read</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">instances</span><span class="p">)</span>
-        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">instances</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
-        <span class="k">return</span> <span class="n">out</span></div>
 
 <div class="viewcode-block" id="ModelsManager.input"><a class="viewcode-back" href="../../reference/managers.html#msdss_models_api.managers.ModelsManager.input">[docs]</a>    <span class="k">def</span> <span class="nf">input</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">settings</span><span class="o">=</span><span class="p">{}):</span>
         <span class="sd">"""</span>
@@ -755,60 +800,15 @@
 <span class="sd">                ]</span>
 <span class="sd">                models_manager.input('temp_model', train_data)</span>
 <span class="sd">        """</span>
-        <span class="n">instance</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+
+        <span class="c1"># (ModelsManager_input_handle) Handle input operation</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">handler</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">handler</span><span class="o">.</span><span class="n">handle_input</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">instances</span><span class="p">)</span>
+
+        <span class="c1"># (ModelsManager_input_run) Initialize model with input data</span>
+        <span class="n">instance</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_instance</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
         <span class="n">instance</span><span class="o">.</span><span class="n">input</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="o">**</span><span class="n">settings</span><span class="p">)</span>
         <span class="n">instance</span><span class="o">.</span><span class="n">save</span><span class="p">()</span></div>
-
-<div class="viewcode-block" id="ModelsManager.load"><a class="viewcode-back" href="../../reference/managers.html#msdss_models_api.managers.ModelsManager.load">[docs]</a>    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">settings</span><span class="o">=</span><span class="p">{}):</span>
-        <span class="sd">"""</span>
-<span class="sd">        Load a model instance if the save exists and has not changed from last loaded instance.</span>
-
-<span class="sd">        * Modifies ``.instance[name]`` by calling the ``load`` method</span>
-<span class="sd">        * Modifies ``.states[name]`` with action and results for loading the model instance</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        name : str</span>
-<span class="sd">            Unique name of the model instance. The instance is stored in ``.instances[name]``.</span>
-<span class="sd">        settings : dict</span>
-<span class="sd">            Keyword arguments passed to the :meth:`msdss_models_api.models.Model.load`.</span>
-
-<span class="sd">        Author</span>
-<span class="sd">        ------</span>
-<span class="sd">        Richard Wen &lt;rrwen.dev@gmail.com&gt;</span>
-<span class="sd">        </span>
-<span class="sd">        Example</span>
-<span class="sd">        -------</span>
-<span class="sd">        .. code::</span>
-
-<span class="sd">            import tempfile</span>
-<span class="sd">            from msdss_models_api.models import Model</span>
-<span class="sd">            from msdss_models_api.managers import ModelsManager</span>
-
-<span class="sd">            with tempfile.TemporaryDirectory() as folder_path:</span>
-
-<span class="sd">                # Setup available models</span>
-<span class="sd">                models = [Model]</span>
-<span class="sd">                </span>
-<span class="sd">                # Create manager</span>
-<span class="sd">                models_manager = ModelsManager(models, folder=folder_path)</span>
-
-<span class="sd">                # Create model instance</span>
-<span class="sd">                models_manager.create('temp_model', 'Model')</span>
-
-<span class="sd">                # Initialize a model instance with inputs</span>
-<span class="sd">                train_data = [</span>
-<span class="sd">                    {'col_a': 1, 'col_b': 'a'},</span>
-<span class="sd">                    {'col_a': 2, 'col_b': 'b'}</span>
-<span class="sd">                ]</span>
-<span class="sd">                models_manager.input('temp_model', train_data)</span>
-
-<span class="sd">                # Load model instance if possible</span>
-<span class="sd">                models_manager.load('temp_model')</span>
-<span class="sd">        """</span>
-        <span class="n">instance</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">handler</span><span class="o">.</span><span class="n">handle_load</span><span class="p">(</span><span class="n">instance</span><span class="p">)</span>
-        <span class="n">instance</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="o">**</span><span class="n">settings</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="ModelsManager.output"><a class="viewcode-back" href="../../reference/managers.html#msdss_models_api.managers.ModelsManager.output">[docs]</a>    <span class="k">def</span> <span class="nf">output</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">settings</span><span class="o">=</span><span class="p">{}):</span>
         <span class="sd">"""</span>
@@ -865,7 +865,13 @@
 <span class="sd">                ]</span>
 <span class="sd">                results = models_manager.output('temp_model', test_data)</span>
 <span class="sd">        """</span>
-        <span class="n">instance</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="c1"># (ModelsManager_output_handle) Handle output operation</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">handler</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">handler</span><span class="o">.</span><span class="n">handle_output</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">instances</span><span class="p">)</span>
+
+        <span class="c1"># (ModelsManager_output_run) Get model output</span>
+        <span class="n">instance</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_instance</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">instance</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
         <span class="n">out</span> <span class="o">=</span> <span class="n">instance</span><span class="o">.</span><span class="n">output</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="o">**</span><span class="n">settings</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">out</span></div>
     
@@ -922,7 +928,14 @@
 <span class="sd">                ]</span>
 <span class="sd">                models_manager.update('temp_model', new_data)</span>
 <span class="sd">        """</span>
-        <span class="n">instance</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+
+        <span class="c1"># (ModelsManager_update_handle) Handle update operation</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">handler</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">handler</span><span class="o">.</span><span class="n">handle_update</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">instances</span><span class="p">)</span>
+
+        <span class="c1"># (ModelsManager_update_run) Update model instance</span>
+        <span class="n">instance</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_instance</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">instance</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
         <span class="n">instance</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="o">**</span><span class="n">settings</span><span class="p">)</span>
         <span class="n">instance</span><span class="o">.</span><span class="n">save</span><span class="p">()</span></div></div>
 
@@ -936,9 +949,9 @@
 <span class="sd">    ----------</span>
 <span class="sd">    worker : :class:`celery:celery.Celery`</span>
 <span class="sd">        A ``celery`` app object to manage background tasks.</span>
-<span class="sd">    models_manager : :class:`msdss_models_api.managers.ModelsManager` or None</span>
-<span class="sd">        A models manager object to manage models. If ``None``, a default manager will be created.</span>
-<span class="sd">        The handler for the models manager will be disabled as model operations will be handled with parameter ``handler`` instead.</span>
+<span class="sd">    models_manager : :class:`msdss_models_api.managers.ModelsManager`</span>
+<span class="sd">        A models manager object to manage models.</span>
+<span class="sd">        The handler for the models manager will be disabled (set to ``None``) as model operations will be handled with attribute ``models_handler`` instead.</span>
 <span class="sd">    handler : :class:`msdss_models_api.handlers.ModelsBackgroundHandler`</span>
 <span class="sd">        Handler object to manage background operations.</span>
 
@@ -961,7 +974,9 @@
 <span class="sd">        * ``task`` (str): the action that the process is performing - one of: ``CREATE``, ``INPUT``, ``UPDATE``</span>
 <span class="sd">        * ``result`` (:class:`celery:celery.result.AsyncResult`): celery async object for getting states, ids, etc (see `celery.result &lt;https://docs.celeryproject.org/en/stable/reference/celery.result.html#celery.result.AsyncResult&gt;`_)</span>
 <span class="sd">        * ``started_at`` (:class:`datetime.datetime`): datetime object for when the task was started</span>
-
+<span class="sd">    </span>
+<span class="sd">    models_handler : :class:`msdss_models_api.handlers.ModelsHandler`</span>
+<span class="sd">        Handler extracted from parameter ``models_manager``.</span>
 <span class="sd">    handler : :class:`msdss_models_api.handlers.ModelsBackgroundHandler`</span>
 <span class="sd">        Same as parameter ``handler``.</span>
 <span class="sd">    </span>
@@ -1022,15 +1037,18 @@
 <span class="sd">            # Delete model instance</span>
 <span class="sd">            bg_manager.delete('temp_model')</span>
 <span class="sd">    """</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">worker</span><span class="p">,</span> <span class="n">models_manager</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">handler</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">worker</span><span class="p">,</span> <span class="n">models_manager</span><span class="o">=</span><span class="n">ModelsManager</span><span class="p">(),</span> <span class="n">handler</span><span class="o">=</span><span class="n">ModelsBackgroundHandler</span><span class="p">()):</span>
 
-        <span class="c1"># (ModelsBackgroundManager_attr) Set attributes</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">models_manager</span> <span class="o">=</span> <span class="n">models_manager</span> <span class="k">if</span> <span class="n">models_manager</span> <span class="k">else</span> <span class="n">ModelsManager</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">models_manager</span><span class="o">.</span><span class="n">handler</span><span class="o">.</span><span class="n">enable</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="c1"># (ModelsBackgroundManager_models_manager) Setup models manager and disable handler</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">models_manager</span> <span class="o">=</span> <span class="n">models_manager</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">models_handler</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">models_manager</span><span class="o">.</span><span class="n">handler</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">models_manager</span><span class="o">.</span><span class="n">handler</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># (ModelsBackgroundManager_attr) Set other attributes</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">worker</span> <span class="o">=</span> <span class="n">worker</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tasks</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">states</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">handler</span> <span class="o">=</span> <span class="n">handler</span> <span class="k">if</span> <span class="n">handler</span> <span class="k">else</span> <span class="n">ModelsBackgroundHandler</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">handler</span> <span class="o">=</span> <span class="n">handler</span>
 
         <span class="c1"># (ModelsBackgroundManager_task_create) Define create task</span>
         <span class="nd">@self</span><span class="o">.</span><span class="n">worker</span><span class="o">.</span><span class="n">task</span>
@@ -1047,11 +1065,10 @@
         <span class="c1"># (ModelsBackgroundManager_task_update) Define update task</span>
         <span class="nd">@self</span><span class="o">.</span><span class="n">worker</span><span class="o">.</span><span class="n">task</span>
         <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">settings</span><span class="o">=</span><span class="p">{}):</span>
-            <span class="n">models_manager</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
             <span class="n">models_manager</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">settings</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tasks</span><span class="p">[</span><span class="s1">'update'</span><span class="p">]</span> <span class="o">=</span> <span class="n">update</span>
 
-<div class="viewcode-block" id="ModelsBackgroundManager._add_model_task"><a class="viewcode-back" href="../../reference/managers.html#msdss_models_api.managers.ModelsBackgroundManager._add_model_task">[docs]</a>    <span class="k">def</span> <span class="nf">_add_model_task</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_add_task</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">"""</span>
 <span class="sd">        Add a background task for a model instance.</span>
 
@@ -1099,14 +1116,14 @@
 <span class="sd">                    {'col_a': 1, 'col_b': 'a'},</span>
 <span class="sd">                    {'col_a': 2, 'col_b': 'b'}</span>
 <span class="sd">                ]</span>
-<span class="sd">                bg_manager._add_model_task('input', 'temp_model', train_data)</span>
+<span class="sd">                bg_manager._add_task('input', 'temp_model', train_data)</span>
 <span class="sd">        """</span>
         <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tasks</span><span class="p">[</span><span class="n">task</span><span class="p">]</span><span class="o">.</span><span class="n">delay</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">states</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s1">'task'</span><span class="p">:</span> <span class="n">task</span><span class="o">.</span><span class="n">upper</span><span class="p">(),</span>
             <span class="s1">'result'</span><span class="p">:</span> <span class="n">result</span><span class="p">,</span>
             <span class="s1">'started_at'</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
-        <span class="p">}</span></div>
+        <span class="p">}</span>
 
 <div class="viewcode-block" id="ModelsBackgroundManager.cancel"><a class="viewcode-back" href="../../reference/managers.html#msdss_models_api.managers.ModelsBackgroundManager.cancel">[docs]</a>    <span class="k">def</span> <span class="nf">cancel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="sd">"""</span>
@@ -1202,9 +1219,9 @@
 <span class="sd">                # Create model instance</span>
 <span class="sd">                bg_manager.create('temp_model', 'Model')</span>
 <span class="sd">        """</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">models_manager</span><span class="o">.</span><span class="n">_load_base</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">models_manager</span><span class="o">.</span><span class="n">_load_base_files</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">handler</span><span class="o">.</span><span class="n">handle_create</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">models_manager</span><span class="o">.</span><span class="n">instances</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">models_manager</span><span class="o">.</span><span class="n">models</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_add_model_task</span><span class="p">(</span><span class="s1">'create'</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add_task</span><span class="p">(</span><span class="s1">'create'</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
 <div class="viewcode-block" id="ModelsBackgroundManager.delete"><a class="viewcode-back" href="../../reference/managers.html#msdss_models_api.managers.ModelsBackgroundManager.delete">[docs]</a>    <span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">"""</span>
@@ -1257,9 +1274,10 @@
 <span class="sd">                # Delete the model instance and any associated bg tasks</span>
 <span class="sd">                bg_manager.delete('temp_model')</span>
 <span class="sd">        """</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">models_manager</span><span class="o">.</span><span class="n">_load_base_files</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">handler</span><span class="o">.</span><span class="n">handle_processing</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">states</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">models_manager</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">cancel</span><span class="p">(</span><span class="n">name</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cancel</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">models_manager</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="ModelsBackgroundManager.get_status"><a class="viewcode-back" href="../../reference/managers.html#msdss_models_api.managers.ModelsBackgroundManager.get_status">[docs]</a>    <span class="k">def</span> <span class="nf">get_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="sd">"""</span>
@@ -1383,10 +1401,10 @@
 <span class="sd">                ]</span>
 <span class="sd">                bg_manager.input('temp_model', train_data)</span>
 <span class="sd">        """</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">models_manager</span><span class="o">.</span><span class="n">_load_base</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">handler</span><span class="o">.</span><span class="n">handle_read</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">models_manager</span><span class="o">.</span><span class="n">instances</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">models_manager</span><span class="o">.</span><span class="n">_load_base_files</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">models_handler</span><span class="o">.</span><span class="n">handle_input</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">models_manager</span><span class="o">.</span><span class="n">instances</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">handler</span><span class="o">.</span><span class="n">handle_processing</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">states</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_add_model_task</span><span class="p">(</span><span class="s1">'input'</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add_task</span><span class="p">(</span><span class="s1">'input'</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="ModelsBackgroundManager.output"><a class="viewcode-back" href="../../reference/managers.html#msdss_models_api.managers.ModelsBackgroundManager.output">[docs]</a>    <span class="k">def</span> <span class="nf">output</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">"""</span>
@@ -1443,10 +1461,9 @@
 <span class="sd">                ]</span>
 <span class="sd">                bg_manager.output('temp_model', new_data)</span>
 <span class="sd">        """</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">models_manager</span><span class="o">.</span><span class="n">_load_base</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">handler</span><span class="o">.</span><span class="n">handle_read</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">models_manager</span><span class="o">.</span><span class="n">instances</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">models_manager</span><span class="o">.</span><span class="n">_load_base_files</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">models_handler</span><span class="o">.</span><span class="n">handle_output</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">models_manager</span><span class="o">.</span><span class="n">instances</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">handler</span><span class="o">.</span><span class="n">handle_processing</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">states</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">models_manager</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">models_manager</span><span class="o">.</span><span class="n">output</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="ModelsBackgroundManager.start"><a class="viewcode-back" href="../../reference/managers.html#msdss_models_api.managers.ModelsBackgroundManager.start">[docs]</a>    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">worker_kwargs</span><span class="o">=</span><span class="p">{},</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -1493,7 +1510,7 @@
 <span class="sd">                    {'col_a': 1, 'col_b': 'a'},</span>
 <span class="sd">                    {'col_a': 2, 'col_b': 'b'}</span>
 <span class="sd">                ]</span>
-<span class="sd">                bg_manager._add_model_task('input', 'temp_model', train_data)</span>
+<span class="sd">                bg_manager._add_task('input', 'temp_model', train_data)</span>
 
 <span class="sd">                # Start worker</span>
 <span class="sd">                bg_manager.start()</span>
@@ -1555,10 +1572,10 @@
 <span class="sd">                ]</span>
 <span class="sd">                bg_manager.update('temp_model', new_data)</span>
 <span class="sd">        """</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">models_manager</span><span class="o">.</span><span class="n">_load_base</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">handler</span><span class="o">.</span><span class="n">handle_read</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">models_manager</span><span class="o">.</span><span class="n">instances</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">models_manager</span><span class="o">.</span><span class="n">_load_base_files</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">models_handler</span><span class="o">.</span><span class="n">handle_update</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">models_manager</span><span class="o">.</span><span class="n">instances</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">handler</span><span class="o">.</span><span class="n">handle_processing</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">states</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_add_model_task</span><span class="p">(</span><span class="s1">'update'</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add_task</span><span class="p">(</span><span class="s1">'update'</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div></div>
 
 <div class="viewcode-block" id="ModelsDBManager"><a class="viewcode-back" href="../../reference/managers.html#msdss_models_api.managers.ModelsDBManager">[docs]</a><span class="k">class</span> <span class="nc">ModelsDBManager</span><span class="p">(</span><span class="n">ModelsManager</span><span class="p">):</span>
     <span class="sd">"""</span>
@@ -1571,11 +1588,8 @@
 <span class="sd">    models : list(:class:`msdss_models_api.models.Model`)</span>
 <span class="sd">        List of available ``Model`` objects to use for creating and managing model instances.</span>
 <span class="sd">        Ensure that the class names are unique, otherwise the last object takes priority.</span>
-<span class="sd">    database : :class:`msdss_base_database:msdss_base_database.core.Database`</span>
-<span class="sd">        A database object for using models with data from the database.</span>
-<span class="sd">    data_manager : :class:`msdss_data_api.managers.DataManager` or None</span>
+<span class="sd">    data_manager : :class:`msdss_data_api.managers.DataManager`</span>
 <span class="sd">        A data manager object for managing data in and out of a database.</span>
-<span class="sd">        If ``None``, one will be configured from parameter ``database``.</span>
 <span class="sd">    *args, **kwargs</span>
 <span class="sd">        Additional arguments for :class:`msdss_models_api.models.ModelsManager`</span>
 <span class="sd">    </span>
@@ -1589,6 +1603,7 @@
 
 <span class="sd">        import tempfile</span>
 <span class="sd">        from msdss_base_database import Database</span>
+<span class="sd">        from msdss_data_api.managers import DataManager</span>
 <span class="sd">        from msdss_models_api.models import Model</span>
 <span class="sd">        from msdss_models_api.managers import ModelsDBManager</span>
 
@@ -1599,7 +1614,8 @@
 <span class="sd">            models = [Model]</span>
 <span class="sd">            </span>
 <span class="sd">            # Create manager</span>
-<span class="sd">            models_manager = ModelsDBManager(models, database, folder=folder_path)</span>
+<span class="sd">            data_manager = DataManager(database=database)</span>
+<span class="sd">            models_manager = ModelsDBManager(models, data_manager, folder=folder_path)</span>
 
 <span class="sd">            # Create model instance</span>
 <span class="sd">            models_manager.create('temp_model', 'Model')</span>
@@ -1625,10 +1641,9 @@
 <span class="sd">            # Delete test table</span>
 <span class="sd">            database.drop_table('models_test')</span>
 <span class="sd">    """</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">models</span><span class="o">=</span><span class="p">[],</span> <span class="n">database</span><span class="o">=</span><span class="n">Database</span><span class="p">(),</span> <span class="n">data_manager</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">models</span><span class="o">=</span><span class="p">[],</span> <span class="n">data_manager</span><span class="o">=</span><span class="n">DataManager</span><span class="p">(</span><span class="n">database</span><span class="o">=</span><span class="n">Database</span><span class="p">()),</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">models</span><span class="o">=</span><span class="n">models</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">database</span> <span class="o">=</span> <span class="n">database</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">data_manager</span> <span class="o">=</span> <span class="n">data_manager</span> <span class="k">if</span> <span class="n">data_manager</span> <span class="k">else</span> <span class="n">DataManager</span><span class="p">(</span><span class="n">database</span><span class="o">=</span><span class="n">database</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_manager</span> <span class="o">=</span> <span class="n">data_manager</span>
     
 <div class="viewcode-block" id="ModelsDBManager.input_db"><a class="viewcode-back" href="../../reference/managers.html#msdss_models_api.managers.ModelsDBManager.input_db">[docs]</a>    <span class="k">def</span> <span class="nf">input_db</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">settings</span><span class="o">=</span><span class="p">{},</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">"""</span>
@@ -1655,6 +1670,7 @@
 
 <span class="sd">            import tempfile</span>
 <span class="sd">            from msdss_base_database import Database</span>
+<span class="sd">            from msdss_data_api.managers import DataManager</span>
 <span class="sd">            from msdss_models_api.models import Model</span>
 <span class="sd">            from msdss_models_api.managers import ModelsDBManager</span>
 
@@ -1665,7 +1681,8 @@
 <span class="sd">                models = [Model]</span>
 <span class="sd">                </span>
 <span class="sd">                # Create manager</span>
-<span class="sd">                models_manager = ModelsDBManager(models, database, folder=folder_path)</span>
+<span class="sd">                data_manager = DataManager(database=database)</span>
+<span class="sd">                models_manager = ModelsDBManager(models, data_manager, folder=folder_path)</span>
 
 <span class="sd">                # Create model instance</span>
 <span class="sd">                models_manager.create('temp_model', 'Model')</span>
@@ -1711,6 +1728,7 @@
 
 <span class="sd">            import tempfile</span>
 <span class="sd">            from msdss_base_database import Database</span>
+<span class="sd">            from msdss_data_api.managers import DataManager</span>
 <span class="sd">            from msdss_models_api.models import Model</span>
 <span class="sd">            from msdss_models_api.managers import ModelsDBManager</span>
 
@@ -1721,7 +1739,8 @@
 <span class="sd">                models = [Model]</span>
 <span class="sd">                </span>
 <span class="sd">                # Create manager</span>
-<span class="sd">                models_manager = ModelsDBManager(models, database, folder=folder_path)</span>
+<span class="sd">                data_manager = DataManager(database=database)</span>
+<span class="sd">                models_manager = ModelsDBManager(models, data_manager, folder=folder_path)</span>
 
 <span class="sd">                # Create model instance</span>
 <span class="sd">                models_manager.create('temp_model', 'Model')</span>
@@ -1732,6 +1751,9 @@
 <span class="sd">                    {'col_a': 2, 'col_b': 'b'}</span>
 <span class="sd">                ]</span>
 <span class="sd">                database.insert('models_test', train_data)</span>
+
+<span class="sd">                # Initialize a model instance with inputs from database</span>
+<span class="sd">                models_manager.input_db('temp_model', 'models_test')</span>
 
 <span class="sd">                # Update model instance with new data</span>
 <span class="sd">                new_data = [</span>
@@ -1755,11 +1777,9 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    database : :class:`msdss_base_database:msdss_base_database.core.Database`</span>
-<span class="sd">        A database object for using models with data from the database.</span>
-<span class="sd">    models_manager : :class:`msdss_models_api.managers.ModelsDBManager` or None</span>
-<span class="sd">        A models DB manager object to manage models that can receive data from a database. If ``None``, a default manager will be created.</span>
-<span class="sd">        The handler for the models manager will be disabled as model operations will be handled with parameter ``handler`` instead.</span>
+<span class="sd">    models_manager : :class:`msdss_models_api.managers.ModelsDBManager`</span>
+<span class="sd">        A models DB manager object to manage models that can receive data from a database.</span>
+<span class="sd">        The handler and data handler for the models manager will be disabled as model operations will be handled with parameter ``handler`` instead.</span>
 <span class="sd">    *args, **kwargs</span>
 <span class="sd">        Additional arguments passed to :class:`msdss_models_api.managers.ModelsBackgroundManager`.</span>
 
@@ -1784,6 +1804,7 @@
 <span class="sd">        import tempfile</span>
 <span class="sd">        from celery import Celery</span>
 <span class="sd">        from msdss_base_database import Database</span>
+<span class="sd">        from msdss_data_api.managers import DataManager</span>
 <span class="sd">        from msdss_models_api.models import Model</span>
 <span class="sd">        from msdss_models_api.managers import *</span>
 <span class="sd">        from pprint import pprint</span>
@@ -1795,7 +1816,8 @@
 <span class="sd">            </span>
 <span class="sd">            # Create manager</span>
 <span class="sd">            database = Database()</span>
-<span class="sd">            models_manager = ModelsDBManager(models, database, folder=folder_path)</span>
+<span class="sd">            data_manager = DataManager(database=database)</span>
+<span class="sd">            models_manager = ModelsDBManager(models, data_manager, folder=folder_path)</span>
 
 <span class="sd">            # Create model instance</span>
 <span class="sd">            models_manager.create('temp_model', 'Model')</span>
@@ -1822,11 +1844,14 @@
 <span class="sd">            database.insert('models_test', new_data)</span>
 <span class="sd">            bg_manager.update_db('temp_model', 'models_test', where=['col_a &gt; 2'])</span>
 <span class="sd">    """</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">database</span><span class="o">=</span><span class="n">Database</span><span class="p">(),</span> <span class="n">models_manager</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">models_manager</span><span class="o">=</span><span class="n">ModelsDBManager</span><span class="p">(),</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 
         <span class="c1"># (ModelsDBBackgroundManager_init) Initialize inherited class</span>
-        <span class="n">models_manager</span> <span class="o">=</span> <span class="n">models_manager</span> <span class="k">if</span> <span class="n">models_manager</span> <span class="k">else</span> <span class="n">ModelsDBManager</span><span class="p">(</span><span class="n">database</span><span class="o">=</span><span class="n">database</span><span class="p">)</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">models_manager</span><span class="o">=</span><span class="n">models_manager</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="c1"># (ModelsDBBackgroundManager_data_manager) Setup data manager</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_handler</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">models_manager</span><span class="o">.</span><span class="n">data_manager</span><span class="o">.</span><span class="n">handler</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">models_manager</span><span class="o">.</span><span class="n">data_manager</span><span class="o">.</span><span class="n">handler</span> <span class="o">=</span> <span class="kc">None</span>
         
         <span class="c1"># (ModelsDBBackgroundManager_task_input) Define input db task</span>
         <span class="nd">@self</span><span class="o">.</span><span class="n">worker</span><span class="o">.</span><span class="n">task</span>
@@ -1837,7 +1862,6 @@
         <span class="c1"># (ModelsDBBackgroundManager_task_update) Define update db task</span>
         <span class="nd">@self</span><span class="o">.</span><span class="n">worker</span><span class="o">.</span><span class="n">task</span>
         <span class="k">def</span> <span class="nf">update_db</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">settings</span><span class="o">=</span><span class="p">{},</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-            <span class="n">models_manager</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
             <span class="n">models_manager</span><span class="o">.</span><span class="n">update_db</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">settings</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tasks</span><span class="p">[</span><span class="s1">'update_db'</span><span class="p">]</span> <span class="o">=</span> <span class="n">update_db</span>
 
@@ -1869,6 +1893,7 @@
 <span class="sd">            import tempfile</span>
 <span class="sd">            from celery import Celery</span>
 <span class="sd">            from msdss_base_database import Database</span>
+<span class="sd">            from msdss_data_api.managers import DataManager</span>
 <span class="sd">            from msdss_models_api.models import Model</span>
 <span class="sd">            from msdss_models_api.managers import *</span>
 <span class="sd">            from pprint import pprint</span>
@@ -1880,7 +1905,8 @@
 <span class="sd">                </span>
 <span class="sd">                # Create manager</span>
 <span class="sd">                database = Database()</span>
-<span class="sd">                models_manager = ModelsDBManager(models, database, folder=folder_path)</span>
+<span class="sd">                data_manager = DataManager(database=database)</span>
+<span class="sd">                models_manager = ModelsDBManager(models, data_manager, folder=folder_path)</span>
 
 <span class="sd">                # Create model instance</span>
 <span class="sd">                models_manager.create('temp_model', 'Model')</span>
@@ -1899,19 +1925,19 @@
 <span class="sd">                # Initialize a model instance with inputs from database</span>
 <span class="sd">                bg_manager.input_db('temp_model', 'models_test')</span>
 <span class="sd">        """</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">models_manager</span><span class="o">.</span><span class="n">_load_base</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">models_manager</span><span class="o">.</span><span class="n">_load_base_files</span><span class="p">()</span>
         
         <span class="c1"># (ModelsDBBackgroundManager_input_db_data) Handle database read and query</span>
         <span class="n">where</span> <span class="o">=</span> <span class="p">[</span><span class="n">split</span><span class="p">(</span><span class="n">w</span><span class="p">)</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">where</span><span class="p">]</span> <span class="k">if</span> <span class="n">where</span> <span class="k">else</span> <span class="n">where</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">models_manager</span><span class="o">.</span><span class="n">data_manager</span><span class="o">.</span><span class="n">handler</span><span class="o">.</span><span class="n">handle_read</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">models_manager</span><span class="o">.</span><span class="n">data_manager</span><span class="o">.</span><span class="n">handler</span><span class="o">.</span><span class="n">handle_where</span><span class="p">(</span><span class="n">where</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_handler</span><span class="o">.</span><span class="n">handle_read</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_handler</span><span class="o">.</span><span class="n">handle_where</span><span class="p">(</span><span class="n">where</span><span class="p">)</span>
 
-        <span class="c1"># (ModelsDBBackgroundManager_input_db_handle) Handle model read and processing</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">handler</span><span class="o">.</span><span class="n">handle_read</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">models_manager</span><span class="o">.</span><span class="n">instances</span><span class="p">)</span>
+        <span class="c1"># (ModelsDBBackgroundManager_input_db_handle) Handle model input and processing</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">models_handler</span><span class="o">.</span><span class="n">handle_input</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">models_manager</span><span class="o">.</span><span class="n">instances</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">handler</span><span class="o">.</span><span class="n">handle_processing</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">states</span><span class="p">)</span>
 
         <span class="c1"># (ModelsDBBackgroundManager_input_db_add) Add input db task</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_add_model_task</span><span class="p">(</span><span class="s1">'input_db'</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">settings</span><span class="o">=</span><span class="n">settings</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="n">where</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add_task</span><span class="p">(</span><span class="s1">'input_db'</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">settings</span><span class="o">=</span><span class="n">settings</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="n">where</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="ModelsDBBackgroundManager.update_db"><a class="viewcode-back" href="../../reference/managers.html#msdss_models_api.managers.ModelsDBBackgroundManager.update_db">[docs]</a>    <span class="k">def</span> <span class="nf">update_db</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">settings</span><span class="o">=</span><span class="p">{},</span> <span class="n">where</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">"""</span>
@@ -1943,6 +1969,7 @@
 <span class="sd">            import tempfile</span>
 <span class="sd">            from celery import Celery</span>
 <span class="sd">            from msdss_base_database import Database</span>
+<span class="sd">            from msdss_data_api.managers import DataManager</span>
 <span class="sd">            from msdss_models_api.models import Model</span>
 <span class="sd">            from msdss_models_api.managers import *</span>
 <span class="sd">            from pprint import pprint</span>
@@ -1954,7 +1981,8 @@
 <span class="sd">                </span>
 <span class="sd">                # Create manager</span>
 <span class="sd">                database = Database()</span>
-<span class="sd">                models_manager = ModelsDBManager(models, database, folder=folder_path)</span>
+<span class="sd">                data_manager = DataManager(database=database)</span>
+<span class="sd">                models_manager = ModelsDBManager(models, data_manager, folder=folder_path)</span>
 
 <span class="sd">                # Create model instance</span>
 <span class="sd">                models_manager.create('temp_model', 'Model')</span>
@@ -1981,49 +2009,122 @@
 <span class="sd">                database.insert('models_test', new_data)</span>
 <span class="sd">                bg_manager.update_db('temp_model', 'models_test', where=['col_a &gt; 2'])</span>
 <span class="sd">        """</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">models_manager</span><span class="o">.</span><span class="n">_load_base</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">models_manager</span><span class="o">.</span><span class="n">_load_base_files</span><span class="p">()</span>
 
         <span class="c1"># (ModelsDBBackgroundManager_update_db_data) Handle database read and query</span>
         <span class="n">where</span> <span class="o">=</span> <span class="p">[</span><span class="n">split</span><span class="p">(</span><span class="n">w</span><span class="p">)</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">where</span><span class="p">]</span> <span class="k">if</span> <span class="n">where</span> <span class="k">else</span> <span class="n">where</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">models_manager</span><span class="o">.</span><span class="n">data_manager</span><span class="o">.</span><span class="n">handler</span><span class="o">.</span><span class="n">handle_read</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">models_manager</span><span class="o">.</span><span class="n">data_manager</span><span class="o">.</span><span class="n">handler</span><span class="o">.</span><span class="n">handle_where</span><span class="p">(</span><span class="n">where</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_handler</span><span class="o">.</span><span class="n">handle_read</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_handler</span><span class="o">.</span><span class="n">handle_where</span><span class="p">(</span><span class="n">where</span><span class="p">)</span>
 
-        <span class="c1"># (ModelsDBBackgroundManager_update_db_handle) Handle model read and processing</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">handler</span><span class="o">.</span><span class="n">handle_read</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">models_manager</span><span class="o">.</span><span class="n">instances</span><span class="p">)</span>
+        <span class="c1"># (ModelsDBBackgroundManager_update_db_handle) Handle model update and processing</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">models_handler</span><span class="o">.</span><span class="n">handle_update</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">models_manager</span><span class="o">.</span><span class="n">instances</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">handler</span><span class="o">.</span><span class="n">handle_processing</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">states</span><span class="p">)</span>
 
         <span class="c1"># (ModelsDBBackgroundManager_update_db_add) Add update db task</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_add_model_task</span><span class="p">(</span><span class="s1">'update_db'</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">settings</span><span class="o">=</span><span class="n">settings</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="n">where</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add_task</span><span class="p">(</span><span class="s1">'update_db'</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">settings</span><span class="o">=</span><span class="n">settings</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="n">where</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div></div>
 
-<span class="k">class</span> <span class="nc">ModelsMetadataManager</span><span class="p">:</span>
+<div class="viewcode-block" id="ModelsMetadataManager"><a class="viewcode-back" href="../../reference/managers.html#msdss_models_api.managers.ModelsMetadataManager">[docs]</a><span class="k">class</span> <span class="nc">ModelsMetadataManager</span><span class="p">(</span><span class="n">MetadataManager</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    Class to manage models metadata in a database.</span>
 
+<span class="sd">    * Inherits from :class:`msdss_data_api:msdss_data_api.managers.MetadataManager`</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    data_manager : :class:`msdss_data_api.managers.DataManager`</span>
+<span class="sd">        Data manager object for managing data in a database.</span>
+<span class="sd">        The restricted tables for the handler will be set to ``[]`` while the only permitted table will be the table name of the parameter ``table``.</span>
+<span class="sd">    table : str</span>
+<span class="sd">        The name of the table to store the metadata.</span>
+<span class="sd">    columns : list(dict) or list(list)</span>
+<span class="sd">        List of dict (kwargs) or lists (positional args) that are passed to sqlalchemy.schema.Column. See parameter ``columns`` in :meth:`msdss_base_database:msdss_base_database.core.create_table`.</span>
+<span class="sd">        This defines the table to store the metadata, where the default is:</span>
+
+<span class="sd">        .. jupyter-execute::</span>
+<span class="sd">            :hide-code:</span>
+
+<span class="sd">            from msdss_models_api.defaults import *</span>
+<span class="sd">            from pprint import pprint</span>
+
+<span class="sd">            pprint(DEFAULT_METADATA_COLUMNS)</span>
+
+<span class="sd">    name_column : str</span>
+<span class="sd">        Name of the column identifying each entry.</span>
+<span class="sd">    updated_column : str</span>
+<span class="sd">        Name of the column for storing the last updated date/time.</span>
+<span class="sd">    *args, **kwargs</span>
+<span class="sd">        Additional arguments passed to :class:`msdss_data_api:msdss_data_api.managers.MetadataManager`</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    See attributes in :class:`msdss_data_api:msdss_data_api.managers.MetadataManager`.</span>
+<span class="sd">    </span>
+<span class="sd">    Author</span>
+<span class="sd">    ------</span>
+<span class="sd">    Richard Wen &lt;rrwen.dev@gmail.com&gt;</span>
+<span class="sd">    </span>
+<span class="sd">    Example</span>
+<span class="sd">    -------</span>
+<span class="sd">    .. jupyter-execute::</span>
+
+<span class="sd">        from datetime import datetime</span>
+<span class="sd">        from msdss_base_database import Database</span>
+<span class="sd">        from msdss_data_api.managers import DataManager</span>
+<span class="sd">        from msdss_models_api.managers import *</span>
+<span class="sd">        from msdss_models_api.defaults import *</span>
+<span class="sd">        </span>
+<span class="sd">        # Setup database</span>
+<span class="sd">        db = Database()</span>
+
+<span class="sd">        # Check if the metadata table exists and drop if it does</span>
+<span class="sd">        if db.has_table(DEFAULT_METADATA_TABLE):</span>
+<span class="sd">            db.drop_table(DEFAULT_METADATA_TABLE)</span>
+
+<span class="sd">        # Setup metadata manager</span>
+<span class="sd">        data_manager = DataManager(database=db)</span>
+<span class="sd">        mdm = ModelsMetadataManager(data_manager)</span>
+
+<span class="sd">        # Add metadata</span>
+<span class="sd">        metadata = [{</span>
+<span class="sd">            'title': 'Testing Data',</span>
+<span class="sd">            'description': 'Data used for testing',</span>
+<span class="sd">            'tags': 'test exp auto',</span>
+<span class="sd">            'source': 'Automatically generated from Python',</span>
+<span class="sd">            'created_by': 'msdss',</span>
+<span class="sd">            'created_at': datetime.now(),</span>
+<span class="sd">            'updated_at': datetime.now()</span>
+<span class="sd">        }]</span>
+<span class="sd">        mdm.create('test_model', metadata)</span>
+
+<span class="sd">        # Get metadata</span>
+<span class="sd">        metadata_get = mdm.get('test_model')</span>
+<span class="sd">        </span>
+<span class="sd">        # Search metadata</span>
+<span class="sd">        search_results = mdm.search(where=['title = "Testing Data"'])</span>
+
+<span class="sd">        # Update metadata</span>
+<span class="sd">        mdm.update('test_model', {'description': 'NEW DESCRIPTION'})</span>
+
+<span class="sd">        # Delete metadata</span>
+<span class="sd">        mdm.delete('test_model')</span>
+<span class="sd">    """</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="n">models_manager</span><span class="p">,</span>
-        <span class="n">table</span><span class="o">=</span><span class="n">DEFAULT_MODELS_TABLE</span><span class="p">,</span>
-        <span class="n">columns</span><span class="o">=</span><span class="n">DEFAULT_MODELS_COLUMNS</span><span class="p">,</span>
-        <span class="n">database</span><span class="o">=</span><span class="n">Database</span><span class="p">()</span>
+        <span class="n">data_manager</span><span class="o">=</span><span class="n">DataManager</span><span class="p">(),</span>
+        <span class="n">table</span><span class="o">=</span><span class="n">DEFAULT_METADATA_TABLE</span><span class="p">,</span>
+        <span class="n">columns</span><span class="o">=</span><span class="n">DEFAULT_METADATA_COLUMNS</span><span class="p">,</span>
+        <span class="n">name_column</span><span class="o">=</span><span class="n">DEFAULT_NAME_COLUMN</span><span class="p">,</span>
+        <span class="n">updated_column</span><span class="o">=</span><span class="n">DEFAULT_UPDATE_COLUMN</span><span class="p">,</span>
+        <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
     <span class="p">):</span>
-
-        <span class="c1"># (ModelsMetadataManager_table) Create table if not exists</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">database</span><span class="o">.</span><span class="n">has_table</span><span class="p">(</span><span class="n">table</span><span class="p">):</span>
-            <span class="n">database</span><span class="o">.</span><span class="n">create_table</span><span class="p">(</span><span class="n">table</span><span class="p">,</span> <span class="n">columns</span><span class="p">)</span>
-
-        <span class="c1"># (ModelsMetadataManager_attr) Set attributes</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">models_manager</span> <span class="o">=</span> <span class="n">models_manager</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">table</span> <span class="o">=</span> <span class="n">table</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">database</span> <span class="o">=</span> <span class="n">database</span>
-
-    <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
-
-        <span class="c1"># (ModelsMetadataManager_create_vars) Set variables</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="n">data</span><span class="p">]</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="k">else</span> <span class="n">data</span>
-        <span class="n">instance</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">models_manager</span><span class="o">.</span><span class="n">instances</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
-
-        <span class="c1"># (ModelsMetadataManager_create_add) Add metadata for model</span>
-        <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">'name'</span><span class="p">]</span> <span class="o">=</span> <span class="n">name</span>
-        <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">'model'</span><span class="p">]</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">instance</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">data_manager</span><span class="o">=</span><span class="n">data_manager</span><span class="p">,</span>
+            <span class="n">table</span><span class="o">=</span><span class="n">table</span><span class="p">,</span>
+            <span class="n">columns</span><span class="o">=</span><span class="n">columns</span><span class="p">,</span>
+            <span class="n">name_column</span><span class="o">=</span><span class="n">name_column</span><span class="p">,</span>
+            <span class="n">updated_column</span><span class="o">=</span><span class="n">updated_column</span><span class="p">,</span>
+            <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span></div>
 </pre></div>
 
           </article>

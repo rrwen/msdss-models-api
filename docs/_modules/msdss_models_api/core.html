@@ -272,6 +272,7 @@
 <span></span><span class="kn">from</span> <span class="nn">celery</span> <span class="kn">import</span> <span class="n">Celery</span>
 <span class="kn">from</span> <span class="nn">fastapi</span> <span class="kn">import</span> <span class="n">FastAPI</span>
 <span class="kn">from</span> <span class="nn">msdss_base_api</span> <span class="kn">import</span> <span class="n">API</span>
+<span class="kn">from</span> <span class="nn">msdss_data_api.managers</span> <span class="kn">import</span> <span class="n">DataManager</span>
 
 <span class="kn">from</span> <span class="nn">.env</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">.managers</span> <span class="kn">import</span> <span class="o">*</span>
@@ -489,7 +490,8 @@
             <span class="n">folder</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'folder'</span><span class="p">,</span> <span class="n">folder</span><span class="p">)</span>
 
         <span class="c1"># (ModelsAPI_bg) Create background manager for models</span>
-        <span class="n">models_manager</span> <span class="o">=</span> <span class="n">ModelsDBManager</span><span class="p">(</span><span class="n">models</span><span class="o">=</span><span class="n">models</span><span class="p">,</span> <span class="n">database</span><span class="o">=</span><span class="n">database</span><span class="p">,</span> <span class="n">folder</span><span class="o">=</span><span class="n">folder</span><span class="p">)</span>
+        <span class="n">data_manager</span> <span class="o">=</span> <span class="n">DataManager</span><span class="p">(</span><span class="n">database</span><span class="o">=</span><span class="n">database</span><span class="p">)</span>
+        <span class="n">models_manager</span> <span class="o">=</span> <span class="n">ModelsDBManager</span><span class="p">(</span><span class="n">models</span><span class="o">=</span><span class="n">models</span><span class="p">,</span> <span class="n">data_manager</span><span class="o">=</span><span class="n">data_manager</span><span class="p">,</span> <span class="n">folder</span><span class="o">=</span><span class="n">folder</span><span class="p">)</span>
         <span class="n">worker</span> <span class="o">=</span> <span class="n">Celery</span><span class="p">(</span><span class="n">broker</span><span class="o">=</span><span class="n">broker_url</span><span class="p">,</span> <span class="n">backend</span><span class="o">=</span><span class="n">backend_url</span><span class="p">)</span>
         <span class="n">bg_manager</span> <span class="o">=</span> <span class="n">ModelsDBBackgroundManager</span><span class="p">(</span><span class="n">worker</span><span class="o">=</span><span class="n">worker</span><span class="p">,</span> <span class="n">models_manager</span><span class="o">=</span><span class="n">models_manager</span><span class="p">)</span>
         <span class="n">models_router_settings</span><span class="p">[</span><span class="s1">'bg_manager'</span><span class="p">]</span> <span class="o">=</span> <span class="n">bg_manager</span>

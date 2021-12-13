@@ -4,7 +4,7 @@ import pickle
 import shutil
 
 from msdss_base_database import Database
-from msdss_data_api.managers import DataManager
+from msdss_data_api.managers import DataManager, MetadataManager
 from shlex import split
 
 from .defaults import *
@@ -21,8 +21,8 @@ class ModelsManager:
         Ensure that the class names are unique, otherwise the last object takes priority.
     folder : str
         The folder path to store models in. The folder will be created if it does not exist.
-    handler : :class:`msdss_models_api.handlers.ModelsHandler`
-        Handler object to manage model operations.
+    handler : :class:`msdss_models_api.handlers.ModelsHandler` or None
+        Handler object to manage model operations. If ``None``, then inputs for model operations will not be handled.
     suffix : str
         Suffix for pickled model object files. These files contain the model objects without inputs or loading.
 
@@ -94,7 +94,7 @@ class ModelsManager:
         self,
         models=[],
         folder=DEFAULT_MODELS_FOLDER,
-        handler=None,
+        handler=ModelsHandler(),
         suffix='_base.pickle'
     ):
 
@@ -106,13 +106,13 @@ class ModelsManager:
         self.folder = folder
         self.models = {(m.__name__):m for m in models}
         self.instances = {}
-        self.handler = handler if handler else ModelsHandler()
+        self.handler = handler
         self.suffix = suffix
 
         # (ModelsManager_load) Load base model instances
-        self._load_base()
+        self._load_base_files()
 
-    def _get_file(self, name):
+    def _get_base_file(self, name):
         """
         Get the path of the base file for the model instance.
 
@@ -150,7 +150,7 @@ class ModelsManager:
                 models_manager.create('temp_model', 'Model')
 
                 # Delete model instance
-                path = models_manager._get_file('temp_model')
+                path = models_manager._get_base_file('temp_model')
         """
         folder = self._get_folder(name)
         out = os.path.join(folder, name + self.suffix)
@@ -199,6 +199,83 @@ class ModelsManager:
         out = os.path.join(self.folder, name)
         return out
 
+    def _get_instance(self, name):
+        """
+        Get a model instance by name.
+
+        Parameters
+        ----------
+        name : str
+            Unique name of the model instance. The instance is stored in ``.instances[name]``.
+        
+        Author
+        ------
+        Richard Wen <rrwen.dev@gmail.com>
+        
+        Example
+        -------
+        .. jupyter-execute::
+
+            import tempfile
+            from msdss_models_api.models import Model
+            from msdss_models_api.managers import ModelsManager
+
+            with tempfile.TemporaryDirectory() as folder_path:
+
+                # Setup available models
+                models = [Model]
+                
+                # Create manager
+                models_manager = ModelsManager(models, folder=folder_path)
+
+                # Create model instance
+                models_manager.create('temp_model', 'Model')
+
+                # Delete model instance
+                models_manager._get_instance('temp_model')
+        """
+        out = self.instances[name]
+        return out
+
+    def _get_model_name(self, name):
+        """
+        Get the model name of a model instance.
+
+        Parameters
+        ----------
+        name : str
+            Unique name of the model instance. The instance is stored in ``.instances[name]``.
+        
+        Author
+        ------
+        Richard Wen <rrwen.dev@gmail.com>
+        
+        Example
+        -------
+        .. jupyter-execute::
+
+            import tempfile
+            from msdss_models_api.models import Model
+            from msdss_models_api.managers import ModelsManager
+
+            with tempfile.TemporaryDirectory() as folder_path:
+
+                # Setup available models
+                models = [Model]
+                
+                # Create manager
+                models_manager = ModelsManager(models, folder=folder_path)
+
+                # Create model instance
+                models_manager.create('temp_model', 'Model')
+
+                # Delete model instance
+                models_manager._get_model_name('temp_model')
+        """
+        instance = self._get_instance(name)
+        out = type(instance).__name__
+        return out
+
     def _get_save_file(self, name):
         """
         Get the path of the save file for the model instance without the extension.
@@ -243,7 +320,7 @@ class ModelsManager:
         out = os.path.join(folder, name)
         return out
 
-    def _load_base(self, force=False):
+    def _load_base_files(self, force=False):
         """
         Load all base models.
 
@@ -278,12 +355,12 @@ class ModelsManager:
                 models_manager.create('temp_model', 'Model')
 
                 # Load all base models
-                models_manager._load_base()
+                models_manager._load_base_files()
         """
         names = [name for name in os.listdir(self.folder) if os.path.isdir(os.path.join(self.folder, name))]
         for name in names:
             if name not in self.instances or force:
-                path = self._get_file(name)
+                path = self._get_base_file(name)
                 with open(path, 'rb') as file:
                     self.instances[name] = pickle.load(file)
 
@@ -326,7 +403,10 @@ class ModelsManager:
                 # Create model instance
                 models_manager.create('temp_model', 'Model')
         """
-        self.handler.handle_create(name, model, self.instances, self.models)
+
+        # (ModelsMAnager_create_handle) Handle create operation
+        if self.handler:
+            self.handler.handle_create(name, model, self.instances, self.models)
         
         # (ModelsManager_create_subfolder) Create subfolder if not exists for model
         folder = self._get_folder(name)
@@ -338,7 +418,7 @@ class ModelsManager:
         base_model = self.models[model](file_path=save_file, **settings)
 
         # (ModelsManager_create_save) Save base model object
-        with open(self._get_file(name), 'wb') as base_file:
+        with open(self._get_base_file(name), 'wb') as base_file:
             pickle.dump(base_model, base_file)
             self.instances[name] = base_model
 
@@ -390,53 +470,18 @@ class ModelsManager:
                 models_manager.delete('temp_model')
         """
 
+        # (ModelsManager_delete_handle) Handle read operation
+        if self.handler:
+            self.handler.handle_read(name, self.instances)
+
         # (ModelsManager_delete_instance) Run instance deletion
-        instance = self.get(name)
+        instance = self._get_instance(name)
         instance.delete(**settings)
 
         # (ModelsManager_delete_folder) Delete folder
         folder = self._get_folder(name)
         shutil.rmtree(folder)
         del self.instances[name]
-
-    def get(self, name):
-        """
-        Get a model instance by name.
-
-        Parameters
-        ----------
-        name : str
-            Unique name of the model instance. The instance is stored in ``.instances[name]``.
-        
-        Author
-        ------
-        Richard Wen <rrwen.dev@gmail.com>
-        
-        Example
-        -------
-        .. jupyter-execute::
-
-            import tempfile
-            from msdss_models_api.models import Model
-            from msdss_models_api.managers import ModelsManager
-
-            with tempfile.TemporaryDirectory() as folder_path:
-
-                # Setup available models
-                models = [Model]
-                
-                # Create manager
-                models_manager = ModelsManager(models, folder=folder_path)
-
-                # Create model instance
-                models_manager.create('temp_model', 'Model')
-
-                # Delete model instance
-                models_manager.get('temp_model')
-        """
-        self.handler.handle_read(name, self.instances)
-        out = self.instances[name]
-        return out
 
     def input(self, name, data, settings={}):
         """
@@ -484,60 +529,15 @@ class ModelsManager:
                 ]
                 models_manager.input('temp_model', train_data)
         """
-        instance = self.get(name)
+
+        # (ModelsManager_input_handle) Handle input operation
+        if self.handler:
+            self.handler.handle_input(name, self.instances)
+
+        # (ModelsManager_input_run) Initialize model with input data
+        instance = self._get_instance(name)
         instance.input(data, **settings)
         instance.save()
-
-    def load(self, name, settings={}):
-        """
-        Load a model instance if the save exists and has not changed from last loaded instance.
-
-        * Modifies ``.instance[name]`` by calling the ``load`` method
-        * Modifies ``.states[name]`` with action and results for loading the model instance
-
-        Parameters
-        ----------
-        name : str
-            Unique name of the model instance. The instance is stored in ``.instances[name]``.
-        settings : dict
-            Keyword arguments passed to the :meth:`msdss_models_api.models.Model.load`.
-
-        Author
-        ------
-        Richard Wen <rrwen.dev@gmail.com>
-        
-        Example
-        -------
-        .. code::
-
-            import tempfile
-            from msdss_models_api.models import Model
-            from msdss_models_api.managers import ModelsManager
-
-            with tempfile.TemporaryDirectory() as folder_path:
-
-                # Setup available models
-                models = [Model]
-                
-                # Create manager
-                models_manager = ModelsManager(models, folder=folder_path)
-
-                # Create model instance
-                models_manager.create('temp_model', 'Model')
-
-                # Initialize a model instance with inputs
-                train_data = [
-                    {'col_a': 1, 'col_b': 'a'},
-                    {'col_a': 2, 'col_b': 'b'}
-                ]
-                models_manager.input('temp_model', train_data)
-
-                # Load model instance if possible
-                models_manager.load('temp_model')
-        """
-        instance = self.get(name)
-        self.handler.handle_load(instance)
-        instance.load(**settings)
 
     def output(self, name, data, settings={}):
         """
@@ -594,7 +594,13 @@ class ModelsManager:
                 ]
                 results = models_manager.output('temp_model', test_data)
         """
-        instance = self.get(name)
+        # (ModelsManager_output_handle) Handle output operation
+        if self.handler:
+            self.handler.handle_output(name, self.instances)
+
+        # (ModelsManager_output_run) Get model output
+        instance = self._get_instance(name)
+        instance.load()
         out = instance.output(data, **settings)
         return out
     
@@ -651,7 +657,14 @@ class ModelsManager:
                 ]
                 models_manager.update('temp_model', new_data)
         """
-        instance = self.get(name)
+
+        # (ModelsManager_update_handle) Handle update operation
+        if self.handler:
+            self.handler.handle_update(name, self.instances)
+
+        # (ModelsManager_update_run) Update model instance
+        instance = self._get_instance(name)
+        instance.load()
         instance.update(data, **settings)
         instance.save()
 
@@ -665,9 +678,9 @@ class ModelsBackgroundManager:
     ----------
     worker : :class:`celery:celery.Celery`
         A ``celery`` app object to manage background tasks.
-    models_manager : :class:`msdss_models_api.managers.ModelsManager` or None
-        A models manager object to manage models. If ``None``, a default manager will be created.
-        The handler for the models manager will be disabled as model operations will be handled with parameter ``handler`` instead.
+    models_manager : :class:`msdss_models_api.managers.ModelsManager`
+        A models manager object to manage models.
+        The handler for the models manager will be disabled (set to ``None``) as model operations will be handled with attribute ``models_handler`` instead.
     handler : :class:`msdss_models_api.handlers.ModelsBackgroundHandler`
         Handler object to manage background operations.
 
@@ -690,7 +703,9 @@ class ModelsBackgroundManager:
         * ``task`` (str): the action that the process is performing - one of: ``CREATE``, ``INPUT``, ``UPDATE``
         * ``result`` (:class:`celery:celery.result.AsyncResult`): celery async object for getting states, ids, etc (see `celery.result <https://docs.celeryproject.org/en/stable/reference/celery.result.html#celery.result.AsyncResult>`_)
         * ``started_at`` (:class:`datetime.datetime`): datetime object for when the task was started
-
+    
+    models_handler : :class:`msdss_models_api.handlers.ModelsHandler`
+        Handler extracted from parameter ``models_manager``.
     handler : :class:`msdss_models_api.handlers.ModelsBackgroundHandler`
         Same as parameter ``handler``.
     
@@ -751,15 +766,18 @@ class ModelsBackgroundManager:
             # Delete model instance
             bg_manager.delete('temp_model')
     """
-    def __init__(self, worker, models_manager=None, handler=None):
+    def __init__(self, worker, models_manager=ModelsManager(), handler=ModelsBackgroundHandler()):
 
-        # (ModelsBackgroundManager_attr) Set attributes
-        self.models_manager = models_manager if models_manager else ModelsManager()
-        self.models_manager.handler.enable = False
+        # (ModelsBackgroundManager_models_manager) Setup models manager and disable handler
+        self.models_manager = models_manager
+        self.models_handler = self.models_manager.handler
+        self.models_manager.handler = None
+
+        # (ModelsBackgroundManager_attr) Set other attributes
         self.worker = worker
         self.tasks = {}
         self.states = {}
-        self.handler = handler if handler else ModelsBackgroundHandler()
+        self.handler = handler
 
         # (ModelsBackgroundManager_task_create) Define create task
         @self.worker.task
@@ -776,11 +794,10 @@ class ModelsBackgroundManager:
         # (ModelsBackgroundManager_task_update) Define update task
         @self.worker.task
         def update(name, data, settings={}):
-            models_manager.load(name)
             models_manager.update(name, data, settings)
         self.tasks['update'] = update
 
-    def _add_model_task(self, task, name, *args, **kwargs):
+    def _add_task(self, task, name, *args, **kwargs):
         """
         Add a background task for a model instance.
 
@@ -828,7 +845,7 @@ class ModelsBackgroundManager:
                     {'col_a': 1, 'col_b': 'a'},
                     {'col_a': 2, 'col_b': 'b'}
                 ]
-                bg_manager._add_model_task('input', 'temp_model', train_data)
+                bg_manager._add_task('input', 'temp_model', train_data)
         """
         result = self.tasks[task].delay(name, *args, **kwargs)
         self.states[name] = {
@@ -931,9 +948,9 @@ class ModelsBackgroundManager:
                 # Create model instance
                 bg_manager.create('temp_model', 'Model')
         """
-        self.models_manager._load_base()
-        self.handler.handle_create(name, model, self.models_manager.instances, self.models_manager.models)
-        self._add_model_task('create', name, model, *args, **kwargs)
+        self.models_manager._load_base_files()
+        self.models_handler.handle_create(name, model, self.models_manager.instances, self.models_manager.models)
+        self._add_task('create', name, model, *args, **kwargs)
 
     def delete(self, name, *args, **kwargs):
         """
@@ -986,9 +1003,11 @@ class ModelsBackgroundManager:
                 # Delete the model instance and any associated bg tasks
                 bg_manager.delete('temp_model')
         """
-        self.handler.handle_processing(name, self.states)
+        self.models_manager._load_base_files()
+        if name in self.states:
+            self.handler.handle_processing(name, self.states)
+            self.cancel(name)
         self.models_manager.delete(name, *args, **kwargs)
-        self.cancel(name)
 
     def get_status(self, name):
         """
@@ -1112,10 +1131,10 @@ class ModelsBackgroundManager:
                 ]
                 bg_manager.input('temp_model', train_data)
         """
-        self.models_manager._load_base()
-        self.handler.handle_read(name, self.models_manager.instances)
+        self.models_manager._load_base_files()
+        self.models_handler.handle_input(name, self.models_manager.instances)
         self.handler.handle_processing(name, self.states)
-        self._add_model_task('input', name, *args, **kwargs)
+        self._add_task('input', name, *args, **kwargs)
 
     def output(self, name, *args, **kwargs):
         """
@@ -1172,10 +1191,9 @@ class ModelsBackgroundManager:
                 ]
                 bg_manager.output('temp_model', new_data)
         """
-        self.models_manager._load_base()
-        self.handler.handle_read(name, self.models_manager.instances)
+        self.models_manager._load_base_files()
+        self.models_handler.handle_output(name, self.models_manager.instances)
         self.handler.handle_processing(name, self.states)
-        self.models_manager.load(name)
         return self.models_manager.output(name, *args, **kwargs)
 
     def start(self, *args, worker_kwargs={}, **kwargs):
@@ -1222,7 +1240,7 @@ class ModelsBackgroundManager:
                     {'col_a': 1, 'col_b': 'a'},
                     {'col_a': 2, 'col_b': 'b'}
                 ]
-                bg_manager._add_model_task('input', 'temp_model', train_data)
+                bg_manager._add_task('input', 'temp_model', train_data)
 
                 # Start worker
                 bg_manager.start()
@@ -1284,10 +1302,10 @@ class ModelsBackgroundManager:
                 ]
                 bg_manager.update('temp_model', new_data)
         """
-        self.models_manager._load_base()
-        self.handler.handle_read(name, self.models_manager.instances)
+        self.models_manager._load_base_files()
+        self.models_handler.handle_update(name, self.models_manager.instances)
         self.handler.handle_processing(name, self.states)
-        self._add_model_task('update', name, *args, **kwargs)
+        self._add_task('update', name, *args, **kwargs)
 
 class ModelsDBManager(ModelsManager):
     """
@@ -1300,11 +1318,8 @@ class ModelsDBManager(ModelsManager):
     models : list(:class:`msdss_models_api.models.Model`)
         List of available ``Model`` objects to use for creating and managing model instances.
         Ensure that the class names are unique, otherwise the last object takes priority.
-    database : :class:`msdss_base_database:msdss_base_database.core.Database`
-        A database object for using models with data from the database.
-    data_manager : :class:`msdss_data_api.managers.DataManager` or None
+    data_manager : :class:`msdss_data_api.managers.DataManager`
         A data manager object for managing data in and out of a database.
-        If ``None``, one will be configured from parameter ``database``.
     *args, **kwargs
         Additional arguments for :class:`msdss_models_api.models.ModelsManager`
     
@@ -1318,6 +1333,7 @@ class ModelsDBManager(ModelsManager):
 
         import tempfile
         from msdss_base_database import Database
+        from msdss_data_api.managers import DataManager
         from msdss_models_api.models import Model
         from msdss_models_api.managers import ModelsDBManager
 
@@ -1328,7 +1344,8 @@ class ModelsDBManager(ModelsManager):
             models = [Model]
             
             # Create manager
-            models_manager = ModelsDBManager(models, database, folder=folder_path)
+            data_manager = DataManager(database=database)
+            models_manager = ModelsDBManager(models, data_manager, folder=folder_path)
 
             # Create model instance
             models_manager.create('temp_model', 'Model')
@@ -1354,10 +1371,9 @@ class ModelsDBManager(ModelsManager):
             # Delete test table
             database.drop_table('models_test')
     """
-    def __init__(self, models=[], database=Database(), data_manager=None, *args, **kwargs):
+    def __init__(self, models=[], data_manager=DataManager(database=Database()), *args, **kwargs):
         super().__init__(models=models, *args, **kwargs)
-        self.database = database
-        self.data_manager = data_manager if data_manager else DataManager(database=database)
+        self.data_manager = data_manager
     
     def input_db(self, name, dataset, settings={}, *args, **kwargs):
         """
@@ -1384,6 +1400,7 @@ class ModelsDBManager(ModelsManager):
 
             import tempfile
             from msdss_base_database import Database
+            from msdss_data_api.managers import DataManager
             from msdss_models_api.models import Model
             from msdss_models_api.managers import ModelsDBManager
 
@@ -1394,7 +1411,8 @@ class ModelsDBManager(ModelsManager):
                 models = [Model]
                 
                 # Create manager
-                models_manager = ModelsDBManager(models, database, folder=folder_path)
+                data_manager = DataManager(database=database)
+                models_manager = ModelsDBManager(models, data_manager, folder=folder_path)
 
                 # Create model instance
                 models_manager.create('temp_model', 'Model')
@@ -1440,6 +1458,7 @@ class ModelsDBManager(ModelsManager):
 
             import tempfile
             from msdss_base_database import Database
+            from msdss_data_api.managers import DataManager
             from msdss_models_api.models import Model
             from msdss_models_api.managers import ModelsDBManager
 
@@ -1450,7 +1469,8 @@ class ModelsDBManager(ModelsManager):
                 models = [Model]
                 
                 # Create manager
-                models_manager = ModelsDBManager(models, database, folder=folder_path)
+                data_manager = DataManager(database=database)
+                models_manager = ModelsDBManager(models, data_manager, folder=folder_path)
 
                 # Create model instance
                 models_manager.create('temp_model', 'Model')
@@ -1461,6 +1481,9 @@ class ModelsDBManager(ModelsManager):
                     {'col_a': 2, 'col_b': 'b'}
                 ]
                 database.insert('models_test', train_data)
+
+                # Initialize a model instance with inputs from database
+                models_manager.input_db('temp_model', 'models_test')
 
                 # Update model instance with new data
                 new_data = [
@@ -1484,11 +1507,9 @@ class ModelsDBBackgroundManager(ModelsBackgroundManager):
 
     Parameters
     ----------
-    database : :class:`msdss_base_database:msdss_base_database.core.Database`
-        A database object for using models with data from the database.
-    models_manager : :class:`msdss_models_api.managers.ModelsDBManager` or None
-        A models DB manager object to manage models that can receive data from a database. If ``None``, a default manager will be created.
-        The handler for the models manager will be disabled as model operations will be handled with parameter ``handler`` instead.
+    models_manager : :class:`msdss_models_api.managers.ModelsDBManager`
+        A models DB manager object to manage models that can receive data from a database.
+        The handler and data handler for the models manager will be disabled as model operations will be handled with parameter ``handler`` instead.
     *args, **kwargs
         Additional arguments passed to :class:`msdss_models_api.managers.ModelsBackgroundManager`.
 
@@ -1513,6 +1534,7 @@ class ModelsDBBackgroundManager(ModelsBackgroundManager):
         import tempfile
         from celery import Celery
         from msdss_base_database import Database
+        from msdss_data_api.managers import DataManager
         from msdss_models_api.models import Model
         from msdss_models_api.managers import *
         from pprint import pprint
@@ -1524,7 +1546,8 @@ class ModelsDBBackgroundManager(ModelsBackgroundManager):
             
             # Create manager
             database = Database()
-            models_manager = ModelsDBManager(models, database, folder=folder_path)
+            data_manager = DataManager(database=database)
+            models_manager = ModelsDBManager(models, data_manager, folder=folder_path)
 
             # Create model instance
             models_manager.create('temp_model', 'Model')
@@ -1551,11 +1574,14 @@ class ModelsDBBackgroundManager(ModelsBackgroundManager):
             database.insert('models_test', new_data)
             bg_manager.update_db('temp_model', 'models_test', where=['col_a > 2'])
     """
-    def __init__(self, database=Database(), models_manager=None, *args, **kwargs):
+    def __init__(self, models_manager=ModelsDBManager(), *args, **kwargs):
 
         # (ModelsDBBackgroundManager_init) Initialize inherited class
-        models_manager = models_manager if models_manager else ModelsDBManager(database=database)
         super().__init__(models_manager=models_manager, *args, **kwargs)
+
+        # (ModelsDBBackgroundManager_data_manager) Setup data manager
+        self.data_handler = self.models_manager.data_manager.handler
+        self.models_manager.data_manager.handler = None
         
         # (ModelsDBBackgroundManager_task_input) Define input db task
         @self.worker.task
@@ -1566,7 +1592,6 @@ class ModelsDBBackgroundManager(ModelsBackgroundManager):
         # (ModelsDBBackgroundManager_task_update) Define update db task
         @self.worker.task
         def update_db(name, dataset, settings={}, *args, **kwargs):
-            models_manager.load(name)
             models_manager.update_db(name, dataset, settings, *args, **kwargs)
         self.tasks['update_db'] = update_db
 
@@ -1598,6 +1623,7 @@ class ModelsDBBackgroundManager(ModelsBackgroundManager):
             import tempfile
             from celery import Celery
             from msdss_base_database import Database
+            from msdss_data_api.managers import DataManager
             from msdss_models_api.models import Model
             from msdss_models_api.managers import *
             from pprint import pprint
@@ -1609,7 +1635,8 @@ class ModelsDBBackgroundManager(ModelsBackgroundManager):
                 
                 # Create manager
                 database = Database()
-                models_manager = ModelsDBManager(models, database, folder=folder_path)
+                data_manager = DataManager(database=database)
+                models_manager = ModelsDBManager(models, data_manager, folder=folder_path)
 
                 # Create model instance
                 models_manager.create('temp_model', 'Model')
@@ -1628,19 +1655,19 @@ class ModelsDBBackgroundManager(ModelsBackgroundManager):
                 # Initialize a model instance with inputs from database
                 bg_manager.input_db('temp_model', 'models_test')
         """
-        self.models_manager._load_base()
+        self.models_manager._load_base_files()
         
         # (ModelsDBBackgroundManager_input_db_data) Handle database read and query
         where = [split(w) for w in where] if where else where
-        self.models_manager.data_manager.handler.handle_read(dataset)
-        self.models_manager.data_manager.handler.handle_where(where)
+        self.data_handler.handle_read(dataset)
+        self.data_handler.handle_where(where)
 
-        # (ModelsDBBackgroundManager_input_db_handle) Handle model read and processing
-        self.handler.handle_read(name, self.models_manager.instances)
+        # (ModelsDBBackgroundManager_input_db_handle) Handle model input and processing
+        self.models_handler.handle_input(name, self.models_manager.instances)
         self.handler.handle_processing(name, self.states)
 
         # (ModelsDBBackgroundManager_input_db_add) Add input db task
-        self._add_model_task('input_db', name, dataset, settings=settings, where=where, *args, **kwargs)
+        self._add_task('input_db', name, dataset, settings=settings, where=where, *args, **kwargs)
 
     def update_db(self, name, dataset, settings={}, where=None, *args, **kwargs):
         """
@@ -1672,6 +1699,7 @@ class ModelsDBBackgroundManager(ModelsBackgroundManager):
             import tempfile
             from celery import Celery
             from msdss_base_database import Database
+            from msdss_data_api.managers import DataManager
             from msdss_models_api.models import Model
             from msdss_models_api.managers import *
             from pprint import pprint
@@ -1683,7 +1711,8 @@ class ModelsDBBackgroundManager(ModelsBackgroundManager):
                 
                 # Create manager
                 database = Database()
-                models_manager = ModelsDBManager(models, database, folder=folder_path)
+                data_manager = DataManager(database=database)
+                models_manager = ModelsDBManager(models, data_manager, folder=folder_path)
 
                 # Create model instance
                 models_manager.create('temp_model', 'Model')
@@ -1710,46 +1739,119 @@ class ModelsDBBackgroundManager(ModelsBackgroundManager):
                 database.insert('models_test', new_data)
                 bg_manager.update_db('temp_model', 'models_test', where=['col_a > 2'])
         """
-        self.models_manager._load_base()
+        self.models_manager._load_base_files()
 
         # (ModelsDBBackgroundManager_update_db_data) Handle database read and query
         where = [split(w) for w in where] if where else where
-        self.models_manager.data_manager.handler.handle_read(dataset)
-        self.models_manager.data_manager.handler.handle_where(where)
+        self.data_handler.handle_read(dataset)
+        self.data_handler.handle_where(where)
 
-        # (ModelsDBBackgroundManager_update_db_handle) Handle model read and processing
-        self.handler.handle_read(name, self.models_manager.instances)
+        # (ModelsDBBackgroundManager_update_db_handle) Handle model update and processing
+        self.models_handler.handle_update(name, self.models_manager.instances)
         self.handler.handle_processing(name, self.states)
 
         # (ModelsDBBackgroundManager_update_db_add) Add update db task
-        self._add_model_task('update_db', name, dataset, settings=settings, where=where, *args, **kwargs)
+        self._add_task('update_db', name, dataset, settings=settings, where=where, *args, **kwargs)
 
-class ModelsMetadataManager:
+class ModelsMetadataManager(MetadataManager):
+    """
+    Class to manage models metadata in a database.
 
+    * Inherits from :class:`msdss_data_api:msdss_data_api.managers.MetadataManager`
+    
+    Parameters
+    ----------
+    data_manager : :class:`msdss_data_api.managers.DataManager`
+        Data manager object for managing data in a database.
+        The restricted tables for the handler will be set to ``[]`` while the only permitted table will be the table name of the parameter ``table``.
+    table : str
+        The name of the table to store the metadata.
+    columns : list(dict) or list(list)
+        List of dict (kwargs) or lists (positional args) that are passed to sqlalchemy.schema.Column. See parameter ``columns`` in :meth:`msdss_base_database:msdss_base_database.core.create_table`.
+        This defines the table to store the metadata, where the default is:
+
+        .. jupyter-execute::
+            :hide-code:
+
+            from msdss_models_api.defaults import *
+            from pprint import pprint
+
+            pprint(DEFAULT_METADATA_COLUMNS)
+
+    name_column : str
+        Name of the column identifying each entry.
+    updated_column : str
+        Name of the column for storing the last updated date/time.
+    *args, **kwargs
+        Additional arguments passed to :class:`msdss_data_api:msdss_data_api.managers.MetadataManager`
+
+    Attributes
+    ----------
+    See attributes in :class:`msdss_data_api:msdss_data_api.managers.MetadataManager`.
+    
+    Author
+    ------
+    Richard Wen <rrwen.dev@gmail.com>
+    
+    Example
+    -------
+    .. jupyter-execute::
+
+        from datetime import datetime
+        from msdss_base_database import Database
+        from msdss_data_api.managers import DataManager
+        from msdss_models_api.managers import *
+        from msdss_models_api.defaults import *
+        
+        # Setup database
+        db = Database()
+
+        # Check if the metadata table exists and drop if it does
+        if db.has_table(DEFAULT_METADATA_TABLE):
+            db.drop_table(DEFAULT_METADATA_TABLE)
+
+        # Setup metadata manager
+        data_manager = DataManager(database=db)
+        mdm = ModelsMetadataManager(data_manager)
+
+        # Add metadata
+        metadata = [{
+            'title': 'Testing Data',
+            'description': 'Data used for testing',
+            'tags': 'test exp auto',
+            'source': 'Automatically generated from Python',
+            'created_by': 'msdss',
+            'created_at': datetime.now(),
+            'updated_at': datetime.now()
+        }]
+        mdm.create('test_model', metadata)
+
+        # Get metadata
+        metadata_get = mdm.get('test_model')
+        
+        # Search metadata
+        search_results = mdm.search(where=['title = "Testing Data"'])
+
+        # Update metadata
+        mdm.update('test_model', {'description': 'NEW DESCRIPTION'})
+
+        # Delete metadata
+        mdm.delete('test_model')
+    """
     def __init__(
         self,
-        models_manager,
-        table=DEFAULT_MODELS_TABLE,
-        columns=DEFAULT_MODELS_COLUMNS,
-        database=Database()
+        data_manager=DataManager(),
+        table=DEFAULT_METADATA_TABLE,
+        columns=DEFAULT_METADATA_COLUMNS,
+        name_column=DEFAULT_NAME_COLUMN,
+        updated_column=DEFAULT_UPDATE_COLUMN,
+        *args, **kwargs
     ):
-
-        # (ModelsMetadataManager_table) Create table if not exists
-        if not database.has_table(table):
-            database.create_table(table, columns)
-
-        # (ModelsMetadataManager_attr) Set attributes
-        self.models_manager = models_manager
-        self.table = table
-        self.database = database
-
-    def create(self, name, data):
-
-        # (ModelsMetadataManager_create_vars) Set variables
-        data = [data] if isinstance(data, dict) else data
-        instance = self.models_manager.instances[name]
-
-        # (ModelsMetadataManager_create_add) Add metadata for model
-        data[0]['name'] = name
-        data[0]['model'] = type(instance).__name__
-        self.database.insert(self.table, data)
+        super().__init__(
+            data_manager=data_manager,
+            table=table,
+            columns=columns,
+            name_column=name_column,
+            updated_column=updated_column,
+            *args, **kwargs
+        )

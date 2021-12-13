@@ -1,5 +1,6 @@
 from celery import Celery
 from msdss_base_database import Database
+from msdss_data_api import DataManager
 
 from .defaults import *
 from .handlers import *
@@ -48,7 +49,7 @@ def create_models_bg_manager_func(
 
         import tempfile
         from msdss_models_api.models import *
-        from msdss_data_api.tools import *
+        from msdss_models_api.tools import *
 
         with tempfile.TemporaryDirectory() as folder_path:
 
@@ -111,7 +112,7 @@ def create_models_db_bg_manager_func(
         import tempfile
         from msdss_base_database import Database
         from msdss_models_api.models import *
-        from msdss_data_api.tools import *
+        from msdss_models_api.tools import *
 
         with tempfile.TemporaryDirectory() as folder_path:
 
@@ -120,9 +121,10 @@ def create_models_db_bg_manager_func(
             database = Database()
 
             # Create a function yielding the models manager to use as a dependency
-            get_bg_manager = create_models_bg_manager_func(models=models, database=database, folder=folder_path)
+            get_bg_manager = create_models_db_bg_manager_func(models=models, database=database, folder=folder_path)
     """
-    models_manager = models_manager if models_manager else ModelsDBManager(models=models, database=database, folder=folder)
+    data_manager = DataManager(database=database)
+    models_manager = models_manager if models_manager else ModelsDBManager(models=models, data_manager=data_manager, folder=folder)
     bg_manager = bg_manager if bg_manager else ModelsDBBackgroundManager(worker=worker, models_manager=models_manager, *args, **kwargs)
     def out():
         yield bg_manager

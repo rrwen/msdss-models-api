@@ -285,13 +285,85 @@
             
   <section id="how-it-works">
 <h1 id="howitworks--page-root">How it Works<a class="headerlink" href="#howitworks--page-root" title="Permalink to this headline">¶</a></h1>
-<ol class="loweralpha simple" start="24">
-<li></li>
-</ol>
-<div class="graphviz"><img alt="digraph methods {
-a -&gt; b;
-}" class="graphviz" src="_images/graphviz-1b03c12ace2546edeee1795fa59d2f463d2c3f69.png"/></div>
-</section>
+<p>This package creates an extended <a class="reference external" href="https://rrwen.github.io/msdss-base-api/reference/api.html#msdss_base_api.core.API" title="(in msdss_base_api v0.1.2)"><code class="docutils literal notranslate"><span class="pre">msdss_base_api.core.API</span></code></a> application using <a class="reference internal" href="reference/core.html#msdss_models_api.core.ModelsAPI" title="msdss_models_api.core.ModelsAPI"><code class="xref py py-class docutils literal notranslate"><span class="pre">msdss_models_api.core.ModelsAPI</span></code></a>. The <code class="docutils literal notranslate"><span class="pre">ModelsAPI</span></code> class uses <a class="reference internal" href="reference/routers.html#msdss_models_api.routers.get_models_router" title="msdss_models_api.routers.get_models_router"><code class="xref py py-func docutils literal notranslate"><span class="pre">msdss_models_api.routers.get_models_router()</span></code></a> to setup routes for managing models. Model management is handled by managers in <a class="reference internal" href="reference/managers.html#module-msdss_models_api.managers" title="msdss_models_api.managers"><code class="xref py py-mod docutils literal notranslate"><span class="pre">msdss_models_api.managers</span></code></a>, which use handlers in <a class="reference internal" href="reference/handlers.html#module-msdss_models_api.handlers" title="msdss_models_api.handlers"><code class="xref py py-mod docutils literal notranslate"><span class="pre">msdss_models_api.handlers</span></code></a> to check for route inputs. The general idea is: <code class="docutils literal notranslate"><span class="pre">handlers</span> <span class="pre">-&gt;</span> <span class="pre">managers</span> <span class="pre">-&gt;</span> <span class="pre">get_models_router</span> <span class="pre">-&gt;</span> <span class="pre">ModelsAPI</span></code>.</p>
+<p><strong>Other notes:</strong></p>
+<ul class="simple">
+<li><p>Database operations are handled by <a class="reference external" href="https://rrwen.github.io/msdss-data-api/reference/managers.html#msdss_data_api.managers.DataManager" title="(in msdss_data_api v0.2.6)"><code class="docutils literal notranslate"><span class="pre">msdss_data_api.managers.DataManager</span></code></a> and <a class="reference external" href="https://rrwen.github.io/msdss-data-api/reference/managers.html#msdss_data_api.managers.MetadataManager" title="(in msdss_data_api v0.2.6)"><code class="docutils literal notranslate"><span class="pre">msdss_data_api.managers.MetadataManager</span></code></a>.</p></li>
+<li><p>Long-running background tasks are managed by <a class="reference internal" href="reference/managers.html#msdss_models_api.managers.ModelsBackgroundManager" title="msdss_models_api.managers.ModelsBackgroundManager"><code class="xref py py-class docutils literal notranslate"><span class="pre">msdss_models_api.managers.ModelsBackgroundManager</span></code></a> (non-database) and <a class="reference internal" href="reference/managers.html#msdss_models_api.managers.ModelsDBBackgroundManager" title="msdss_models_api.managers.ModelsDBBackgroundManager"><code class="xref py py-class docutils literal notranslate"><span class="pre">msdss_models_api.managers.ModelsDBBackgroundManager</span></code></a> (with database) using <a class="reference external" href="https://docs.celeryproject.org/en/stable/index.html">Celery</a> and <a class="reference external" href="https://redis.io/">Redis</a>.</p></li>
+<li><p>For user authentication and management, the <a class="reference external" href="https://rrwen.github.io/msdss-users-api/reference/core.html#msdss_users_api.core.UsersAPI" title="(in msdss_users_api v0.2.1)"><code class="docutils literal notranslate"><span class="pre">msdss_users_api.core.UsersAPI</span></code></a> object is used to create user management routes and dependencies.</p></li>
+</ul>
+<div class="graphviz"><img alt='digraph methods {
+compound=true;
+rankdir=LR;
+graph [pad="0.75", nodesep="0.25", ranksep="1"];
+
+baseapi[label="msdss-base-api" URL="https://rrwen.github.io/msdss-base-api/" style=filled];
+basedb[label="msdss-base-database" URL="https://rrwen.github.io/msdss-base-database/" style=filled];
+usersapi[label="msdss-users-api" URL="https://rrwen.github.io/msdss-users-api/" style=filled];
+
+model[label="Model" shape=rect];
+modelcreate[label="ModelCreate" shape=rect];
+modelmetadataupdate[label="ModelMetadataUpdate" shape=rect];
+
+datamanager[label="DataManager" shape=rect];
+metadatamanager[label="MetadataManager" shape=rect];
+
+modelsmanager[label="ModelsManager" shape=rect];
+modelsbgmanager[label="ModelsBackgroundManager" shape=rect];
+modelsdbmanager[label="ModelsDBManager" shape=rect];
+modelsdbbgmanager[label="ModelsDBBackgroundManager" shape=rect];
+modelsmetadatamanager[label="ModelsMetadataManager" shape=rect];
+
+modelshandler[label="ModelsHandler" shape=rect];
+modelsbghandler[label="ModelsBackgroundHandler" shape=rect];
+
+getmodelsrouter[label="get_models_router" shape=rect style=rounded];
+
+subgraph cluster0 {
+   label=&lt; &lt;B&gt;msdss_models_api.core.ModelsAPI&lt;/B&gt; &gt;;
+   style=rounded;
+
+   subgraph cluster1 {
+      label=&lt; &lt;B&gt;msdss_models_api.models&lt;/B&gt; &gt;;
+      model;
+      modelcreate;
+      modelmetadataupdate;
+   }
+   modelmetadataupdate -&gt; getmodelsrouter[lhead=cluster1 ltail=cluster1];
+
+   subgraph cluster2 {
+      label=&lt; &lt;B&gt;msdss_models_api.handlers&lt;/B&gt; &gt;;
+      modelshandler;
+      modelsbghandler;
+   }
+   modelshandler -&gt; modelsmanager[lhead=cluster3 ltail=cluster2];
+
+   subgraph cluster3 {
+      label=&lt; &lt;B&gt;msdss_models_api.managers&lt;/B&gt; &gt;;
+      modelsmanager;
+      modelsbgmanager;
+      modelsdbmanager;
+      modelsdbbgmanager;
+      modelsmetadatamanager;
+   }
+   modelsdbbgmanager -&gt; getmodelsrouter[lhead=cluster3 ltail=cluster3];
+
+   subgraph cluster4 {
+      label=&lt; &lt;B&gt;msdss_data_api.managers&lt;/B&gt; &gt;;
+      datamanager;
+      metadatamanager;
+   }
+   basedb -&gt; datamanager[lhead=cluster4 ltail=cluster4];
+   datamanager -&gt; modelsmanager[lhead=cluster3 ltail=cluster4];
+
+   {usersapi;getmodelsrouter} -&gt; baseapi;
+}
+}' class="graphviz" src="_images/graphviz-452fc4a3470a25f0700d3d19262e56b3a5d342a2.png" usemap="#methods"/></div>
+<map id="methods" name="methods">
+<area alt="" coords="1568,533,1564,526,1552,519,1532,514,1508,511,1482,509,1455,511,1431,514,1411,519,1399,526,1395,533,1399,541,1411,547,1431,553,1455,556,1482,557,1508,556,1532,553,1552,547,1564,541" href="https://rrwen.github.io/msdss-base-api/" id="node1" shape="poly" title="msdss-base-api"/>
+<area alt="" coords="319,536,313,529,297,522,272,517,241,513,206,512,171,513,140,517,115,522,99,529,93,536,99,543,115,550,140,555,171,559,206,560,241,559,272,555,297,550,313,543" href="https://rrwen.github.io/msdss-base-database/" id="node2" shape="poly" title="msdss-base-database"/>
+<area alt="" coords="1299,569,1294,562,1282,555,1262,550,1237,547,1209,545,1181,547,1156,550,1136,555,1123,562,1119,569,1123,577,1136,583,1156,589,1181,592,1209,593,1237,592,1262,589,1282,583,1294,577" href="https://rrwen.github.io/msdss-users-api/" id="node3" shape="poly" title="msdss-users-api"/>
+</map></section>
 
 
           </article>

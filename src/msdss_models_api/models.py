@@ -2,6 +2,8 @@ import os
 import pickle
 
 from datetime import datetime
+from pydantic import BaseModel
+from typing import Optional
 
 class Model:
     """
@@ -92,6 +94,7 @@ class Model:
         self.file = f'{file_path}.{file_ext}'
         self.last_loaded = None
         self.metadata = {
+            'name': self.__class__.__name__,
             'can_input': can_input,
             'can_output': can_output,
             'can_update': can_update
@@ -129,9 +132,14 @@ class Model:
         out = os.path.isfile(self.file)
         return out
 
-    def delete(self):
+    def delete(self, force=False):
         """
         Deletes the saved model and sets the attribute ``.instance`` to ``None``.
+
+        Parameters
+        ----------
+        force : bool
+            Whether to force deletion regardless if the files exist or not.
         
         Author
         ------
@@ -157,7 +165,8 @@ class Model:
                 blank_model.delete()
         """
         self.instance = None
-        os.remove(self.file)
+        if self.can_load() or force: 
+            os.remove(self.file)
 
     def input(self, data):
         """
@@ -422,3 +431,69 @@ class Model:
                 blank_model.update(new_data)
         """
         pass
+
+class ModelCreate(BaseModel):
+    """
+    Class for creating creating models using the API.
+    
+    Attributes
+    ----------
+    title : str
+        Title of the model stored in metadata.
+    description : str
+        Description of model stored in metadata.
+    source : str
+        Source of model stored in metadata.
+    tags : str
+        Space separated tags for the model.
+    
+    Author
+    ------
+    Richard Wen <rrwen.dev@gmail.com>
+    
+    Example
+    -------
+    .. jupyter-execute::
+
+        from msdss_models_api.models import *
+        from pprint import pprint
+        fields = ModelCreate.__fields__
+        pprint(fields)
+    """
+    title: Optional[str]
+    description: Optional[str]
+    source: Optional[str]
+    tags: Optional[str]
+
+class ModelMetadataUpdate(BaseModel):
+    """
+    Model for updating model metadata.
+    
+    Attributes
+    ----------
+    title : str
+        Title of the model stored in metadata.
+    description : str
+        Description of model stored in metadata.
+    source : str
+        Data source of model stored in metadata.
+    tags : str
+        Space separated tags for the model.
+    
+    Author
+    ------
+    Richard Wen <rrwen.dev@gmail.com>
+    
+    Example
+    -------
+    .. jupyter-execute::
+
+        from msdss_models_api.models import *
+        from pprint import pprint
+        fields = ModelMetadataUpdate.__fields__
+        pprint(fields)
+    """
+    title: Optional[str]
+    description: Optional[str]
+    source: Optional[str]
+    tags: Optional[str]

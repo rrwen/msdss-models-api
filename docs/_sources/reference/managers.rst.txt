@@ -78,6 +78,11 @@ cancel
 
 .. automethod:: msdss_models_api.managers.ModelsBackgroundManager.cancel
 
+create
+^^^^^^
+
+.. automethod:: msdss_models_api.managers.ModelsBackgroundManager.create
+
 delete
 ^^^^^^
 

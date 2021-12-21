@@ -47,3 +47,13 @@ update
 ^^^^^^
 
 .. automethod:: msdss_models_api.models.Model.update
+
+ModelCreate
+-----------
+
+.. autoclass:: msdss_models_api.models.ModelCreate
+
+ModelMetadataUpdate
+-------------------
+
+.. autoclass:: msdss_models_api.models.ModelMetadataUpdate

@@ -24,7 +24,6 @@ DEFAULT_METADATA_COLUMNS = [
     ('can_input', 'Boolean'),
     ('can_output', 'Boolean'),
     ('can_update', 'Boolean'),
-    ('directory', 'String'),
     ('created_by', 'String'),
     ('created_at', 'DateTime'),
     ('updated_at', 'DateTime')
@@ -42,14 +41,9 @@ DEFAULT_MODELS_ROUTE_SETTINGS = dict(
         _get_user={'superuser': True}
     ),
     delete=dict(
-        path='/',
-        _enable=True,
-        _get_user={'superuser': True}
-    ),
-    status=dict(
         path='/{name}',
         _enable=True,
-        _get_user={}
+        _get_user={'superuser': True}
     ),
     input=dict(
         path='/{name}',
@@ -57,12 +51,34 @@ DEFAULT_MODELS_ROUTE_SETTINGS = dict(
         _get_user={'superuser': True}
     ),
     input_db=dict(
-        path='/{name}/data/{dataset}',
+        path='/{name}/data',
+        _enable=True,
+        _get_user={'superuser': True}
+    ),
+    metadata=dict(
+        path='/{name}/metadata',
+        tags=['metadata'],
+        _enable=True,
+        _get_user={}
+    ),
+    metadata_update=dict(
+        path='/{name}/metadata',
+        tags=['metadata'],
         _enable=True,
         _get_user={'superuser': True}
     ),
     output=dict(
         path='/{name}/output',
+        _enable=True,
+        _get_user={}
+    ),
+    status=dict(
+        path='/{name}/status',
+        _enable=True,
+        _get_user={}
+    ),
+    search=dict(
+        path='/',
         _enable=True,
         _get_user={}
     ),
@@ -72,7 +88,7 @@ DEFAULT_MODELS_ROUTE_SETTINGS = dict(
         _get_user={'superuser': True}
     ),
     update_db=dict(
-        path='/{name}/data/{dataset}',
+        path='/{name}/data',
         _enable=True,
         _get_user={'superuser': True}
     )

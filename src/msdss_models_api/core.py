@@ -20,13 +20,17 @@ class ModelsAPI(API):
         If ``None``, user authentication will not be used for models routes.
     database : :class:`msdss_base_database:msdss_base_database.core.Database`
         A database object for using models with data from the database.
-    models : list(:class:`msdss_models_api.models.Model`)
-        List of available ``Model`` objects to use for creating and managing model instances.
-        Ensure that the class names are unique, otherwise the last object in the list takes priority.
+    models : list(:class:`msdss_models_api.models.Model`) or dict(:class:`msdss_models_api.models.Model`)
+        List or dict of available ``Model`` objects to use for creating and managing model instances.
+        If ``list``, ensure that the class names are unique, otherwise the last object in the list takes priority.
+    worker : :class:`celery:celery.Celery` or None
+        Celery worker for background processes. If ``None``, a default worker will be created using parameters ``broker_url`` and ``backend_url``.
     broker_url : str or None
         Link to connect to a `Redis <https://redis.io/>`_ broker. Env vars will take priority - see parameter ``env``.
+        If parameter ``worker`` is set, this will not be applied.
     backend_url : str or None
         Link to connect to a `Redis <https://redis.io/>`_ backend. Env vars will take priority - see parameter ``env``.
+        If parameter ``worker`` is set, this will not be applied.
     folder : str
         The folder path to store models in. The folder will be created if it does not exist. Env vars will take priority - see parameter ``env``.
     models_router_settings : dict
@@ -55,8 +59,10 @@ class ModelsAPI(API):
 
     Attributes
     ----------
-    users_api_database : :class:`msdss_base_database:msdss_base_database.core.Database`
+    models_api_database : :class:`msdss_base_database:msdss_base_database.core.Database`
         Database object for users API.
+    models_api_worker : :class:`celery:celery.Celery`
+        Same as parameter ``worker``.
     misc : dict
         Dictionary of miscellaneous values:
 
@@ -198,6 +204,7 @@ class ModelsAPI(API):
         users_api=None,
         database=Database(),
         models=[],
+        worker=None,
         broker_url=DEFAULT_BROKER_URL,
         backend_url=DEFAULT_BACKEND_URL,
         folder=DEFAULT_MODELS_FOLDER,
@@ -211,18 +218,23 @@ class ModelsAPI(API):
         *args, **kwargs):
         super().__init__(api=api, *args, **kwargs)
 
-        # (UsersAPI_env) Set env vars
+        # (ModelsAPI_env) Set env vars
         if env.exists() and load_env:
             env.load()
             broker_url = env.get('broker_url', broker_url)
             backend_url = env.get('backend_url', backend_url)
             folder = env.get('folder', folder)
 
+        # (ModelsAPI_folder) Create folder if not exists
+        if not os.path.isdir(folder):
+            os.makedirs(folder)
+
         # (ModelsAPI_bg) Create background manager for models
         data_manager = DataManager(database=database)
         models_manager = ModelsDBManager(models=models, data_manager=data_manager, folder=folder)
-        worker = Celery(broker=broker_url, backend=backend_url)
-        bg_manager = ModelsDBBackgroundManager(worker=worker, models_manager=models_manager)
+        worker = worker if worker else Celery(broker=broker_url, backend=backend_url)
+        metadata_manager = ModelsMetadataManager(data_manager)
+        bg_manager = ModelsDBBackgroundManager(worker=worker, models_manager=models_manager, metadata_manager=metadata_manager)
         models_router_settings['bg_manager'] = bg_manager
         
         # (ModelsAPI_users) Add users app if specified
@@ -234,14 +246,13 @@ class ModelsAPI(API):
         self.add_router(models_router)
 
         # (ModelsAPI_router_attr) Set attributes
+        self.models_api_worker = worker
         self.misc = {}
         self.misc['bg_manager'] = bg_manager
 
-    def start_worker(self):
+    def get_worker(self):
         """
-        Start the background worker to process background tasks.
-
-        This should be run in a separate terminal instance from the app.
+        Get the background worker to process background tasks.
 
         Author
         ------
@@ -262,6 +273,7 @@ class ModelsAPI(API):
             )
 
             # Run the background worker in a separate terminal
-            app.start_worker()
+            worker = app.get_worker()
         """
-        self.misc['bg_manager'].start()
+        out = self.models_api_worker
+        return out

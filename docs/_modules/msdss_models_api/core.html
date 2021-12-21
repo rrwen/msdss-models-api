@@ -291,13 +291,17 @@
 <span class="sd">        If ``None``, user authentication will not be used for models routes.</span>
 <span class="sd">    database : :class:`msdss_base_database:msdss_base_database.core.Database`</span>
 <span class="sd">        A database object for using models with data from the database.</span>
-<span class="sd">    models : list(:class:`msdss_models_api.models.Model`)</span>
-<span class="sd">        List of available ``Model`` objects to use for creating and managing model instances.</span>
-<span class="sd">        Ensure that the class names are unique, otherwise the last object in the list takes priority.</span>
+<span class="sd">    models : list(:class:`msdss_models_api.models.Model`) or dict(:class:`msdss_models_api.models.Model`)</span>
+<span class="sd">        List or dict of available ``Model`` objects to use for creating and managing model instances.</span>
+<span class="sd">        If ``list``, ensure that the class names are unique, otherwise the last object in the list takes priority.</span>
+<span class="sd">    worker : :class:`celery:celery.Celery` or None</span>
+<span class="sd">        Celery worker for background processes. If ``None``, a default worker will be created using parameters ``broker_url`` and ``backend_url``.</span>
 <span class="sd">    broker_url : str or None</span>
 <span class="sd">        Link to connect to a `Redis &lt;https://redis.io/&gt;`_ broker. Env vars will take priority - see parameter ``env``.</span>
+<span class="sd">        If parameter ``worker`` is set, this will not be applied.</span>
 <span class="sd">    backend_url : str or None</span>
 <span class="sd">        Link to connect to a `Redis &lt;https://redis.io/&gt;`_ backend. Env vars will take priority - see parameter ``env``.</span>
+<span class="sd">        If parameter ``worker`` is set, this will not be applied.</span>
 <span class="sd">    folder : str</span>
 <span class="sd">        The folder path to store models in. The folder will be created if it does not exist. Env vars will take priority - see parameter ``env``.</span>
 <span class="sd">    models_router_settings : dict</span>
@@ -326,8 +330,10 @@
 
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
-<span class="sd">    users_api_database : :class:`msdss_base_database:msdss_base_database.core.Database`</span>
+<span class="sd">    models_api_database : :class:`msdss_base_database:msdss_base_database.core.Database`</span>
 <span class="sd">        Database object for users API.</span>
+<span class="sd">    models_api_worker : :class:`celery:celery.Celery`</span>
+<span class="sd">        Same as parameter ``worker``.</span>
 <span class="sd">    misc : dict</span>
 <span class="sd">        Dictionary of miscellaneous values:</span>
 
@@ -469,6 +475,7 @@
         <span class="n">users_api</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">database</span><span class="o">=</span><span class="n">Database</span><span class="p">(),</span>
         <span class="n">models</span><span class="o">=</span><span class="p">[],</span>
+        <span class="n">worker</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">broker_url</span><span class="o">=</span><span class="n">DEFAULT_BROKER_URL</span><span class="p">,</span>
         <span class="n">backend_url</span><span class="o">=</span><span class="n">DEFAULT_BACKEND_URL</span><span class="p">,</span>
         <span class="n">folder</span><span class="o">=</span><span class="n">DEFAULT_MODELS_FOLDER</span><span class="p">,</span>
@@ -482,18 +489,23 @@
         <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">api</span><span class="o">=</span><span class="n">api</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
-        <span class="c1"># (UsersAPI_env) Set env vars</span>
+        <span class="c1"># (ModelsAPI_env) Set env vars</span>
         <span class="k">if</span> <span class="n">env</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span> <span class="ow">and</span> <span class="n">load_env</span><span class="p">:</span>
             <span class="n">env</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
             <span class="n">broker_url</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'broker_url'</span><span class="p">,</span> <span class="n">broker_url</span><span class="p">)</span>
             <span class="n">backend_url</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'backend_url'</span><span class="p">,</span> <span class="n">backend_url</span><span class="p">)</span>
             <span class="n">folder</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'folder'</span><span class="p">,</span> <span class="n">folder</span><span class="p">)</span>
 
+        <span class="c1"># (ModelsAPI_folder) Create folder if not exists</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">folder</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">folder</span><span class="p">)</span>
+
         <span class="c1"># (ModelsAPI_bg) Create background manager for models</span>
         <span class="n">data_manager</span> <span class="o">=</span> <span class="n">DataManager</span><span class="p">(</span><span class="n">database</span><span class="o">=</span><span class="n">database</span><span class="p">)</span>
         <span class="n">models_manager</span> <span class="o">=</span> <span class="n">ModelsDBManager</span><span class="p">(</span><span class="n">models</span><span class="o">=</span><span class="n">models</span><span class="p">,</span> <span class="n">data_manager</span><span class="o">=</span><span class="n">data_manager</span><span class="p">,</span> <span class="n">folder</span><span class="o">=</span><span class="n">folder</span><span class="p">)</span>
-        <span class="n">worker</span> <span class="o">=</span> <span class="n">Celery</span><span class="p">(</span><span class="n">broker</span><span class="o">=</span><span class="n">broker_url</span><span class="p">,</span> <span class="n">backend</span><span class="o">=</span><span class="n">backend_url</span><span class="p">)</span>
-        <span class="n">bg_manager</span> <span class="o">=</span> <span class="n">ModelsDBBackgroundManager</span><span class="p">(</span><span class="n">worker</span><span class="o">=</span><span class="n">worker</span><span class="p">,</span> <span class="n">models_manager</span><span class="o">=</span><span class="n">models_manager</span><span class="p">)</span>
+        <span class="n">worker</span> <span class="o">=</span> <span class="n">worker</span> <span class="k">if</span> <span class="n">worker</span> <span class="k">else</span> <span class="n">Celery</span><span class="p">(</span><span class="n">broker</span><span class="o">=</span><span class="n">broker_url</span><span class="p">,</span> <span class="n">backend</span><span class="o">=</span><span class="n">backend_url</span><span class="p">)</span>
+        <span class="n">metadata_manager</span> <span class="o">=</span> <span class="n">ModelsMetadataManager</span><span class="p">(</span><span class="n">data_manager</span><span class="p">)</span>
+        <span class="n">bg_manager</span> <span class="o">=</span> <span class="n">ModelsDBBackgroundManager</span><span class="p">(</span><span class="n">worker</span><span class="o">=</span><span class="n">worker</span><span class="p">,</span> <span class="n">models_manager</span><span class="o">=</span><span class="n">models_manager</span><span class="p">,</span> <span class="n">metadata_manager</span><span class="o">=</span><span class="n">metadata_manager</span><span class="p">)</span>
         <span class="n">models_router_settings</span><span class="p">[</span><span class="s1">'bg_manager'</span><span class="p">]</span> <span class="o">=</span> <span class="n">bg_manager</span>
         
         <span class="c1"># (ModelsAPI_users) Add users app if specified</span>
@@ -505,14 +517,13 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">add_router</span><span class="p">(</span><span class="n">models_router</span><span class="p">)</span>
 
         <span class="c1"># (ModelsAPI_router_attr) Set attributes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">models_api_worker</span> <span class="o">=</span> <span class="n">worker</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">misc</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">misc</span><span class="p">[</span><span class="s1">'bg_manager'</span><span class="p">]</span> <span class="o">=</span> <span class="n">bg_manager</span>
 
-    <span class="k">def</span> <span class="nf">start_worker</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ModelsAPI.get_worker"><a class="viewcode-back" href="../../reference/core.html#msdss_models_api.core.ModelsAPI.get_worker">[docs]</a>    <span class="k">def</span> <span class="nf">get_worker</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">"""</span>
-<span class="sd">        Start the background worker to process background tasks.</span>
-
-<span class="sd">        This should be run in a separate terminal instance from the app.</span>
+<span class="sd">        Get the background worker to process background tasks.</span>
 
 <span class="sd">        Author</span>
 <span class="sd">        ------</span>
@@ -533,9 +544,10 @@
 <span class="sd">            )</span>
 
 <span class="sd">            # Run the background worker in a separate terminal</span>
-<span class="sd">            app.start_worker()</span>
+<span class="sd">            worker = app.get_worker()</span>
 <span class="sd">        """</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">misc</span><span class="p">[</span><span class="s1">'bg_manager'</span><span class="p">]</span><span class="o">.</span><span class="n">start</span><span class="p">()</span></div>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">models_api_worker</span>
+        <span class="k">return</span> <span class="n">out</span></div></div>
 </pre></div>
 
           </article>

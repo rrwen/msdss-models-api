@@ -319,12 +319,12 @@
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="reference/managers.html#msdss_models_api.managers.ModelsManager.create">create() (msdss_models_api.managers.ModelsManager method)</a>
+      <li><a href="reference/managers.html#msdss_models_api.managers.ModelsBackgroundManager.create">create() (msdss_models_api.managers.ModelsBackgroundManager method)</a>
+
+      <ul>
+        <li><a href="reference/managers.html#msdss_models_api.managers.ModelsManager.create">(msdss_models_api.managers.ModelsManager method)</a>
 </li>
-      <li><a href="reference/tools.html#msdss_models_api.tools.create_models_bg_manager_func">create_models_bg_manager_func() (in module msdss_models_api.tools)</a>
-</li>
-      <li><a href="reference/tools.html#msdss_models_api.tools.create_models_db_bg_manager_func">create_models_db_bg_manager_func() (in module msdss_models_api.tools)</a>
-</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -337,6 +337,14 @@
         <li><a href="reference/managers.html#msdss_models_api.managers.ModelsManager.delete">(msdss_models_api.managers.ModelsManager method)</a>
 </li>
         <li><a href="reference/models.html#msdss_models_api.models.Model.delete">(msdss_models_api.models.Model method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/models.html#msdss_models_api.models.ModelCreate.description">description (msdss_models_api.models.ModelCreate attribute)</a>
+
+      <ul>
+        <li><a href="reference/models.html#msdss_models_api.models.ModelMetadataUpdate.description">(msdss_models_api.models.ModelMetadataUpdate attribute)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -357,7 +365,13 @@
 <h2 id="G">G</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/routers.html#msdss_models_api.routers.get_models_router">get_models_router (class in msdss_models_api.routers)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="reference/managers.html#msdss_models_api.managers.ModelsBackgroundManager.get_status">get_status() (msdss_models_api.managers.ModelsBackgroundManager method)</a>
+</li>
+      <li><a href="reference/core.html#msdss_models_api.core.ModelsAPI.get_worker">get_worker() (msdss_models_api.core.ModelsAPI method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -378,8 +392,6 @@
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="reference/handlers.html#msdss_models_api.handlers.ModelsHandler.handle_read">handle_read() (msdss_models_api.handlers.ModelsHandler method)</a>
-</li>
-      <li><a href="reference/handlers.html#msdss_models_api.handlers.ModelsBackgroundHandler.handle_read_state">handle_read_state() (msdss_models_api.handlers.ModelsBackgroundHandler method)</a>
 </li>
       <li><a href="reference/handlers.html#msdss_models_api.handlers.ModelsHandler.handle_update">handle_update() (msdss_models_api.handlers.ModelsHandler method)</a>
 </li>
@@ -437,11 +449,21 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="reference/models.html#msdss_models_api.models.Model.metadata">metadata (msdss_models_api.models.Model attribute)</a>
 </li>
+      <li><a href="reference/managers.html#msdss_models_api.managers.ModelsBackgroundManager.metadata_manager">metadata_manager (msdss_models_api.managers.ModelsBackgroundManager attribute)</a>
+</li>
       <li><a href="reference/core.html#msdss_models_api.core.ModelsAPI.misc">misc (msdss_models_api.core.ModelsAPI attribute)</a>
 </li>
       <li><a href="reference/models.html#msdss_models_api.models.Model">Model (class in msdss_models_api.models)</a>
 </li>
+      <li><a href="reference/models.html#msdss_models_api.models.ModelCreate">ModelCreate (class in msdss_models_api.models)</a>
+</li>
+      <li><a href="reference/models.html#msdss_models_api.models.ModelMetadataUpdate">ModelMetadataUpdate (class in msdss_models_api.models)</a>
+</li>
       <li><a href="reference/managers.html#msdss_models_api.managers.ModelsManager.models">models (msdss_models_api.managers.ModelsManager attribute)</a>
+</li>
+      <li><a href="reference/core.html#msdss_models_api.core.ModelsAPI.models_api_database">models_api_database (msdss_models_api.core.ModelsAPI attribute)</a>
+</li>
+      <li><a href="reference/core.html#msdss_models_api.core.ModelsAPI.models_api_worker">models_api_worker (msdss_models_api.core.ModelsAPI attribute)</a>
 </li>
       <li><a href="reference/managers.html#msdss_models_api.managers.ModelsBackgroundManager.models_handler">models_handler (msdss_models_api.managers.ModelsBackgroundManager attribute)</a>
 </li>
@@ -467,6 +489,8 @@
 </li>
       <li><a href="reference/managers.html#msdss_models_api.managers.ModelsManager">ModelsManager (class in msdss_models_api.managers)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="reference/managers.html#msdss_models_api.managers.ModelsMetadataManager">ModelsMetadataManager (class in msdss_models_api.managers)</a>
 </li>
       <li>
@@ -483,11 +507,9 @@
 </li>
         <li><a href="reference/models.html#module-msdss_models_api.models">msdss_models_api.models</a>
 </li>
-        <li><a href="reference/tools.html#module-msdss_models_api.tools">msdss_models_api.tools</a>
+        <li><a href="reference/routers.html#module-msdss_models_api.routers">msdss_models_api.routers</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     msdss_models_api.core
 
@@ -524,10 +546,10 @@
 </li>
       </ul></li>
       <li>
-    msdss_models_api.tools
+    msdss_models_api.routers
 
       <ul>
-        <li><a href="reference/tools.html#module-msdss_models_api.tools">module</a>
+        <li><a href="reference/routers.html#module-msdss_models_api.routers">module</a>
 </li>
       </ul></li>
   </ul></td>
@@ -560,10 +582,16 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="reference/models.html#msdss_models_api.models.Model.save">save() (msdss_models_api.models.Model method)</a>
 </li>
-      <li><a href="reference/managers.html#msdss_models_api.managers.ModelsBackgroundManager.start">start() (msdss_models_api.managers.ModelsBackgroundManager method)</a>
+      <li><a href="reference/models.html#msdss_models_api.models.ModelCreate.source">source (msdss_models_api.models.ModelCreate attribute)</a>
+
+      <ul>
+        <li><a href="reference/models.html#msdss_models_api.models.ModelMetadataUpdate.source">(msdss_models_api.models.ModelMetadataUpdate attribute)</a>
 </li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/managers.html#msdss_models_api.managers.ModelsBackgroundManager.start">start() (msdss_models_api.managers.ModelsBackgroundManager method)</a>
+</li>
       <li><a href="reference/managers.html#msdss_models_api.managers.ModelsBackgroundManager.states">states (msdss_models_api.managers.ModelsBackgroundManager attribute)</a>
 </li>
       <li><a href="reference/managers.html#msdss_models_api.managers.ModelsManager.suffix">suffix (msdss_models_api.managers.ModelsManager attribute)</a>
@@ -574,10 +602,24 @@
 <h2 id="T">T</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/models.html#msdss_models_api.models.ModelCreate.tags">tags (msdss_models_api.models.ModelCreate attribute)</a>
+
+      <ul>
+        <li><a href="reference/models.html#msdss_models_api.models.ModelMetadataUpdate.tags">(msdss_models_api.models.ModelMetadataUpdate attribute)</a>
+</li>
+      </ul></li>
       <li><a href="reference/managers.html#msdss_models_api.managers.ModelsBackgroundManager.tasks">tasks (msdss_models_api.managers.ModelsBackgroundManager attribute)</a>
 
       <ul>
         <li><a href="reference/managers.html#msdss_models_api.managers.ModelsDBBackgroundManager.tasks">(msdss_models_api.managers.ModelsDBBackgroundManager attribute)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/models.html#msdss_models_api.models.ModelCreate.title">title (msdss_models_api.models.ModelCreate attribute)</a>
+
+      <ul>
+        <li><a href="reference/models.html#msdss_models_api.models.ModelMetadataUpdate.title">(msdss_models_api.models.ModelMetadataUpdate attribute)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -602,8 +644,6 @@
         <li><a href="reference/managers.html#msdss_models_api.managers.ModelsDBManager.update_db">(msdss_models_api.managers.ModelsDBManager method)</a>
 </li>
       </ul></li>
-      <li><a href="reference/core.html#msdss_models_api.core.ModelsAPI.users_api_database">users_api_database (msdss_models_api.core.ModelsAPI attribute)</a>
-</li>
   </ul></td>
 </tr></table>
 

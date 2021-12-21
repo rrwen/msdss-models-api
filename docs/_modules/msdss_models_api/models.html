@@ -273,6 +273,8 @@
 <span class="kn">import</span> <span class="nn">pickle</span>
 
 <span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">BaseModel</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
 
 <div class="viewcode-block" id="Model"><a class="viewcode-back" href="../../reference/models.html#msdss_models_api.models.Model">[docs]</a><span class="k">class</span> <span class="nc">Model</span><span class="p">:</span>
     <span class="sd">"""</span>
@@ -363,6 +365,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">file</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="n">file_path</span><span class="si">}</span><span class="s1">.</span><span class="si">{</span><span class="n">file_ext</span><span class="si">}</span><span class="s1">'</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">last_loaded</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">'name'</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span>
             <span class="s1">'can_input'</span><span class="p">:</span> <span class="n">can_input</span><span class="p">,</span>
             <span class="s1">'can_output'</span><span class="p">:</span> <span class="n">can_output</span><span class="p">,</span>
             <span class="s1">'can_update'</span><span class="p">:</span> <span class="n">can_update</span>
@@ -400,9 +403,14 @@
         <span class="n">out</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">out</span></div>
 
-<div class="viewcode-block" id="Model.delete"><a class="viewcode-back" href="../../reference/models.html#msdss_models_api.models.Model.delete">[docs]</a>    <span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Model.delete"><a class="viewcode-back" href="../../reference/models.html#msdss_models_api.models.Model.delete">[docs]</a>    <span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">"""</span>
 <span class="sd">        Deletes the saved model and sets the attribute ``.instance`` to ``None``.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        force : bool</span>
+<span class="sd">            Whether to force deletion regardless if the files exist or not.</span>
 <span class="sd">        </span>
 <span class="sd">        Author</span>
 <span class="sd">        ------</span>
@@ -428,7 +436,8 @@
 <span class="sd">                blank_model.delete()</span>
 <span class="sd">        """</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">instance</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file</span><span class="p">)</span></div>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">can_load</span><span class="p">()</span> <span class="ow">or</span> <span class="n">force</span><span class="p">:</span> 
+            <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Model.input"><a class="viewcode-back" href="../../reference/models.html#msdss_models_api.models.Model.input">[docs]</a>    <span class="k">def</span> <span class="nf">input</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
         <span class="sd">"""</span>
@@ -693,6 +702,72 @@
 <span class="sd">                blank_model.update(new_data)</span>
 <span class="sd">        """</span>
         <span class="k">pass</span></div></div>
+
+<div class="viewcode-block" id="ModelCreate"><a class="viewcode-back" href="../../reference/models.html#msdss_models_api.models.ModelCreate">[docs]</a><span class="k">class</span> <span class="nc">ModelCreate</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    Class for creating creating models using the API.</span>
+<span class="sd">    </span>
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    title : str</span>
+<span class="sd">        Title of the model stored in metadata.</span>
+<span class="sd">    description : str</span>
+<span class="sd">        Description of model stored in metadata.</span>
+<span class="sd">    source : str</span>
+<span class="sd">        Source of model stored in metadata.</span>
+<span class="sd">    tags : str</span>
+<span class="sd">        Space separated tags for the model.</span>
+<span class="sd">    </span>
+<span class="sd">    Author</span>
+<span class="sd">    ------</span>
+<span class="sd">    Richard Wen &lt;rrwen.dev@gmail.com&gt;</span>
+<span class="sd">    </span>
+<span class="sd">    Example</span>
+<span class="sd">    -------</span>
+<span class="sd">    .. jupyter-execute::</span>
+
+<span class="sd">        from msdss_models_api.models import *</span>
+<span class="sd">        from pprint import pprint</span>
+<span class="sd">        fields = ModelCreate.__fields__</span>
+<span class="sd">        pprint(fields)</span>
+<span class="sd">    """</span>
+    <span class="n">title</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">description</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">source</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">tags</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="ModelMetadataUpdate"><a class="viewcode-back" href="../../reference/models.html#msdss_models_api.models.ModelMetadataUpdate">[docs]</a><span class="k">class</span> <span class="nc">ModelMetadataUpdate</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    Model for updating model metadata.</span>
+<span class="sd">    </span>
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    title : str</span>
+<span class="sd">        Title of the model stored in metadata.</span>
+<span class="sd">    description : str</span>
+<span class="sd">        Description of model stored in metadata.</span>
+<span class="sd">    source : str</span>
+<span class="sd">        Data source of model stored in metadata.</span>
+<span class="sd">    tags : str</span>
+<span class="sd">        Space separated tags for the model.</span>
+<span class="sd">    </span>
+<span class="sd">    Author</span>
+<span class="sd">    ------</span>
+<span class="sd">    Richard Wen &lt;rrwen.dev@gmail.com&gt;</span>
+<span class="sd">    </span>
+<span class="sd">    Example</span>
+<span class="sd">    -------</span>
+<span class="sd">    .. jupyter-execute::</span>
+
+<span class="sd">        from msdss_models_api.models import *</span>
+<span class="sd">        from pprint import pprint</span>
+<span class="sd">        fields = ModelMetadataUpdate.__fields__</span>
+<span class="sd">        pprint(fields)</span>
+<span class="sd">    """</span>
+    <span class="n">title</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">description</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">source</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">tags</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span></div>
 </pre></div>
 
           </article>

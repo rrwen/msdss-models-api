@@ -52,8 +52,3 @@ handle_processing
 ^^^^^^^^^^^^^^^^^
 
 .. automethod:: msdss_models_api.handlers.ModelsBackgroundHandler.handle_processing
-
-handle_read_state
-^^^^^^^^^^^^^^^^^
-
-.. automethod:: msdss_models_api.handlers.ModelsBackgroundHandler.handle_read_state

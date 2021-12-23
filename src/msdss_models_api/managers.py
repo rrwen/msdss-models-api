@@ -1390,7 +1390,7 @@ class ModelsDBManager(ModelsManager):
             # Delete test table
             database.drop_table('models_test')
     """
-    def __init__(self, models=[], data_manager=DataManager(database=Database()), *args, **kwargs):
+    def __init__(self, models=[], data_manager=DataManager(), *args, **kwargs):
         super().__init__(models=models, *args, **kwargs)
         self.data_manager = data_manager
     

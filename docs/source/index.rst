@@ -1,5 +1,5 @@
 msdss-models-api
-==============
+================
 
 Model management API for the Modular Spatial Decision Support Systems (MSDSS) framework.
 

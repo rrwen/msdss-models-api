@@ -1,6 +1,7 @@
 from celery import Celery
 from fastapi import FastAPI
 from msdss_base_api import API
+from msdss_base_database import Database
 from msdss_data_api.managers import DataManager
 
 from .env import *
@@ -18,8 +19,8 @@ class ModelsAPI(API):
     users_api : :class:`msdss_users_api:msdss_users_api.core.UsersAPI` or None
         Users API object to enable user authentication for models routes.
         If ``None``, user authentication will not be used for models routes.
-    database : :class:`msdss_base_database:msdss_base_database.core.Database`
-        A database object for using models with data from the database.
+    database : :class:`msdss_base_database:msdss_base_database.core.Database` or None
+        A database object for using models with data from the database. If ``None``, a default database object will be created.
     models : list(:class:`msdss_models_api.models.Model`) or dict(:class:`msdss_models_api.models.Model`)
         List or dict of available ``Model`` objects to use for creating and managing model instances.
         If ``list``, ensure that the class names are unique, otherwise the last object in the list takes priority.
@@ -202,7 +203,7 @@ class ModelsAPI(API):
     def __init__(
         self,
         users_api=None,
-        database=Database(),
+        database=None,
         models=[],
         worker=None,
         broker_url=DEFAULT_BROKER_URL,
@@ -213,7 +214,7 @@ class ModelsAPI(API):
         env=ModelsDotEnv(),
         api=FastAPI(
             title='MSDSS Models API',
-            version='0.0.0'
+            version='0.0.1'
         ),
         *args, **kwargs):
         super().__init__(api=api, *args, **kwargs)
@@ -230,6 +231,7 @@ class ModelsAPI(API):
             os.makedirs(folder)
 
         # (ModelsAPI_bg) Create background manager for models
+        database = database if database else Database()
         data_manager = DataManager(database=database)
         models_manager = ModelsDBManager(models=models, data_manager=data_manager, folder=folder)
         worker = worker if worker else Celery(broker=broker_url, backend=backend_url)

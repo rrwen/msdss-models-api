@@ -47,7 +47,7 @@
   
   
   
-    <title>core &#8212; 0.0.0</title>
+    <title>core &#8212; 0.0.1</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/material.css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
@@ -90,11 +90,11 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex navheader">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="../index.html" title="0.0.0"
+        <a href="../index.html" title="0.0.1"
            class="md-header-nav__button md-logo">
           
               <img src="../_static/logo.svg" height="26"
-                   alt="0.0.0 logo">
+                   alt="0.0.1 logo">
           
         </a>
       </div>
@@ -177,7 +177,7 @@
   <nav class="md-tabs" data-md-component="tabs">
     <div class="md-tabs__inner md-grid">
       <ul class="md-tabs__list">
-          <li class="md-tabs__item"><a href="../index.html" class="md-tabs__link">0.0.0</a></li>
+          <li class="md-tabs__item"><a href="../index.html" class="md-tabs__link">0.0.1</a></li>
           <li class="md-tabs__item"><a href="index.html" class="md-tabs__link">API Reference</a></li>
       </ul>
     </div>
@@ -190,13 +190,13 @@
               <div class="md-sidebar__inner">
                 <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href="../index.html" title="0.0.0" class="md-nav__button md-logo">
+    <a href="../index.html" title="0.0.1" class="md-nav__button md-logo">
       
         <img src="../_static/logo.svg" alt=" logo" width="48" height="48">
       
     </a>
     <a href="../index.html"
-       title="0.0.0">msdss-models-api</a>
+       title="0.0.1">msdss-models-api</a>
   </label>
     <div class="md-nav__source">
       <a href="https://github.com/rrwen/msdss-models-api/" title="Go to repository" class="md-source" data-md-source="github">
@@ -289,7 +289,7 @@
 <h2 id="modelsapi">ModelsAPI<a class="headerlink" href="#modelsapi" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="msdss_models_api.core.ModelsAPI">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">msdss_models_api.core.</span></span><span class="sig-name descname"><span class="pre">ModelsAPI</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">users_api=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">database=&lt;msdss_base_database.core.Database</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">models=[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">worker=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">broker_url='redis://localhost:6379/0'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">backend_url='redis://localhost:6379/0'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">folder='./models'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">models_router_settings={}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">load_env=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">env=&lt;msdss_models_api.env.ModelsDotEnv</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">api=&lt;fastapi.applications.FastAPI</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msdss_models_api/core.html#ModelsAPI"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msdss_models_api.core.ModelsAPI" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">msdss_models_api.core.</span></span><span class="sig-name descname"><span class="pre">ModelsAPI</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">users_api=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">database=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">models=[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">worker=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">broker_url='redis://localhost:6379/0'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">backend_url='redis://localhost:6379/0'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">folder='./models'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">models_router_settings={}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">load_env=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">env=&lt;msdss_models_api.env.ModelsDotEnv</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">api=&lt;fastapi.applications.FastAPI</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msdss_models_api/core.html#ModelsAPI"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msdss_models_api.core.ModelsAPI" title="Permalink to this definition">¶</a></dt>
 <dd><p>Models API class for managing models.</p>
 <ul class="simple">
 <li><p>Extends the <a class="reference external" href="https://rrwen.github.io/msdss-base-api/reference/api.html#msdss_base_api.core.API" title="(in msdss_base_api v0.1.2)"><code class="docutils literal notranslate"><span class="pre">msdss_base_api.core.API</span></code></a> class</p></li>
@@ -299,7 +299,7 @@
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>users_api</strong> (<a class="reference external" href="https://rrwen.github.io/msdss-users-api/reference/core.html#msdss_users_api.core.UsersAPI" title="(in msdss_users_api v0.2.1)"><code class="docutils literal notranslate"><span class="pre">msdss_users_api.core.UsersAPI</span></code></a> or None) – Users API object to enable user authentication for models routes.
 If <code class="docutils literal notranslate"><span class="pre">None</span></code>, user authentication will not be used for models routes.</p></li>
-<li><p><strong>database</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">msdss_base_database:msdss_base_database.core.Database</span></code>) – A database object for using models with data from the database.</p></li>
+<li><p><strong>database</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">msdss_base_database:msdss_base_database.core.Database</span></code> or None) – A database object for using models with data from the database. If <code class="docutils literal notranslate"><span class="pre">None</span></code>, a default database object will be created.</p></li>
 <li><p><strong>models</strong> (list(<a class="reference internal" href="models.html#msdss_models_api.models.Model" title="msdss_models_api.models.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">msdss_models_api.models.Model</span></code></a>) or dict(<a class="reference internal" href="models.html#msdss_models_api.models.Model" title="msdss_models_api.models.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">msdss_models_api.models.Model</span></code></a>)) – List or dict of available <code class="docutils literal notranslate"><span class="pre">Model</span></code> objects to use for creating and managing model instances.
 If <code class="docutils literal notranslate"><span class="pre">list</span></code>, ensure that the class names are unique, otherwise the last object in the list takes priority.</p></li>
 <li><p><strong>worker</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">celery:celery.Celery</span></code> or None) – Celery worker for background processes. If <code class="docutils literal notranslate"><span class="pre">None</span></code>, a default worker will be created using parameters <code class="docutils literal notranslate"><span class="pre">broker_url</span></code> and <code class="docutils literal notranslate"><span class="pre">backend_url</span></code>.</p></li>

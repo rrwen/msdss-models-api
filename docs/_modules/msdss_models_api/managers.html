@@ -46,7 +46,7 @@
   
   
   
-    <title>msdss_models_api.managers &#8212; 0.0.2</title>
+    <title>msdss_models_api.managers &#8212; 0.0.3</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/material.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
@@ -87,11 +87,11 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex navheader">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="../../index.html" title="0.0.2"
+        <a href="../../index.html" title="0.0.3"
            class="md-header-nav__button md-logo">
           
               <img src="../../_static/logo.svg" height="26"
-                   alt="0.0.2 logo">
+                   alt="0.0.3 logo">
           
         </a>
       </div>
@@ -174,7 +174,7 @@
   <nav class="md-tabs" data-md-component="tabs">
     <div class="md-tabs__inner md-grid">
       <ul class="md-tabs__list">
-          <li class="md-tabs__item"><a href="../../index.html" class="md-tabs__link">0.0.2</a></li>
+          <li class="md-tabs__item"><a href="../../index.html" class="md-tabs__link">0.0.3</a></li>
           <li class="md-tabs__item"><a href="../index.html" class="md-tabs__link">Module code</a></li>
       </ul>
     </div>
@@ -187,13 +187,13 @@
               <div class="md-sidebar__inner">
                 <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href="../../index.html" title="0.0.2" class="md-nav__button md-logo">
+    <a href="../../index.html" title="0.0.3" class="md-nav__button md-logo">
       
         <img src="../../_static/logo.svg" alt=" logo" width="48" height="48">
       
     </a>
     <a href="../../index.html"
-       title="0.0.2">msdss-models-api</a>
+       title="0.0.3">msdss-models-api</a>
   </label>
     <div class="md-nav__source">
       <a href="https://github.com/rrwen/msdss-models-api/" title="Go to repository" class="md-source" data-md-source="github">
@@ -2063,8 +2063,8 @@
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    data_manager : :class:`msdss_data_api.managers.DataManager`</span>
-<span class="sd">        Data manager object for managing data in a database.</span>
+<span class="sd">    data_manager : :class:`msdss_data_api.managers.DataManager` or None</span>
+<span class="sd">        Data manager object for managing data in a database. If ``None``, a default manager will be used.</span>
 <span class="sd">        The restricted tables for the handler will be set to ``[]`` while the only permitted table will be the table name of the parameter ``table``.</span>
 <span class="sd">    table : str</span>
 <span class="sd">        The name of the table to store the metadata.</span>
@@ -2142,13 +2142,14 @@
 <span class="sd">    """</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="n">data_manager</span><span class="o">=</span><span class="n">DataManager</span><span class="p">(),</span>
+        <span class="n">data_manager</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">table</span><span class="o">=</span><span class="n">DEFAULT_METADATA_TABLE</span><span class="p">,</span>
         <span class="n">columns</span><span class="o">=</span><span class="n">DEFAULT_METADATA_COLUMNS</span><span class="p">,</span>
         <span class="n">name_column</span><span class="o">=</span><span class="n">DEFAULT_NAME_COLUMN</span><span class="p">,</span>
         <span class="n">updated_column</span><span class="o">=</span><span class="n">DEFAULT_UPDATE_COLUMN</span><span class="p">,</span>
         <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
     <span class="p">):</span>
+        <span class="n">data_manager</span> <span class="o">=</span> <span class="n">data_manager</span> <span class="k">if</span> <span class="n">data_manager</span> <span class="k">else</span> <span class="n">DataManager</span><span class="p">()</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
             <span class="n">data_manager</span><span class="o">=</span><span class="n">data_manager</span><span class="p">,</span>
             <span class="n">table</span><span class="o">=</span><span class="n">table</span><span class="p">,</span>

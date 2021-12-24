@@ -1792,8 +1792,8 @@ class ModelsMetadataManager(MetadataManager):
     
     Parameters
     ----------
-    data_manager : :class:`msdss_data_api.managers.DataManager`
-        Data manager object for managing data in a database.
+    data_manager : :class:`msdss_data_api.managers.DataManager` or None
+        Data manager object for managing data in a database. If ``None``, a default manager will be used.
         The restricted tables for the handler will be set to ``[]`` while the only permitted table will be the table name of the parameter ``table``.
     table : str
         The name of the table to store the metadata.
@@ -1871,13 +1871,14 @@ class ModelsMetadataManager(MetadataManager):
     """
     def __init__(
         self,
-        data_manager=DataManager(),
+        data_manager=None,
         table=DEFAULT_METADATA_TABLE,
         columns=DEFAULT_METADATA_COLUMNS,
         name_column=DEFAULT_NAME_COLUMN,
         updated_column=DEFAULT_UPDATE_COLUMN,
         *args, **kwargs
     ):
+        data_manager = data_manager if data_manager else DataManager()
         super().__init__(
             data_manager=data_manager,
             table=table,

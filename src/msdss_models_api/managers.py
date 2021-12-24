@@ -21,8 +21,12 @@ class ModelsManager:
         If ``list``, ensure that the class names are unique, otherwise the last object in the list takes priority.
     folder : str
         The folder path to store models in.
-    handler : :class:`msdss_models_api.handlers.ModelsHandler` or None
-        Handler object to manage model operations. If ``None``, then inputs for model operations will not be handled.
+    handler : :class:`msdss_models_api.handlers.ModelsHandler` or bool None
+        Handler object to manage model operations.
+        
+        * If ``None``, then a default handler will be created
+        * If ``False``, then inputs for model operations will not be handled
+
     suffix : str
         Suffix for pickled model object files. These files contain the model objects without inputs or loading.
 
@@ -94,11 +98,12 @@ class ModelsManager:
         self,
         models=[],
         folder=DEFAULT_MODELS_FOLDER,
-        handler=ModelsHandler(),
+        handler=None,
         suffix='_base.pickle'
     ):
 
         # (ModelsManager_attr) Set attributes
+        handler = ModelsHandler() if handler is None else handler
         self.folder = folder
         self.models = {(m.__name__):m for m in models} if isinstance(models, list) else models
         self.instances = {}
@@ -678,8 +683,9 @@ class ModelsBackgroundManager:
     models_manager : :class:`msdss_models_api.managers.ModelsManager`
         A models manager object to manage models.
         The handler for the models manager will be disabled (set to ``None``) as model operations will be handled with attribute ``models_handler`` instead.
-    handler : :class:`msdss_models_api.handlers.ModelsBackgroundHandler`
-        Handler object to manage background operations.
+    handler : :class:`msdss_models_api.handlers.ModelsBackgroundHandler` or None
+        Handler object to manage background operations. If ``None``, a default handler will be created.
+
     metadata_manager : :class:`msdss_models_api.managers.ModelsMetadataManager` or ``None``
         A metadata manager object. If ``None``, metadata will not be managed based on model operations.
 
@@ -766,12 +772,13 @@ class ModelsBackgroundManager:
             # Delete model instance
             bg_manager.delete('temp_model')
     """
-    def __init__(self, worker, models_manager, handler=ModelsBackgroundHandler(), metadata_manager=None):
+    def __init__(self, worker, models_manager, handler=None, metadata_manager=None):
 
         # (ModelsBackgroundManager_models_manager) Setup models manager and disable handler
+        handler = ModelsBackgroundHandler() if handler is None else handler
         self.models_manager = models_manager
         self.models_handler = self.models_manager.handler
-        self.models_manager.handler = None
+        self.models_manager.handler = False
         self.metadata_manager = metadata_manager
 
         # (ModelsBackgroundManager_attr) Set other attributes
@@ -1337,8 +1344,8 @@ class ModelsDBManager(ModelsManager):
     models : list(:class:`msdss_models_api.models.Model`)
         List of available ``Model`` objects to use for creating and managing model instances.
         Ensure that the class names are unique, otherwise the last object takes priority.
-    data_manager : :class:`msdss_data_api.managers.DataManager`
-        A data manager object for managing data in and out of a database.
+    data_manager : :class:`msdss_data_api.managers.DataManager` or None
+        A data manager object for managing data in and out of a database. If ``None``, a default data manager will be used.
     *args, **kwargs
         Additional arguments for :class:`msdss_models_api.models.ModelsManager`
     
@@ -1390,7 +1397,8 @@ class ModelsDBManager(ModelsManager):
             # Delete test table
             database.drop_table('models_test')
     """
-    def __init__(self, models=[], data_manager=DataManager(), *args, **kwargs):
+    def __init__(self, models=[], data_manager=None, *args, **kwargs):
+        data_manager = data_manager if data_manager else DataManager()
         super().__init__(models=models, *args, **kwargs)
         self.data_manager = data_manager
     
@@ -1600,7 +1608,7 @@ class ModelsDBBackgroundManager(ModelsBackgroundManager):
 
         # (ModelsDBBackgroundManager_data_manager) Setup data manager
         self.data_handler = self.models_manager.data_manager.handler
-        self.models_manager.data_manager.handler = None
+        self.models_manager.data_manager.handler = False
         
         # (ModelsDBBackgroundManager_task_input) Define input db task
         @self.worker.task

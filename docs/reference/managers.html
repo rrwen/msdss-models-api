@@ -47,7 +47,7 @@
   
   
   
-    <title>managers &#8212; 0.0.1</title>
+    <title>managers &#8212; 0.0.2</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/material.css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
@@ -90,11 +90,11 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex navheader">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="../index.html" title="0.0.1"
+        <a href="../index.html" title="0.0.2"
            class="md-header-nav__button md-logo">
           
               <img src="../_static/logo.svg" height="26"
-                   alt="0.0.1 logo">
+                   alt="0.0.2 logo">
           
         </a>
       </div>
@@ -177,7 +177,7 @@
   <nav class="md-tabs" data-md-component="tabs">
     <div class="md-tabs__inner md-grid">
       <ul class="md-tabs__list">
-          <li class="md-tabs__item"><a href="../index.html" class="md-tabs__link">0.0.1</a></li>
+          <li class="md-tabs__item"><a href="../index.html" class="md-tabs__link">0.0.2</a></li>
           <li class="md-tabs__item"><a href="index.html" class="md-tabs__link">API Reference</a></li>
       </ul>
     </div>
@@ -190,13 +190,13 @@
               <div class="md-sidebar__inner">
                 <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href="../index.html" title="0.0.1" class="md-nav__button md-logo">
+    <a href="../index.html" title="0.0.2" class="md-nav__button md-logo">
       
         <img src="../_static/logo.svg" alt=" logo" width="48" height="48">
       
     </a>
     <a href="../index.html"
-       title="0.0.1">msdss-models-api</a>
+       title="0.0.2">msdss-models-api</a>
   </label>
     <div class="md-nav__source">
       <a href="https://github.com/rrwen/msdss-models-api/" title="Go to repository" class="md-source" data-md-source="github">
@@ -349,7 +349,7 @@
 <h2 id="modelsmanager">ModelsManager<a class="headerlink" href="#modelsmanager" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="msdss_models_api.managers.ModelsManager">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">msdss_models_api.managers.</span></span><span class="sig-name descname"><span class="pre">ModelsManager</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">models=[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">folder='./models'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">handler=&lt;msdss_models_api.handlers.ModelsHandler</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">suffix='_base.pickle'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msdss_models_api/managers.html#ModelsManager"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msdss_models_api.managers.ModelsManager" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">msdss_models_api.managers.</span></span><span class="sig-name descname"><span class="pre">ModelsManager</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">models</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">folder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'./models'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">handler</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">suffix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'_base.pickle'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msdss_models_api/managers.html#ModelsManager"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msdss_models_api.managers.ModelsManager" title="Permalink to this definition">¶</a></dt>
 <dd><p>Class to manage <a class="reference internal" href="models.html#msdss_models_api.models.Model" title="msdss_models_api.models.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">msdss_models_api.models.Model</span></code></a> objects.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -357,7 +357,12 @@
 <li><p><strong>models</strong> (list(<a class="reference internal" href="models.html#msdss_models_api.models.Model" title="msdss_models_api.models.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">msdss_models_api.models.Model</span></code></a>) or dict(<a class="reference internal" href="models.html#msdss_models_api.models.Model" title="msdss_models_api.models.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">msdss_models_api.models.Model</span></code></a>)) – List or dict of available <code class="docutils literal notranslate"><span class="pre">Model</span></code> objects to use for creating and managing model instances.
 If <code class="docutils literal notranslate"><span class="pre">list</span></code>, ensure that the class names are unique, otherwise the last object in the list takes priority.</p></li>
 <li><p><strong>folder</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – The folder path to store models in.</p></li>
-<li><p><strong>handler</strong> (<a class="reference internal" href="handlers.html#msdss_models_api.handlers.ModelsHandler" title="msdss_models_api.handlers.ModelsHandler"><code class="xref py py-class docutils literal notranslate"><span class="pre">msdss_models_api.handlers.ModelsHandler</span></code></a> or None) – Handler object to manage model operations. If <code class="docutils literal notranslate"><span class="pre">None</span></code>, then inputs for model operations will not be handled.</p></li>
+<li><p><strong>handler</strong> (<a class="reference internal" href="handlers.html#msdss_models_api.handlers.ModelsHandler" title="msdss_models_api.handlers.ModelsHandler"><code class="xref py py-class docutils literal notranslate"><span class="pre">msdss_models_api.handlers.ModelsHandler</span></code></a> or bool None) – <p>Handler object to manage model operations.</p>
+<ul>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">None</span></code>, then a default handler will be created</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">False</span></code>, then inputs for model operations will not be handled</p></li>
+</ul>
+</p></li>
 <li><p><strong>suffix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Suffix for pickled model object files. These files contain the model objects without inputs or loading.</p></li>
 </ul>
 </dd>
@@ -1012,7 +1017,7 @@ If <code class="docutils literal notranslate"><span class="pre">list</span></cod
 <h2 id="modelsbackgroundmanager">ModelsBackgroundManager<a class="headerlink" href="#modelsbackgroundmanager" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="msdss_models_api.managers.ModelsBackgroundManager">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">msdss_models_api.managers.</span></span><span class="sig-name descname"><span class="pre">ModelsBackgroundManager</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">worker</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">models_manager</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">handler=&lt;msdss_models_api.handlers.ModelsBackgroundHandler</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata_manager=None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msdss_models_api/managers.html#ModelsBackgroundManager"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msdss_models_api.managers.ModelsBackgroundManager" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">msdss_models_api.managers.</span></span><span class="sig-name descname"><span class="pre">ModelsBackgroundManager</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">worker</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">models_manager</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">handler</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata_manager</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msdss_models_api/managers.html#ModelsBackgroundManager"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msdss_models_api.managers.ModelsBackgroundManager" title="Permalink to this definition">¶</a></dt>
 <dd><p>Class to manage <a class="reference internal" href="models.html#msdss_models_api.models.Model" title="msdss_models_api.models.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">msdss_models_api.models.Model</span></code></a> background processes using a <a class="reference internal" href="#msdss_models_api.managers.ModelsManager" title="msdss_models_api.managers.ModelsManager"><code class="xref py py-class docutils literal notranslate"><span class="pre">msdss_models_api.managers.ModelsManager</span></code></a>.</p>
 <ul class="simple">
 <li><p>Note: it is expected that the model outputs and creation are not long running processes</p></li>
@@ -1023,7 +1028,7 @@ If <code class="docutils literal notranslate"><span class="pre">list</span></cod
 <li><p><strong>worker</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">celery:celery.Celery</span></code>) – A <code class="docutils literal notranslate"><span class="pre">celery</span></code> app object to manage background tasks.</p></li>
 <li><p><strong>models_manager</strong> (<a class="reference internal" href="#msdss_models_api.managers.ModelsManager" title="msdss_models_api.managers.ModelsManager"><code class="xref py py-class docutils literal notranslate"><span class="pre">msdss_models_api.managers.ModelsManager</span></code></a>) – A models manager object to manage models.
 The handler for the models manager will be disabled (set to <code class="docutils literal notranslate"><span class="pre">None</span></code>) as model operations will be handled with attribute <code class="docutils literal notranslate"><span class="pre">models_handler</span></code> instead.</p></li>
-<li><p><strong>handler</strong> (<a class="reference internal" href="handlers.html#msdss_models_api.handlers.ModelsBackgroundHandler" title="msdss_models_api.handlers.ModelsBackgroundHandler"><code class="xref py py-class docutils literal notranslate"><span class="pre">msdss_models_api.handlers.ModelsBackgroundHandler</span></code></a>) – Handler object to manage background operations.</p></li>
+<li><p><strong>handler</strong> (<a class="reference internal" href="handlers.html#msdss_models_api.handlers.ModelsBackgroundHandler" title="msdss_models_api.handlers.ModelsBackgroundHandler"><code class="xref py py-class docutils literal notranslate"><span class="pre">msdss_models_api.handlers.ModelsBackgroundHandler</span></code></a> or None) – Handler object to manage background operations. If <code class="docutils literal notranslate"><span class="pre">None</span></code>, a default handler will be created.</p></li>
 <li><p><strong>metadata_manager</strong> (<a class="reference internal" href="#msdss_models_api.managers.ModelsMetadataManager" title="msdss_models_api.managers.ModelsMetadataManager"><code class="xref py py-class docutils literal notranslate"><span class="pre">msdss_models_api.managers.ModelsMetadataManager</span></code></a> or <code class="docutils literal notranslate"><span class="pre">None</span></code>) – A metadata manager object. If <code class="docutils literal notranslate"><span class="pre">None</span></code>, metadata will not be managed based on model operations.</p></li>
 </ul>
 </dd>
@@ -1641,7 +1646,7 @@ The handler for the models manager will be disabled (set to <code class="docutil
 <h2 id="modelsdbmanager">ModelsDBManager<a class="headerlink" href="#modelsdbmanager" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="msdss_models_api.managers.ModelsDBManager">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">msdss_models_api.managers.</span></span><span class="sig-name descname"><span class="pre">ModelsDBManager</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">models=[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_manager=&lt;msdss_data_api.managers.DataManager</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msdss_models_api/managers.html#ModelsDBManager"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msdss_models_api.managers.ModelsDBManager" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">msdss_models_api.managers.</span></span><span class="sig-name descname"><span class="pre">ModelsDBManager</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">models</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_manager</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msdss_models_api/managers.html#ModelsDBManager"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msdss_models_api.managers.ModelsDBManager" title="Permalink to this definition">¶</a></dt>
 <dd><p>Class to manage <a class="reference internal" href="models.html#msdss_models_api.models.Model" title="msdss_models_api.models.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">msdss_models_api.models.Model</span></code></a> objects with added methods for processing models with data from a database.</p>
 <ul class="simple">
 <li><p>Inherits from <code class="xref py py-class docutils literal notranslate"><span class="pre">msdss_models_api.models.ModelsManager</span></code></p></li>
@@ -1651,7 +1656,7 @@ The handler for the models manager will be disabled (set to <code class="docutil
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>models</strong> (list(<a class="reference internal" href="models.html#msdss_models_api.models.Model" title="msdss_models_api.models.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">msdss_models_api.models.Model</span></code></a>)) – List of available <code class="docutils literal notranslate"><span class="pre">Model</span></code> objects to use for creating and managing model instances.
 Ensure that the class names are unique, otherwise the last object takes priority.</p></li>
-<li><p><strong>data_manager</strong> (<a class="reference external" href="https://rrwen.github.io/msdss-data-api/reference/managers.html#msdss_data_api.managers.DataManager" title="(in msdss_data_api v0.2.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">msdss_data_api.managers.DataManager</span></code></a>) – A data manager object for managing data in and out of a database.</p></li>
+<li><p><strong>data_manager</strong> (<a class="reference external" href="https://rrwen.github.io/msdss-data-api/reference/managers.html#msdss_data_api.managers.DataManager" title="(in msdss_data_api v0.2.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">msdss_data_api.managers.DataManager</span></code></a> or None) – A data manager object for managing data in and out of a database. If <code class="docutils literal notranslate"><span class="pre">None</span></code>, a default data manager will be used.</p></li>
 <li><p><strong>*args</strong> – Additional arguments for <code class="xref py py-class docutils literal notranslate"><span class="pre">msdss_models_api.models.ModelsManager</span></code></p></li>
 <li><p><strong>**kwargs</strong> – Additional arguments for <code class="xref py py-class docutils literal notranslate"><span class="pre">msdss_models_api.models.ModelsManager</span></code></p></li>
 </ul>

@@ -64,15 +64,17 @@ def get_models_router(
                     'title': 'Title for Model',
                     'description': 'Description for model...',
                     'tags': 'tag1 tag2 tag3',
-                    'source': 'Source for model'
+                    'source': 'Source for model',
+                    'settings': {}
                 }),
             bg_manager = Depends(get_bg_manager),
             user = Depends(get_user['create'])
         ):
             metadata = body.dict()
+            parameters = {'settings': metadata.pop('settings', {})}
             if user:
                 metadata['created_by'] = user.email
-            bg_manager.create(name, model, metadata=metadata)
+            bg_manager.create(name, model, metadata=metadata, parameters=parameters)
 
     # (get_models_router_delete) Add delete route to models router
     if enable['delete']:

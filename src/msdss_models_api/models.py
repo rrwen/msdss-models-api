@@ -3,7 +3,7 @@ import pickle
 
 from datetime import datetime
 from pydantic import BaseModel
-from typing import Optional
+from typing import Any, Dict, Optional
 
 class Model:
     """
@@ -451,6 +451,8 @@ class ModelCreate(BaseModel):
         Source of model stored in metadata.
     tags : str
         Space separated tags for the model.
+    settings : str
+        Initial custom key value settings for the model.
     
     Author
     ------
@@ -469,6 +471,7 @@ class ModelCreate(BaseModel):
     description: Optional[str]
     source: Optional[str]
     tags: Optional[str]
+    settings: Optional[Dict[str, Any]]
 
 class ModelMetadataUpdate(BaseModel):
     """

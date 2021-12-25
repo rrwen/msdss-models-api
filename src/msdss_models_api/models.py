@@ -94,7 +94,6 @@ class Model:
         self.file = f'{file_path}.{file_ext}'
         self.last_loaded = None
         self.metadata = {
-            'name': self.__class__.__name__,
             'can_input': can_input,
             'can_output': can_output,
             'can_update': can_update

@@ -417,6 +417,7 @@ class ModelsManager:
         # (ModelsManager_create_obj) Create base model object
         save_file = self._get_save_file(name)
         base_model = self.models[model](file_path=save_file, **parameters)
+        base_model.metadata['model'] = model
 
         # (ModelsManager_create_save) Save base model object
         with open(self._get_base_file(name), 'wb') as base_file:
@@ -970,7 +971,7 @@ class ModelsBackgroundManager:
             metadata['name'] = name
             metadata['created_at'] = datetime.now()
             metadata['updated_at'] = datetime.now()
-            metadata['model'] = instance.metadata['name']
+            metadata['model'] = instance.metadata['model'] if 'model' in instance.metadata else type(instance).__name__
             metadata['can_input'] = instance.metadata['can_input']
             metadata['can_output'] = instance.metadata['can_output']
             metadata['can_update'] = instance.metadata['can_update']

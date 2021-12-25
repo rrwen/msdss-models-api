@@ -24,6 +24,8 @@ class Model:
         Whether the method ``.output`` is defined and available. This is useful for controlling route requests in an API.
     can_update : bool
         Whether the method ``.update`` is defined and available. This is useful for controlling route requests in an API.
+    settings : dict
+        Dict of initial custom settings to be used by model methods. These are expected not to change from the time of initialization.
 
     Attributes
     ----------
@@ -39,6 +41,8 @@ class Model:
         * ``can_input`` (bool): same as parameter ``can_input``
         * ``can_output`` (bool): same as parameter ``can_output``
         * ``can_update`` (bool): same as parameter ``can_update``
+    settings : dict
+        Same as parameter ``settings``.
 
     Author
     ------
@@ -88,7 +92,8 @@ class Model:
         file_ext='pickle',
         can_input=True,
         can_output=True,
-        can_update=True
+        can_update=True,
+        settings={}
     ):
         self.instance = None
         self.file = f'{file_path}.{file_ext}'
@@ -98,6 +103,7 @@ class Model:
             'can_output': can_output,
             'can_update': can_update
         }
+        self.settings = settings
 
     def can_load(self):
         """

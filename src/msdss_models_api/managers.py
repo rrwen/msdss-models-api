@@ -1053,7 +1053,7 @@ class ModelsBackgroundManager:
 
             * ``task`` (str): the processing task of the model instance
             * ``status`` (str): the processing status of the model instance 
-            * ``started_at`` (:class:`datetime.datetime): when the process was started
+            * ``started_at`` (:class:`datetime.datetime`): when the process was started
 
             If the model instance is not processing, it will return a dict of the status only ``{'status': 'IDLE'}``.
 

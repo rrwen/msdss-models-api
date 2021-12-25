@@ -46,7 +46,7 @@
   
   
   
-    <title>msdss_models_api.models &#8212; 0.0.4</title>
+    <title>msdss_models_api.models &#8212; 0.0.5</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/material.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
@@ -87,11 +87,11 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex navheader">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="../../index.html" title="0.0.4"
+        <a href="../../index.html" title="0.0.5"
            class="md-header-nav__button md-logo">
           
               <img src="../../_static/logo.svg" height="26"
-                   alt="0.0.4 logo">
+                   alt="0.0.5 logo">
           
         </a>
       </div>
@@ -174,7 +174,7 @@
   <nav class="md-tabs" data-md-component="tabs">
     <div class="md-tabs__inner md-grid">
       <ul class="md-tabs__list">
-          <li class="md-tabs__item"><a href="../../index.html" class="md-tabs__link">0.0.4</a></li>
+          <li class="md-tabs__item"><a href="../../index.html" class="md-tabs__link">0.0.5</a></li>
           <li class="md-tabs__item"><a href="../index.html" class="md-tabs__link">Module code</a></li>
       </ul>
     </div>
@@ -187,13 +187,13 @@
               <div class="md-sidebar__inner">
                 <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href="../../index.html" title="0.0.4" class="md-nav__button md-logo">
+    <a href="../../index.html" title="0.0.5" class="md-nav__button md-logo">
       
         <img src="../../_static/logo.svg" alt=" logo" width="48" height="48">
       
     </a>
     <a href="../../index.html"
-       title="0.0.4">msdss-models-api</a>
+       title="0.0.5">msdss-models-api</a>
   </label>
     <div class="md-nav__source">
       <a href="https://github.com/rrwen/msdss-models-api/" title="Go to repository" class="md-source" data-md-source="github">
@@ -295,6 +295,8 @@
 <span class="sd">        Whether the method ``.output`` is defined and available. This is useful for controlling route requests in an API.</span>
 <span class="sd">    can_update : bool</span>
 <span class="sd">        Whether the method ``.update`` is defined and available. This is useful for controlling route requests in an API.</span>
+<span class="sd">    settings : dict</span>
+<span class="sd">        Dict of initial custom settings to be used by model methods. These are expected not to change from the time of initialization.</span>
 
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
@@ -310,6 +312,8 @@
 <span class="sd">        * ``can_input`` (bool): same as parameter ``can_input``</span>
 <span class="sd">        * ``can_output`` (bool): same as parameter ``can_output``</span>
 <span class="sd">        * ``can_update`` (bool): same as parameter ``can_update``</span>
+<span class="sd">    settings : dict</span>
+<span class="sd">        Same as parameter ``settings``.</span>
 
 <span class="sd">    Author</span>
 <span class="sd">    ------</span>
@@ -359,7 +363,8 @@
         <span class="n">file_ext</span><span class="o">=</span><span class="s1">'pickle'</span><span class="p">,</span>
         <span class="n">can_input</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="n">can_output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-        <span class="n">can_update</span><span class="o">=</span><span class="kc">True</span>
+        <span class="n">can_update</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">settings</span><span class="o">=</span><span class="p">{}</span>
     <span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">instance</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">file</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="n">file_path</span><span class="si">}</span><span class="s1">.</span><span class="si">{</span><span class="n">file_ext</span><span class="si">}</span><span class="s1">'</span>
@@ -369,6 +374,7 @@
             <span class="s1">'can_output'</span><span class="p">:</span> <span class="n">can_output</span><span class="p">,</span>
             <span class="s1">'can_update'</span><span class="p">:</span> <span class="n">can_update</span>
         <span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">settings</span> <span class="o">=</span> <span class="n">settings</span>
 
 <div class="viewcode-block" id="Model.can_load"><a class="viewcode-back" href="../../reference/models.html#msdss_models_api.models.Model.can_load">[docs]</a>    <span class="k">def</span> <span class="nf">can_load</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">"""</span>

@@ -47,7 +47,7 @@
   
   
   
-    <title>managers &#8212; 0.0.4</title>
+    <title>managers &#8212; 0.0.5</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/material.css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
@@ -90,11 +90,11 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex navheader">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="../index.html" title="0.0.4"
+        <a href="../index.html" title="0.0.5"
            class="md-header-nav__button md-logo">
           
               <img src="../_static/logo.svg" height="26"
-                   alt="0.0.4 logo">
+                   alt="0.0.5 logo">
           
         </a>
       </div>
@@ -177,7 +177,7 @@
   <nav class="md-tabs" data-md-component="tabs">
     <div class="md-tabs__inner md-grid">
       <ul class="md-tabs__list">
-          <li class="md-tabs__item"><a href="../index.html" class="md-tabs__link">0.0.4</a></li>
+          <li class="md-tabs__item"><a href="../index.html" class="md-tabs__link">0.0.5</a></li>
           <li class="md-tabs__item"><a href="index.html" class="md-tabs__link">API Reference</a></li>
       </ul>
     </div>
@@ -190,13 +190,13 @@
               <div class="md-sidebar__inner">
                 <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href="../index.html" title="0.0.4" class="md-nav__button md-logo">
+    <a href="../index.html" title="0.0.5" class="md-nav__button md-logo">
       
         <img src="../_static/logo.svg" alt=" logo" width="48" height="48">
       
     </a>
     <a href="../index.html"
-       title="0.0.4">msdss-models-api</a>
+       title="0.0.5">msdss-models-api</a>
   </label>
     <div class="md-nav__source">
       <a href="https://github.com/rrwen/msdss-models-api/" title="Go to repository" class="md-source" data-md-source="github">
@@ -299,13 +299,13 @@
         </li>
         <li class="md-nav__item"><a href="#get-status" class="md-nav__link">get_status</a>
         </li>
-        <li class="md-nav__item"><a href="#id5" class="md-nav__link">input</a>
+        <li class="md-nav__item"><a href="#id3" class="md-nav__link">input</a>
         </li>
-        <li class="md-nav__item"><a href="#id6" class="md-nav__link">output</a>
+        <li class="md-nav__item"><a href="#id4" class="md-nav__link">output</a>
         </li>
         <li class="md-nav__item"><a href="#start" class="md-nav__link">start</a>
         </li>
-        <li class="md-nav__item"><a href="#id7" class="md-nav__link">update</a>
+        <li class="md-nav__item"><a href="#id5" class="md-nav__link">update</a>
         </li></ul>
             </nav>
         </li>
@@ -319,9 +319,9 @@
         </li>
         <li class="md-nav__item"><a href="#modelsdbbackgroundmanager" class="md-nav__link">ModelsDBBackgroundManager</a><nav class="md-nav">
               <ul class="md-nav__list">
-        <li class="md-nav__item"><a href="#id8" class="md-nav__link">input_db</a>
+        <li class="md-nav__item"><a href="#id6" class="md-nav__link">input_db</a>
         </li>
-        <li class="md-nav__item"><a href="#id9" class="md-nav__link">update_db</a>
+        <li class="md-nav__item"><a href="#id7" class="md-nav__link">update_db</a>
         </li></ul>
             </nav>
         </li>
@@ -1382,7 +1382,7 @@ The handler for the models manager will be disabled (set to <code class="docutil
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">task</span></code> (str): the processing task of the model instance</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">status</span></code> (str): the processing status of the model instance</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">started_at</span></code> (:class:<a href="#id3"><span class="problematic" id="id4">`</span></a>datetime.datetime): when the process was started</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">started_at</span></code> (<a class="reference external" href="https://docs.python.org/3/library/datetime.html#datetime.datetime" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">datetime.datetime</span></code></a>): when the process was started</p></li>
 </ul>
 <p>If the model instance is not processing, it will return a dict of the status only <code class="docutils literal notranslate"><span class="pre">{'status':</span> <span class="pre">'IDLE'}</span></code>.</p>
 </p>
@@ -1429,8 +1429,8 @@ The handler for the models manager will be disabled (set to <code class="docutil
 </div>
 </dd></dl>
 </section>
-<section id="id5">
-<h3 id="id5">input<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
+<section id="id3">
+<h3 id="id3">input<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
 <dl class="py method">
 <dt class="sig sig-object py" id="msdss_models_api.managers.ModelsBackgroundManager.input">
 <span class="sig-prename descclassname"><span class="pre">ModelsBackgroundManager.</span></span><span class="sig-name descname"><span class="pre">input</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msdss_models_api/managers.html#ModelsBackgroundManager.input"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msdss_models_api.managers.ModelsBackgroundManager.input" title="Permalink to this definition">¶</a></dt>
@@ -1478,8 +1478,8 @@ The handler for the models manager will be disabled (set to <code class="docutil
 </div>
 </dd></dl>
 </section>
-<section id="id6">
-<h3 id="id6">output<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
+<section id="id4">
+<h3 id="id4">output<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
 <dl class="py method">
 <dt class="sig sig-object py" id="msdss_models_api.managers.ModelsBackgroundManager.output">
 <span class="sig-prename descclassname"><span class="pre">ModelsBackgroundManager.</span></span><span class="sig-name descname"><span class="pre">output</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msdss_models_api/managers.html#ModelsBackgroundManager.output"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msdss_models_api.managers.ModelsBackgroundManager.output" title="Permalink to this definition">¶</a></dt>
@@ -1585,8 +1585,8 @@ The handler for the models manager will be disabled (set to <code class="docutil
 </div>
 </dd></dl>
 </section>
-<section id="id7">
-<h3 id="id7">update<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
+<section id="id5">
+<h3 id="id5">update<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
 <dl class="py method">
 <dt class="sig sig-object py" id="msdss_models_api.managers.ModelsBackgroundManager.update">
 <span class="sig-prename descclassname"><span class="pre">ModelsBackgroundManager.</span></span><span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msdss_models_api/managers.html#ModelsBackgroundManager.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msdss_models_api.managers.ModelsBackgroundManager.update" title="Permalink to this definition">¶</a></dt>
@@ -1935,8 +1935,8 @@ The handler and data handler for the models manager will be disabled as model op
 </pre></div>
 </div>
 </dd></dl>
-<section id="id8">
-<h3 id="id8">input_db<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h3>
+<section id="id6">
+<h3 id="id6">input_db<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
 <dl class="py method">
 <dt class="sig sig-object py" id="msdss_models_api.managers.ModelsDBBackgroundManager.input_db">
 <span class="sig-prename descclassname"><span class="pre">ModelsDBBackgroundManager.</span></span><span class="sig-name descname"><span class="pre">input_db</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">where</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msdss_models_api/managers.html#ModelsDBBackgroundManager.input_db"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msdss_models_api.managers.ModelsDBBackgroundManager.input_db" title="Permalink to this definition">¶</a></dt>
@@ -1994,8 +1994,8 @@ The handler and data handler for the models manager will be disabled as model op
 </div>
 </dd></dl>
 </section>
-<section id="id9">
-<h3 id="id9">update_db<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h3>
+<section id="id7">
+<h3 id="id7">update_db<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
 <dl class="py method">
 <dt class="sig sig-object py" id="msdss_models_api.managers.ModelsDBBackgroundManager.update_db">
 <span class="sig-prename descclassname"><span class="pre">ModelsDBBackgroundManager.</span></span><span class="sig-name descname"><span class="pre">update_db</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">where</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msdss_models_api/managers.html#ModelsDBBackgroundManager.update_db"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msdss_models_api.managers.ModelsDBBackgroundManager.update_db" title="Permalink to this definition">¶</a></dt>

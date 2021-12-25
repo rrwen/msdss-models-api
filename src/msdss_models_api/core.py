@@ -214,7 +214,7 @@ class ModelsAPI(API):
         env=ModelsDotEnv(),
         api=FastAPI(
             title='MSDSS Models API',
-            version='0.0.4'
+            version='0.0.5'
         ),
         *args, **kwargs):
         super().__init__(api=api, *args, **kwargs)

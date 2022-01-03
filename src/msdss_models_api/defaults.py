@@ -11,6 +11,7 @@ DEFAULT_BROKER_URL = 'redis://localhost:6379/0'
 DEFAULT_BACKEND_URL = 'redis://localhost:6379/0'
 
 DEFAULT_METADATA_TABLE = 'model'
+DEFAULT_BASE_METADATA_TABLE = 'base_model'
 DEFAULT_NAME_COLUMN = 'name'
 DEFAULT_UPDATE_COLUMN = 'updated_at'
 DEFAULT_METADATA_COLUMNS = [
@@ -27,6 +28,13 @@ DEFAULT_METADATA_COLUMNS = [
     ('created_by', 'String'),
     ('created_at', 'DateTime'),
     ('updated_at', 'DateTime')
+]
+DEFAULT_BASE_METADATA_COLUMNS = [
+    ('model', 'String'),
+    ('description', 'String'),
+    ('input_description', 'String'),
+    ('output_description', 'String'),
+    ('update_description', 'String')
 ]
 
 DEFAULT_MODELS_ROUTE_SETTINGS = dict(

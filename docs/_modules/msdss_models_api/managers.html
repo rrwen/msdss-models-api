@@ -46,7 +46,7 @@
   
   
   
-    <title>msdss_models_api.managers &#8212; 0.0.5</title>
+    <title>msdss_models_api.managers &#8212; 0.0.7</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/material.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
@@ -87,11 +87,11 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex navheader">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="../../index.html" title="0.0.5"
+        <a href="../../index.html" title="0.0.7"
            class="md-header-nav__button md-logo">
           
               <img src="../../_static/logo.svg" height="26"
-                   alt="0.0.5 logo">
+                   alt="0.0.7 logo">
           
         </a>
       </div>
@@ -174,7 +174,7 @@
   <nav class="md-tabs" data-md-component="tabs">
     <div class="md-tabs__inner md-grid">
       <ul class="md-tabs__list">
-          <li class="md-tabs__item"><a href="../../index.html" class="md-tabs__link">0.0.5</a></li>
+          <li class="md-tabs__item"><a href="../../index.html" class="md-tabs__link">0.0.7</a></li>
           <li class="md-tabs__item"><a href="../index.html" class="md-tabs__link">Module code</a></li>
       </ul>
     </div>
@@ -187,13 +187,13 @@
               <div class="md-sidebar__inner">
                 <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href="../../index.html" title="0.0.5" class="md-nav__button md-logo">
+    <a href="../../index.html" title="0.0.7" class="md-nav__button md-logo">
       
         <img src="../../_static/logo.svg" alt=" logo" width="48" height="48">
       
     </a>
     <a href="../../index.html"
-       title="0.0.5">msdss-models-api</a>
+       title="0.0.7">msdss-models-api</a>
   </label>
     <div class="md-nav__source">
       <a href="https://github.com/rrwen/msdss-models-api/" title="Go to repository" class="md-source" data-md-source="github">
@@ -273,13 +273,14 @@
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">pickle</span>
 <span class="kn">import</span> <span class="nn">shutil</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
 
-<span class="kn">from</span> <span class="nn">msdss_base_database</span> <span class="kn">import</span> <span class="n">Database</span>
 <span class="kn">from</span> <span class="nn">msdss_data_api.managers</span> <span class="kn">import</span> <span class="n">DataManager</span><span class="p">,</span> <span class="n">MetadataManager</span>
 <span class="kn">from</span> <span class="nn">shlex</span> <span class="kn">import</span> <span class="n">split</span>
 
 <span class="kn">from</span> <span class="nn">.defaults</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">.handlers</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">.tools</span> <span class="kn">import</span> <span class="o">*</span>
 
 <div class="viewcode-block" id="ModelsManager"><a class="viewcode-back" href="../../reference/managers.html#msdss_models_api.managers.ModelsManager">[docs]</a><span class="k">class</span> <span class="nc">ModelsManager</span><span class="p">:</span>
     <span class="sd">"""</span>
@@ -957,7 +958,6 @@
 <span class="sd">        The handler for the models manager will be disabled (set to ``None``) as model operations will be handled with attribute ``models_handler`` instead.</span>
 <span class="sd">    handler : :class:`msdss_models_api.handlers.ModelsBackgroundHandler` or None</span>
 <span class="sd">        Handler object to manage background operations. If ``None``, a default handler will be created.</span>
-
 <span class="sd">    metadata_manager : :class:`msdss_models_api.managers.ModelsMetadataManager` or ``None``</span>
 <span class="sd">        A metadata manager object. If ``None``, metadata will not be managed based on model operations.</span>
 
@@ -2085,12 +2085,17 @@
 <span class="sd">        Name of the column identifying each entry.</span>
 <span class="sd">    updated_column : str</span>
 <span class="sd">        Name of the column for storing the last updated date/time.</span>
+<span class="sd">    base_table : str</span>
+<span class="sd">        Name of the table to store the metadata for base models.</span>
 <span class="sd">    *args, **kwargs</span>
 <span class="sd">        Additional arguments passed to :class:`msdss_data_api:msdss_data_api.managers.MetadataManager`</span>
 
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
-<span class="sd">    See attributes in :class:`msdss_data_api:msdss_data_api.managers.MetadataManager`.</span>
+<span class="sd">    base_table : str</span>
+<span class="sd">        Same as parameter ``base_table``.</span>
+<span class="sd">    </span>
+<span class="sd">        See other attributes in :class:`msdss_data_api:msdss_data_api.managers.MetadataManager`.</span>
 <span class="sd">    </span>
 <span class="sd">    Author</span>
 <span class="sd">    ------</span>
@@ -2100,57 +2105,71 @@
 <span class="sd">    -------</span>
 <span class="sd">    .. jupyter-execute::</span>
 
+<span class="sd">        import tempfile</span>
 <span class="sd">        from datetime import datetime</span>
 <span class="sd">        from msdss_base_database import Database</span>
 <span class="sd">        from msdss_data_api.managers import DataManager</span>
 <span class="sd">        from msdss_models_api.managers import *</span>
 <span class="sd">        from msdss_models_api.defaults import *</span>
 <span class="sd">        </span>
-<span class="sd">        # Setup database</span>
-<span class="sd">        db = Database()</span>
+<span class="sd">        with tempfile.TemporaryDirectory() as folder_path:</span>
 
-<span class="sd">        # Check if the metadata table exists and drop if it does</span>
-<span class="sd">        if db.has_table(DEFAULT_METADATA_TABLE):</span>
-<span class="sd">            db.drop_table(DEFAULT_METADATA_TABLE)</span>
-
-<span class="sd">        # Setup metadata manager</span>
-<span class="sd">        data_manager = DataManager(database=db)</span>
-<span class="sd">        mdm = ModelsMetadataManager(data_manager)</span>
-
-<span class="sd">        # Add metadata</span>
-<span class="sd">        metadata = [{</span>
-<span class="sd">            'title': 'Testing Data',</span>
-<span class="sd">            'description': 'Data used for testing',</span>
-<span class="sd">            'tags': 'test exp auto',</span>
-<span class="sd">            'source': 'Automatically generated from Python',</span>
-<span class="sd">            'created_by': 'msdss',</span>
-<span class="sd">            'created_at': datetime.now(),</span>
-<span class="sd">            'updated_at': datetime.now()</span>
-<span class="sd">        }]</span>
-<span class="sd">        mdm.create('test_model', metadata)</span>
-
-<span class="sd">        # Get metadata</span>
-<span class="sd">        metadata_get = mdm.get('test_model')</span>
+<span class="sd">            # Setup available models</span>
+<span class="sd">            models = [Model]</span>
+<span class="sd">            </span>
+<span class="sd">            # Create manager</span>
+<span class="sd">            models_manager = ModelsManager(models, folder=folder_path)</span>
 <span class="sd">        </span>
-<span class="sd">        # Search metadata</span>
-<span class="sd">        search_results = mdm.search(where=['title = "Testing Data"'])</span>
+<span class="sd">            # Setup database</span>
+<span class="sd">            db = Database()</span>
 
-<span class="sd">        # Update metadata</span>
-<span class="sd">        mdm.update('test_model', {'description': 'NEW DESCRIPTION'})</span>
+<span class="sd">            # Check if the metadata table exists and drop if it does</span>
+<span class="sd">            if db.has_table(DEFAULT_METADATA_TABLE):</span>
+<span class="sd">                db.drop_table(DEFAULT_METADATA_TABLE)</span>
 
-<span class="sd">        # Delete metadata</span>
-<span class="sd">        mdm.delete('test_model')</span>
+<span class="sd">            # Setup metadata manager</span>
+<span class="sd">            data_manager = DataManager(database=db)</span>
+<span class="sd">            mdm = ModelsMetadataManager(data_manager, models_manager)</span>
+
+<span class="sd">            # Add metadata</span>
+<span class="sd">            metadata = [{</span>
+<span class="sd">                'title': 'Test Model',</span>
+<span class="sd">                'description': 'model used for testing',</span>
+<span class="sd">                'tags': 'test exp auto',</span>
+<span class="sd">                'source': 'Automatically generated from Python',</span>
+<span class="sd">                'model': 'Model',</span>
+<span class="sd">                'created_by': 'msdss',</span>
+<span class="sd">                'created_at': datetime.now(),</span>
+<span class="sd">                'updated_at': datetime.now()</span>
+<span class="sd">            }]</span>
+<span class="sd">            mdm.create('test_model', metadata)</span>
+
+<span class="sd">            # Get metadata</span>
+<span class="sd">            metadata_get = mdm.get('test_model')</span>
+<span class="sd">            </span>
+<span class="sd">            # Search metadata</span>
+<span class="sd">            search_results = mdm.search(where=['title = "Test Model"'])</span>
+
+<span class="sd">            # Update metadata</span>
+<span class="sd">            mdm.update('test_model', {'description': 'NEW DESCRIPTION'})</span>
+
+<span class="sd">            # Delete metadata</span>
+<span class="sd">            mdm.delete('test_model')</span>
 <span class="sd">    """</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">data_manager</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">models_manager</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">table</span><span class="o">=</span><span class="n">DEFAULT_METADATA_TABLE</span><span class="p">,</span>
         <span class="n">columns</span><span class="o">=</span><span class="n">DEFAULT_METADATA_COLUMNS</span><span class="p">,</span>
         <span class="n">name_column</span><span class="o">=</span><span class="n">DEFAULT_NAME_COLUMN</span><span class="p">,</span>
         <span class="n">updated_column</span><span class="o">=</span><span class="n">DEFAULT_UPDATE_COLUMN</span><span class="p">,</span>
+        <span class="n">base_table</span><span class="o">=</span><span class="n">DEFAULT_BASE_METADATA_TABLE</span><span class="p">,</span>
+        <span class="n">base_columns</span><span class="o">=</span><span class="n">DEFAULT_BASE_METADATA_COLUMNS</span><span class="p">,</span>
         <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
     <span class="p">):</span>
         <span class="n">data_manager</span> <span class="o">=</span> <span class="n">data_manager</span> <span class="k">if</span> <span class="n">data_manager</span> <span class="k">else</span> <span class="n">DataManager</span><span class="p">()</span>
+        <span class="n">models_manager</span> <span class="o">=</span> <span class="n">models_manager</span> <span class="k">if</span> <span class="n">models_manager</span> <span class="k">else</span> <span class="n">ModelsManager</span><span class="p">()</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
             <span class="n">data_manager</span><span class="o">=</span><span class="n">data_manager</span><span class="p">,</span>
             <span class="n">table</span><span class="o">=</span><span class="n">table</span><span class="p">,</span>
@@ -2158,7 +2177,147 @@
             <span class="n">name_column</span><span class="o">=</span><span class="n">name_column</span><span class="p">,</span>
             <span class="n">updated_column</span><span class="o">=</span><span class="n">updated_column</span><span class="p">,</span>
             <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
-        <span class="p">)</span></div>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">base_table</span> <span class="o">=</span> <span class="n">base_table</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">base_columns</span> <span class="o">=</span> <span class="n">base_columns</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">models_manager</span> <span class="o">=</span> <span class="n">models_manager</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_manager</span><span class="o">.</span><span class="n">handler</span><span class="o">.</span><span class="n">permitted_tables</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_table</span><span class="p">]</span>
+
+<div class="viewcode-block" id="ModelsMetadataManager.load_base_models"><a class="viewcode-back" href="../../reference/managers.html#msdss_models_api.managers.ModelsMetadataManager.load_base_models">[docs]</a>    <span class="k">def</span> <span class="nf">load_base_models</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">"""</span>
+<span class="sd">        Load base model metadata into a table in the database.</span>
+
+<span class="sd">        If a table with the same name exists, it will be deleted and rebuilt.</span>
+
+<span class="sd">        Author</span>
+<span class="sd">        ------</span>
+<span class="sd">        Richard Wen &lt;rrwen.dev@gmail.com&gt;</span>
+<span class="sd">        </span>
+<span class="sd">        Example</span>
+<span class="sd">        -------</span>
+<span class="sd">        .. jupyter-execute::</span>
+
+<span class="sd">            import tempfile</span>
+<span class="sd">            from msdss_base_database import Database</span>
+<span class="sd">            from msdss_data_api.managers import DataManager</span>
+<span class="sd">            from msdss_models_api.managers import *</span>
+<span class="sd">            from msdss_models_api.defaults import *</span>
+<span class="sd">            from msdss_models_api.models import *</span>
+
+<span class="sd">            with tempfile.TemporaryDirectory() as folder_path:</span>
+
+<span class="sd">                # Setup available models</span>
+<span class="sd">                models = [Model]</span>
+<span class="sd">                </span>
+<span class="sd">                # Create manager</span>
+<span class="sd">                models_manager = ModelsManager(models, folder=folder_path)</span>
+<span class="sd">            </span>
+<span class="sd">                # Setup database</span>
+<span class="sd">                db = Database()</span>
+
+<span class="sd">                # Check if the metadata table exists and drop if it does</span>
+<span class="sd">                if db.has_table(DEFAULT_METADATA_TABLE):</span>
+<span class="sd">                    db.drop_table(DEFAULT_METADATA_TABLE)</span>
+
+<span class="sd">                # Setup metadata manager</span>
+<span class="sd">                data_manager = DataManager(database=db)</span>
+<span class="sd">                mdm = ModelsMetadataManager(data_manager, models_manager)</span>
+
+<span class="sd">                # Load base models</span>
+<span class="sd">                mdm.load_base_models()</span>
+<span class="sd">        """</span>
+
+        <span class="c1"># (ModelsMetadataManager_load_base_models_recreate) Delete table if exists and recreate</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_manager</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">has_table</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base_table</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data_manager</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base_table</span><span class="p">,</span> <span class="n">delete_all</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_manager</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">create_table</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base_table</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_columns</span><span class="p">)</span>
+
+        <span class="c1"># (ModelsMetadataManager_load_base_models_data) Create base model metadata using model docstrings</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">model</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">models_manager</span><span class="o">.</span><span class="n">models</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">with</span> <span class="n">warnings</span><span class="o">.</span><span class="n">catch_warnings</span><span class="p">():</span>
+                    <span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="s1">'ignore'</span><span class="p">)</span>
+                    <span class="n">doc</span> <span class="o">=</span> <span class="n">get_md_doc</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+                    <span class="n">input_doc</span> <span class="o">=</span> <span class="n">get_md_doc</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">input</span><span class="p">)</span> <span class="k">if</span> <span class="s1">'input'</span> <span class="ow">in</span> <span class="nb">dir</span><span class="p">(</span><span class="n">model</span><span class="p">)</span> <span class="k">else</span> <span class="s1">'Not Available'</span>
+                    <span class="n">output_doc</span> <span class="o">=</span> <span class="n">get_md_doc</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">output</span><span class="p">)</span> <span class="k">if</span> <span class="s1">'output'</span> <span class="ow">in</span> <span class="nb">dir</span><span class="p">(</span><span class="n">model</span><span class="p">)</span> <span class="k">else</span> <span class="s1">'Not Available'</span>
+                    <span class="n">update_doc</span> <span class="o">=</span> <span class="n">get_md_doc</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">update</span><span class="p">)</span> <span class="k">if</span> <span class="s1">'update'</span> <span class="ow">in</span> <span class="nb">dir</span><span class="p">(</span><span class="n">model</span><span class="p">)</span> <span class="k">else</span> <span class="s1">'Not Available'</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="n">doc</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="vm">__doc__</span>
+                <span class="n">input_doc</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">input</span><span class="o">.</span><span class="vm">__doc__</span> <span class="k">if</span> <span class="s1">'input'</span> <span class="ow">in</span> <span class="nb">dir</span><span class="p">(</span><span class="n">model</span><span class="p">)</span> <span class="k">else</span> <span class="s1">'Not Available'</span>
+                <span class="n">output_doc</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="vm">__doc__</span> <span class="k">if</span> <span class="s1">'output'</span> <span class="ow">in</span> <span class="nb">dir</span><span class="p">(</span><span class="n">model</span><span class="p">)</span> <span class="k">else</span> <span class="s1">'Not Available'</span>
+                <span class="n">update_doc</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">update</span><span class="o">.</span><span class="vm">__doc__</span> <span class="k">if</span> <span class="s1">'update'</span> <span class="ow">in</span> <span class="nb">dir</span><span class="p">(</span><span class="n">model</span><span class="p">)</span> <span class="k">else</span> <span class="s1">'Not Available'</span>
+            <span class="n">model_data</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s1">'model'</span><span class="p">:</span> <span class="n">model_name</span><span class="p">,</span>
+                <span class="s1">'description'</span><span class="p">:</span> <span class="n">doc</span><span class="p">,</span>
+                <span class="s1">'input_description'</span><span class="p">:</span> <span class="n">input_doc</span><span class="p">,</span>
+                <span class="s1">'output_description'</span><span class="p">:</span> <span class="n">output_doc</span><span class="p">,</span>
+                <span class="s1">'update_description'</span><span class="p">:</span> <span class="n">update_doc</span>
+            <span class="p">}</span>
+            <span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">model_data</span><span class="p">)</span>
+
+        <span class="c1"># (ModelsMetadataManager_load_base_models_insert) Add base model metadata to database</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_manager</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base_table</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ModelsMetadataManager.search_base_models"><a class="viewcode-back" href="../../reference/managers.html#msdss_models_api.managers.ModelsMetadataManager.search_base_models">[docs]</a>    <span class="k">def</span> <span class="nf">search_base_models</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">"""</span>
+<span class="sd">        Search base model metadata.</span>
+
+<span class="sd">        See :meth:`msdss_data_api.managers.DataManager.get`.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        *args, **kwargs</span>
+<span class="sd">            Additional arguments passed to :meth:`msdss_data_api.managers.DataManager.get` except for parameter ``table``.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        list(dict)</span>
+<span class="sd">            A dict of lists where each key is the column name and each list contains the values for columns in the order of the rows of the table.</span>
+<span class="sd">        </span>
+<span class="sd">        Author</span>
+<span class="sd">        ------</span>
+<span class="sd">        Richard Wen &lt;rrwen.dev@gmail.com&gt;</span>
+
+<span class="sd">        Example</span>
+<span class="sd">        -------</span>
+<span class="sd">        .. jupyter-execute::</span>
+
+<span class="sd">            import tempfile</span>
+<span class="sd">            from msdss_base_database import Database</span>
+<span class="sd">            from msdss_data_api.managers import DataManager</span>
+<span class="sd">            from msdss_models_api.managers import *</span>
+<span class="sd">            from msdss_models_api.defaults import *</span>
+<span class="sd">            from msdss_models_api.models import *</span>
+
+<span class="sd">            with tempfile.TemporaryDirectory() as folder_path:</span>
+
+<span class="sd">                # Setup available models</span>
+<span class="sd">                models = [Model]</span>
+<span class="sd">                </span>
+<span class="sd">                # Create manager</span>
+<span class="sd">                models_manager = ModelsManager(models, folder=folder_path)</span>
+<span class="sd">            </span>
+<span class="sd">                # Setup database</span>
+<span class="sd">                db = Database()</span>
+
+<span class="sd">                # Check if the metadata table exists and drop if it does</span>
+<span class="sd">                if db.has_table(DEFAULT_METADATA_TABLE):</span>
+<span class="sd">                    db.drop_table(DEFAULT_METADATA_TABLE)</span>
+
+<span class="sd">                # Setup metadata manager</span>
+<span class="sd">                data_manager = DataManager(database=db)</span>
+<span class="sd">                mdm = ModelsMetadataManager(data_manager, models_manager)</span>
+
+<span class="sd">                # Load base models</span>
+<span class="sd">                mdm.load_base_models()</span>
+
+<span class="sd">                # Search base models</span>
+<span class="sd">                out = mdm.search_base_models()</span>
+<span class="sd">                print(out)</span>
+<span class="sd">        """</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_manager</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base_table</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span></div></div>
 </pre></div>
 
           </article>
@@ -2179,7 +2338,7 @@
       <div class="md-footer-meta__inner md-grid">
         <div class="md-footer-copyright">
           <div class="md-footer-copyright__highlight">
-              &#169; Copyright 2021, Richard Wen.
+              &#169; Copyright 2022, Richard Wen.
               
           </div>
             Created using

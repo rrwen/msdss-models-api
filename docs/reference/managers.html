@@ -47,7 +47,7 @@
   
   
   
-    <title>managers &#8212; 0.0.6</title>
+    <title>managers &#8212; 0.0.7</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/material.css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
@@ -90,11 +90,11 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex navheader">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="../index.html" title="0.0.6"
+        <a href="../index.html" title="0.0.7"
            class="md-header-nav__button md-logo">
           
               <img src="../_static/logo.svg" height="26"
-                   alt="0.0.6 logo">
+                   alt="0.0.7 logo">
           
         </a>
       </div>
@@ -177,7 +177,7 @@
   <nav class="md-tabs" data-md-component="tabs">
     <div class="md-tabs__inner md-grid">
       <ul class="md-tabs__list">
-          <li class="md-tabs__item"><a href="../index.html" class="md-tabs__link">0.0.6</a></li>
+          <li class="md-tabs__item"><a href="../index.html" class="md-tabs__link">0.0.7</a></li>
           <li class="md-tabs__item"><a href="index.html" class="md-tabs__link">API Reference</a></li>
       </ul>
     </div>
@@ -190,13 +190,13 @@
               <div class="md-sidebar__inner">
                 <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href="../index.html" title="0.0.6" class="md-nav__button md-logo">
+    <a href="../index.html" title="0.0.7" class="md-nav__button md-logo">
       
         <img src="../_static/logo.svg" alt=" logo" width="48" height="48">
       
     </a>
     <a href="../index.html"
-       title="0.0.6">msdss-models-api</a>
+       title="0.0.7">msdss-models-api</a>
   </label>
     <div class="md-nav__source">
       <a href="https://github.com/rrwen/msdss-models-api/" title="Go to repository" class="md-source" data-md-source="github">
@@ -326,6 +326,10 @@
             </nav>
         </li>
         <li class="md-nav__item"><a href="#modelsmetadatamanager" class="md-nav__link">ModelsMetadataManager</a>
+        </li>
+        <li class="md-nav__item"><a href="#load-base-models" class="md-nav__link">load_base_models</a>
+        </li>
+        <li class="md-nav__item"><a href="#search-base-models" class="md-nav__link">search_base_models</a>
         </li></ul>
             </nav>
         </li>
@@ -1656,7 +1660,7 @@ The handler for the models manager will be disabled (set to <code class="docutil
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>models</strong> (list(<a class="reference internal" href="models.html#msdss_models_api.models.Model" title="msdss_models_api.models.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">msdss_models_api.models.Model</span></code></a>)) – List of available <code class="docutils literal notranslate"><span class="pre">Model</span></code> objects to use for creating and managing model instances.
 Ensure that the class names are unique, otherwise the last object takes priority.</p></li>
-<li><p><strong>data_manager</strong> (<a class="reference external" href="https://rrwen.github.io/msdss-data-api/reference/managers.html#msdss_data_api.managers.DataManager" title="(in msdss_data_api v0.2.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">msdss_data_api.managers.DataManager</span></code></a> or None) – A data manager object for managing data in and out of a database. If <code class="docutils literal notranslate"><span class="pre">None</span></code>, a default data manager will be used.</p></li>
+<li><p><strong>data_manager</strong> (<a class="reference external" href="https://rrwen.github.io/msdss-data-api/reference/managers.html#msdss_data_api.managers.DataManager" title="(in msdss_data_api v0.2.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">msdss_data_api.managers.DataManager</span></code></a> or None) – A data manager object for managing data in and out of a database. If <code class="docutils literal notranslate"><span class="pre">None</span></code>, a default data manager will be used.</p></li>
 <li><p><strong>*args</strong> – Additional arguments for <code class="xref py py-class docutils literal notranslate"><span class="pre">msdss_models_api.models.ModelsManager</span></code></p></li>
 <li><p><strong>**kwargs</strong> – Additional arguments for <code class="xref py py-class docutils literal notranslate"><span class="pre">msdss_models_api.models.ModelsManager</span></code></p></li>
 </ul>
@@ -1723,10 +1727,10 @@ Ensure that the class names are unique, otherwise the last object takes priority
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Unique name of the model instance. The instance is stored in <code class="docutils literal notranslate"><span class="pre">.instances[name]</span></code>.</p></li>
-<li><p><strong>dataset</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Name of the table from the database. See parameter <code class="docutils literal notranslate"><span class="pre">dataset</span></code> <a class="reference external" href="https://rrwen.github.io/msdss-data-api/reference/managers.html#msdss_data_api.managers.DataManager.get" title="(in msdss_data_api v0.2.6)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">msdss_data_api.managers.DataManager.get()</span></code></a>.</p></li>
+<li><p><strong>dataset</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Name of the table from the database. See parameter <code class="docutils literal notranslate"><span class="pre">dataset</span></code> <a class="reference external" href="https://rrwen.github.io/msdss-data-api/reference/managers.html#msdss_data_api.managers.DataManager.get" title="(in msdss_data_api v0.2.9)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">msdss_data_api.managers.DataManager.get()</span></code></a>.</p></li>
 <li><p><strong>parameters</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a>) – Keyword arguments passed to the <a class="reference internal" href="models.html#msdss_models_api.models.Model.input" title="msdss_models_api.models.Model.input"><code class="xref py py-meth docutils literal notranslate"><span class="pre">msdss_models_api.models.Model.input()</span></code></a>.</p></li>
-<li><p><strong>*args</strong> – Additional arguments passed to <a class="reference external" href="https://rrwen.github.io/msdss-data-api/reference/managers.html#msdss_data_api.managers.DataManager.get" title="(in msdss_data_api v0.2.6)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">msdss_data_api.managers.DataManager.get()</span></code></a>.</p></li>
-<li><p><strong>**kwargs</strong> – Additional arguments passed to <a class="reference external" href="https://rrwen.github.io/msdss-data-api/reference/managers.html#msdss_data_api.managers.DataManager.get" title="(in msdss_data_api v0.2.6)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">msdss_data_api.managers.DataManager.get()</span></code></a>.</p></li>
+<li><p><strong>*args</strong> – Additional arguments passed to <a class="reference external" href="https://rrwen.github.io/msdss-data-api/reference/managers.html#msdss_data_api.managers.DataManager.get" title="(in msdss_data_api v0.2.9)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">msdss_data_api.managers.DataManager.get()</span></code></a>.</p></li>
+<li><p><strong>**kwargs</strong> – Additional arguments passed to <a class="reference external" href="https://rrwen.github.io/msdss-data-api/reference/managers.html#msdss_data_api.managers.DataManager.get" title="(in msdss_data_api v0.2.9)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">msdss_data_api.managers.DataManager.get()</span></code></a>.</p></li>
 </ul>
 </dd>
 </dl>
@@ -1784,10 +1788,10 @@ Ensure that the class names are unique, otherwise the last object takes priority
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Unique name of the model instance. The instance is stored in <code class="docutils literal notranslate"><span class="pre">.instances[name]</span></code>.</p></li>
-<li><p><strong>dataset</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Name of the table from the database. See parameter <code class="docutils literal notranslate"><span class="pre">dataset</span></code> <a class="reference external" href="https://rrwen.github.io/msdss-data-api/reference/managers.html#msdss_data_api.managers.DataManager.get" title="(in msdss_data_api v0.2.6)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">msdss_data_api.managers.DataManager.get()</span></code></a>.</p></li>
+<li><p><strong>dataset</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Name of the table from the database. See parameter <code class="docutils literal notranslate"><span class="pre">dataset</span></code> <a class="reference external" href="https://rrwen.github.io/msdss-data-api/reference/managers.html#msdss_data_api.managers.DataManager.get" title="(in msdss_data_api v0.2.9)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">msdss_data_api.managers.DataManager.get()</span></code></a>.</p></li>
 <li><p><strong>parameters</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a>) – Keyword arguments passed to the <a class="reference internal" href="models.html#msdss_models_api.models.Model.update" title="msdss_models_api.models.Model.update"><code class="xref py py-meth docutils literal notranslate"><span class="pre">msdss_models_api.models.Model.update()</span></code></a>.</p></li>
-<li><p><strong>*args</strong> – Additional arguments passed to <a class="reference external" href="https://rrwen.github.io/msdss-data-api/reference/managers.html#msdss_data_api.managers.DataManager.get" title="(in msdss_data_api v0.2.6)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">msdss_data_api.managers.DataManager.get()</span></code></a>.</p></li>
-<li><p><strong>**kwargs</strong> – Additional arguments passed to <a class="reference external" href="https://rrwen.github.io/msdss-data-api/reference/managers.html#msdss_data_api.managers.DataManager.get" title="(in msdss_data_api v0.2.6)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">msdss_data_api.managers.DataManager.get()</span></code></a>.</p></li>
+<li><p><strong>*args</strong> – Additional arguments passed to <a class="reference external" href="https://rrwen.github.io/msdss-data-api/reference/managers.html#msdss_data_api.managers.DataManager.get" title="(in msdss_data_api v0.2.9)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">msdss_data_api.managers.DataManager.get()</span></code></a>.</p></li>
+<li><p><strong>**kwargs</strong> – Additional arguments passed to <a class="reference external" href="https://rrwen.github.io/msdss-data-api/reference/managers.html#msdss_data_api.managers.DataManager.get" title="(in msdss_data_api v0.2.9)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">msdss_data_api.managers.DataManager.get()</span></code></a>.</p></li>
 </ul>
 </dd>
 </dl>
@@ -1945,11 +1949,11 @@ The handler and data handler for the models manager will be disabled as model op
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Unique name of the model instance. The instance is stored in <code class="docutils literal notranslate"><span class="pre">.instances[name]</span></code>.</p></li>
-<li><p><strong>dataset</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Name of the table from the database. See parameter <code class="docutils literal notranslate"><span class="pre">dataset</span></code> <a class="reference external" href="https://rrwen.github.io/msdss-data-api/reference/managers.html#msdss_data_api.managers.DataManager.get" title="(in msdss_data_api v0.2.6)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">msdss_data_api.managers.DataManager.get()</span></code></a>.</p></li>
+<li><p><strong>dataset</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Name of the table from the database. See parameter <code class="docutils literal notranslate"><span class="pre">dataset</span></code> <a class="reference external" href="https://rrwen.github.io/msdss-data-api/reference/managers.html#msdss_data_api.managers.DataManager.get" title="(in msdss_data_api v0.2.9)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">msdss_data_api.managers.DataManager.get()</span></code></a>.</p></li>
 <li><p><strong>parameters</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a>) – Keyword arguments passed to the <a class="reference internal" href="models.html#msdss_models_api.models.Model.input" title="msdss_models_api.models.Model.input"><code class="xref py py-meth docutils literal notranslate"><span class="pre">msdss_models_api.models.Model.input()</span></code></a>.</p></li>
-<li><p><strong>where</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em>(</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>)</em>) – See parameter <code class="docutils literal notranslate"><span class="pre">where</span></code> in <a class="reference external" href="https://rrwen.github.io/msdss-data-api/reference/managers.html#msdss_data_api.managers.DataManager.get" title="(in msdss_data_api v0.2.6)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">msdss_data_api.managers.DataManager.get()</span></code></a>.</p></li>
-<li><p><strong>*args</strong> – Additional arguments passed to <a class="reference external" href="https://rrwen.github.io/msdss-data-api/reference/managers.html#msdss_data_api.managers.DataManager.get" title="(in msdss_data_api v0.2.6)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">msdss_data_api.managers.DataManager.get()</span></code></a>.</p></li>
-<li><p><strong>**kwargs</strong> – Additional arguments passed to <a class="reference external" href="https://rrwen.github.io/msdss-data-api/reference/managers.html#msdss_data_api.managers.DataManager.get" title="(in msdss_data_api v0.2.6)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">msdss_data_api.managers.DataManager.get()</span></code></a>.</p></li>
+<li><p><strong>where</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em>(</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>)</em>) – See parameter <code class="docutils literal notranslate"><span class="pre">where</span></code> in <a class="reference external" href="https://rrwen.github.io/msdss-data-api/reference/managers.html#msdss_data_api.managers.DataManager.get" title="(in msdss_data_api v0.2.9)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">msdss_data_api.managers.DataManager.get()</span></code></a>.</p></li>
+<li><p><strong>*args</strong> – Additional arguments passed to <a class="reference external" href="https://rrwen.github.io/msdss-data-api/reference/managers.html#msdss_data_api.managers.DataManager.get" title="(in msdss_data_api v0.2.9)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">msdss_data_api.managers.DataManager.get()</span></code></a>.</p></li>
+<li><p><strong>**kwargs</strong> – Additional arguments passed to <a class="reference external" href="https://rrwen.github.io/msdss-data-api/reference/managers.html#msdss_data_api.managers.DataManager.get" title="(in msdss_data_api v0.2.9)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">msdss_data_api.managers.DataManager.get()</span></code></a>.</p></li>
 </ul>
 </dd>
 </dl>
@@ -2005,11 +2009,11 @@ The handler and data handler for the models manager will be disabled as model op
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – See parameter <code class="docutils literal notranslate"><span class="pre">name</span></code> in <a class="reference internal" href="#msdss_models_api.managers.ModelsManager.update" title="msdss_models_api.managers.ModelsManager.update"><code class="xref py py-meth docutils literal notranslate"><span class="pre">msdss_models_api.managers.ModelsManager.update()</span></code></a>.</p></li>
-<li><p><strong>dataset</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Name of the table from the database. See parameter <code class="docutils literal notranslate"><span class="pre">dataset</span></code> <a class="reference external" href="https://rrwen.github.io/msdss-data-api/reference/managers.html#msdss_data_api.managers.DataManager.get" title="(in msdss_data_api v0.2.6)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">msdss_data_api.managers.DataManager.get()</span></code></a>.</p></li>
+<li><p><strong>dataset</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Name of the table from the database. See parameter <code class="docutils literal notranslate"><span class="pre">dataset</span></code> <a class="reference external" href="https://rrwen.github.io/msdss-data-api/reference/managers.html#msdss_data_api.managers.DataManager.get" title="(in msdss_data_api v0.2.9)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">msdss_data_api.managers.DataManager.get()</span></code></a>.</p></li>
 <li><p><strong>parameters</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a>) – Keyword arguments passed to the <a class="reference internal" href="models.html#msdss_models_api.models.Model.update" title="msdss_models_api.models.Model.update"><code class="xref py py-meth docutils literal notranslate"><span class="pre">msdss_models_api.models.Model.update()</span></code></a>.</p></li>
-<li><p><strong>where</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em>(</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>)</em>) – See parameter <code class="docutils literal notranslate"><span class="pre">where</span></code> in <a class="reference external" href="https://rrwen.github.io/msdss-data-api/reference/managers.html#msdss_data_api.managers.DataManager.get" title="(in msdss_data_api v0.2.6)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">msdss_data_api.managers.DataManager.get()</span></code></a>.</p></li>
-<li><p><strong>*args</strong> – Additional arguments passed to <a class="reference external" href="https://rrwen.github.io/msdss-data-api/reference/managers.html#msdss_data_api.managers.DataManager.get" title="(in msdss_data_api v0.2.6)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">msdss_data_api.managers.DataManager.get()</span></code></a>.</p></li>
-<li><p><strong>**kwargs</strong> – Additional arguments passed to <a class="reference external" href="https://rrwen.github.io/msdss-data-api/reference/managers.html#msdss_data_api.managers.DataManager.get" title="(in msdss_data_api v0.2.6)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">msdss_data_api.managers.DataManager.get()</span></code></a>.</p></li>
+<li><p><strong>where</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em>(</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>)</em>) – See parameter <code class="docutils literal notranslate"><span class="pre">where</span></code> in <a class="reference external" href="https://rrwen.github.io/msdss-data-api/reference/managers.html#msdss_data_api.managers.DataManager.get" title="(in msdss_data_api v0.2.9)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">msdss_data_api.managers.DataManager.get()</span></code></a>.</p></li>
+<li><p><strong>*args</strong> – Additional arguments passed to <a class="reference external" href="https://rrwen.github.io/msdss-data-api/reference/managers.html#msdss_data_api.managers.DataManager.get" title="(in msdss_data_api v0.2.9)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">msdss_data_api.managers.DataManager.get()</span></code></a>.</p></li>
+<li><p><strong>**kwargs</strong> – Additional arguments passed to <a class="reference external" href="https://rrwen.github.io/msdss-data-api/reference/managers.html#msdss_data_api.managers.DataManager.get" title="(in msdss_data_api v0.2.9)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">msdss_data_api.managers.DataManager.get()</span></code></a>.</p></li>
 </ul>
 </dd>
 </dl>
@@ -2067,15 +2071,15 @@ The handler and data handler for the models manager will be disabled as model op
 <h2 id="modelsmetadatamanager">ModelsMetadataManager<a class="headerlink" href="#modelsmetadatamanager" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="msdss_models_api.managers.ModelsMetadataManager">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">msdss_models_api.managers.</span></span><span class="sig-name descname"><span class="pre">ModelsMetadataManager</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_manager</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">table</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'model'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">columns</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[{'name':</span> <span class="pre">'id',</span> <span class="pre">'type_':</span> <span class="pre">'Integer',</span> <span class="pre">'primary_key':</span> <span class="pre">True},</span> <span class="pre">{'name':</span> <span class="pre">'name',</span> <span class="pre">'type_':</span> <span class="pre">'String',</span> <span class="pre">'unique':</span> <span class="pre">True},</span> <span class="pre">('title',</span> <span class="pre">'String'),</span> <span class="pre">('description',</span> <span class="pre">'String'),</span> <span class="pre">('tags',</span> <span class="pre">'String'),</span> <span class="pre">('source',</span> <span class="pre">'String'),</span> <span class="pre">('model',</span> <span class="pre">'String'),</span> <span class="pre">('can_input',</span> <span class="pre">'Boolean'),</span> <span class="pre">('can_output',</span> <span class="pre">'Boolean'),</span> <span class="pre">('can_update',</span> <span class="pre">'Boolean'),</span> <span class="pre">('created_by',</span> <span class="pre">'String'),</span> <span class="pre">('created_at',</span> <span class="pre">'DateTime'),</span> <span class="pre">('updated_at',</span> <span class="pre">'DateTime')]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name_column</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'name'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">updated_column</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'updated_at'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msdss_models_api/managers.html#ModelsMetadataManager"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msdss_models_api.managers.ModelsMetadataManager" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">msdss_models_api.managers.</span></span><span class="sig-name descname"><span class="pre">ModelsMetadataManager</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_manager</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">models_manager</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">table</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'model'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">columns</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[{'name':</span> <span class="pre">'id',</span> <span class="pre">'type_':</span> <span class="pre">'Integer',</span> <span class="pre">'primary_key':</span> <span class="pre">True},</span> <span class="pre">{'name':</span> <span class="pre">'name',</span> <span class="pre">'type_':</span> <span class="pre">'String',</span> <span class="pre">'unique':</span> <span class="pre">True},</span> <span class="pre">('title',</span> <span class="pre">'String'),</span> <span class="pre">('description',</span> <span class="pre">'String'),</span> <span class="pre">('tags',</span> <span class="pre">'String'),</span> <span class="pre">('source',</span> <span class="pre">'String'),</span> <span class="pre">('model',</span> <span class="pre">'String'),</span> <span class="pre">('can_input',</span> <span class="pre">'Boolean'),</span> <span class="pre">('can_output',</span> <span class="pre">'Boolean'),</span> <span class="pre">('can_update',</span> <span class="pre">'Boolean'),</span> <span class="pre">('created_by',</span> <span class="pre">'String'),</span> <span class="pre">('created_at',</span> <span class="pre">'DateTime'),</span> <span class="pre">('updated_at',</span> <span class="pre">'DateTime')]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name_column</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'name'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">updated_column</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'updated_at'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base_table</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'base_model'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base_columns</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[('model',</span> <span class="pre">'String'),</span> <span class="pre">('description',</span> <span class="pre">'String'),</span> <span class="pre">('input_description',</span> <span class="pre">'String'),</span> <span class="pre">('output_description',</span> <span class="pre">'String'),</span> <span class="pre">('update_description',</span> <span class="pre">'String')]</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msdss_models_api/managers.html#ModelsMetadataManager"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msdss_models_api.managers.ModelsMetadataManager" title="Permalink to this definition">¶</a></dt>
 <dd><p>Class to manage models metadata in a database.</p>
 <ul class="simple">
-<li><p>Inherits from <a class="reference external" href="https://rrwen.github.io/msdss-data-api/reference/managers.html#msdss_data_api.managers.MetadataManager" title="(in msdss_data_api v0.2.6)"><code class="docutils literal notranslate"><span class="pre">msdss_data_api.managers.MetadataManager</span></code></a></p></li>
+<li><p>Inherits from <a class="reference external" href="https://rrwen.github.io/msdss-data-api/reference/managers.html#msdss_data_api.managers.MetadataManager" title="(in msdss_data_api v0.2.9)"><code class="docutils literal notranslate"><span class="pre">msdss_data_api.managers.MetadataManager</span></code></a></p></li>
 </ul>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>data_manager</strong> (<a class="reference external" href="https://rrwen.github.io/msdss-data-api/reference/managers.html#msdss_data_api.managers.DataManager" title="(in msdss_data_api v0.2.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">msdss_data_api.managers.DataManager</span></code></a> or None) – Data manager object for managing data in a database. If <code class="docutils literal notranslate"><span class="pre">None</span></code>, a default manager will be used.
+<li><p><strong>data_manager</strong> (<a class="reference external" href="https://rrwen.github.io/msdss-data-api/reference/managers.html#msdss_data_api.managers.DataManager" title="(in msdss_data_api v0.2.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">msdss_data_api.managers.DataManager</span></code></a> or None) – Data manager object for managing data in a database. If <code class="docutils literal notranslate"><span class="pre">None</span></code>, a default manager will be used.
 The restricted tables for the handler will be set to <code class="docutils literal notranslate"><span class="pre">[]</span></code> while the only permitted table will be the table name of the parameter <code class="docutils literal notranslate"><span class="pre">table</span></code>.</p></li>
 <li><p><strong>table</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – The name of the table to store the metadata.</p></li>
 <li><p><strong>columns</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em>(</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a><em>) or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em>(</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em>)</em>) – <p>List of dict (kwargs) or lists (positional args) that are passed to sqlalchemy.schema.Column. See parameter <code class="docutils literal notranslate"><span class="pre">columns</span></code> in <code class="xref py py-meth docutils literal notranslate"><span class="pre">msdss_base_database:msdss_base_database.core.create_table()</span></code>.
@@ -2102,64 +2106,199 @@ This defines the table to store the metadata, where the default is:</p>
 </p></li>
 <li><p><strong>name_column</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Name of the column identifying each entry.</p></li>
 <li><p><strong>updated_column</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Name of the column for storing the last updated date/time.</p></li>
-<li><p><strong>*args</strong> – Additional arguments passed to <a class="reference external" href="https://rrwen.github.io/msdss-data-api/reference/managers.html#msdss_data_api.managers.MetadataManager" title="(in msdss_data_api v0.2.6)"><code class="docutils literal notranslate"><span class="pre">msdss_data_api.managers.MetadataManager</span></code></a></p></li>
-<li><p><strong>**kwargs</strong> – Additional arguments passed to <a class="reference external" href="https://rrwen.github.io/msdss-data-api/reference/managers.html#msdss_data_api.managers.MetadataManager" title="(in msdss_data_api v0.2.6)"><code class="docutils literal notranslate"><span class="pre">msdss_data_api.managers.MetadataManager</span></code></a></p></li>
+<li><p><strong>base_table</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Name of the table to store the metadata for base models.</p></li>
+<li><p><strong>*args</strong> – Additional arguments passed to <a class="reference external" href="https://rrwen.github.io/msdss-data-api/reference/managers.html#msdss_data_api.managers.MetadataManager" title="(in msdss_data_api v0.2.9)"><code class="docutils literal notranslate"><span class="pre">msdss_data_api.managers.MetadataManager</span></code></a></p></li>
+<li><p><strong>**kwargs</strong> – Additional arguments passed to <a class="reference external" href="https://rrwen.github.io/msdss-data-api/reference/managers.html#msdss_data_api.managers.MetadataManager" title="(in msdss_data_api v0.2.9)"><code class="docutils literal notranslate"><span class="pre">msdss_data_api.managers.MetadataManager</span></code></a></p></li>
 </ul>
 </dd>
 </dl>
 <dl class="py attribute">
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">See</span> <span class="pre">attributes</span> <span class="pre">in</span> <span class="pre">:class:`msdss_data_api:msdss_data_api.managers.MetadataManager`.</span></span></dt>
-<dd></dd></dl>
+<dt class="sig sig-object py" id="msdss_models_api.managers.ModelsMetadataManager.base_table">
+<span class="sig-name descname"><span class="pre">base_table</span></span><a class="headerlink" href="#msdss_models_api.managers.ModelsMetadataManager.base_table" title="Permalink to this definition">¶</a></dt>
+<dd><p>Same as parameter <code class="docutils literal notranslate"><span class="pre">base_table</span></code>.</p>
+<p>See other attributes in <a class="reference external" href="https://rrwen.github.io/msdss-data-api/reference/managers.html#msdss_data_api.managers.MetadataManager" title="(in msdss_data_api v0.2.9)"><code class="docutils literal notranslate"><span class="pre">msdss_data_api.managers.MetadataManager</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
 <p class="rubric">Author</p>
 <p>Richard Wen &lt;<a class="reference external" href="mailto:rrwen.dev%40gmail.com">rrwen<span>.</span>dev<span>@</span>gmail<span>.</span>com</a>&gt;</p>
 <p class="rubric">Example</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">tempfile</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
 <span class="kn">from</span> <span class="nn">msdss_base_database</span> <span class="kn">import</span> <span class="n">Database</span>
 <span class="kn">from</span> <span class="nn">msdss_data_api.managers</span> <span class="kn">import</span> <span class="n">DataManager</span>
 <span class="kn">from</span> <span class="nn">msdss_models_api.managers</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">msdss_models_api.defaults</span> <span class="kn">import</span> <span class="o">*</span>
 
-<span class="c1"># Setup database</span>
-<span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
+<span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryDirectory</span><span class="p">()</span> <span class="k">as</span> <span class="n">folder_path</span><span class="p">:</span>
 
-<span class="c1"># Check if the metadata table exists and drop if it does</span>
-<span class="k">if</span> <span class="n">db</span><span class="o">.</span><span class="n">has_table</span><span class="p">(</span><span class="n">DEFAULT_METADATA_TABLE</span><span class="p">):</span>
-    <span class="n">db</span><span class="o">.</span><span class="n">drop_table</span><span class="p">(</span><span class="n">DEFAULT_METADATA_TABLE</span><span class="p">)</span>
+    <span class="c1"># Setup available models</span>
+    <span class="n">models</span> <span class="o">=</span> <span class="p">[</span><span class="n">Model</span><span class="p">]</span>
 
-<span class="c1"># Setup metadata manager</span>
-<span class="n">data_manager</span> <span class="o">=</span> <span class="n">DataManager</span><span class="p">(</span><span class="n">database</span><span class="o">=</span><span class="n">db</span><span class="p">)</span>
-<span class="n">mdm</span> <span class="o">=</span> <span class="n">ModelsMetadataManager</span><span class="p">(</span><span class="n">data_manager</span><span class="p">)</span>
+    <span class="c1"># Create manager</span>
+    <span class="n">models_manager</span> <span class="o">=</span> <span class="n">ModelsManager</span><span class="p">(</span><span class="n">models</span><span class="p">,</span> <span class="n">folder</span><span class="o">=</span><span class="n">folder_path</span><span class="p">)</span>
 
-<span class="c1"># Add metadata</span>
-<span class="n">metadata</span> <span class="o">=</span> <span class="p">[{</span>
-    <span class="s1">'title'</span><span class="p">:</span> <span class="s1">'Testing Data'</span><span class="p">,</span>
-    <span class="s1">'description'</span><span class="p">:</span> <span class="s1">'Data used for testing'</span><span class="p">,</span>
-    <span class="s1">'tags'</span><span class="p">:</span> <span class="s1">'test exp auto'</span><span class="p">,</span>
-    <span class="s1">'source'</span><span class="p">:</span> <span class="s1">'Automatically generated from Python'</span><span class="p">,</span>
-    <span class="s1">'created_by'</span><span class="p">:</span> <span class="s1">'msdss'</span><span class="p">,</span>
-    <span class="s1">'created_at'</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(),</span>
-    <span class="s1">'updated_at'</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
-<span class="p">}]</span>
-<span class="n">mdm</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s1">'test_model'</span><span class="p">,</span> <span class="n">metadata</span><span class="p">)</span>
+    <span class="c1"># Setup database</span>
+    <span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
 
-<span class="c1"># Get metadata</span>
-<span class="n">metadata_get</span> <span class="o">=</span> <span class="n">mdm</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'test_model'</span><span class="p">)</span>
+    <span class="c1"># Check if the metadata table exists and drop if it does</span>
+    <span class="k">if</span> <span class="n">db</span><span class="o">.</span><span class="n">has_table</span><span class="p">(</span><span class="n">DEFAULT_METADATA_TABLE</span><span class="p">):</span>
+        <span class="n">db</span><span class="o">.</span><span class="n">drop_table</span><span class="p">(</span><span class="n">DEFAULT_METADATA_TABLE</span><span class="p">)</span>
 
-<span class="c1"># Search metadata</span>
-<span class="n">search_results</span> <span class="o">=</span> <span class="n">mdm</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">where</span><span class="o">=</span><span class="p">[</span><span class="s1">'title = "Testing Data"'</span><span class="p">])</span>
+    <span class="c1"># Setup metadata manager</span>
+    <span class="n">data_manager</span> <span class="o">=</span> <span class="n">DataManager</span><span class="p">(</span><span class="n">database</span><span class="o">=</span><span class="n">db</span><span class="p">)</span>
+    <span class="n">mdm</span> <span class="o">=</span> <span class="n">ModelsMetadataManager</span><span class="p">(</span><span class="n">data_manager</span><span class="p">,</span> <span class="n">models_manager</span><span class="p">)</span>
 
-<span class="c1"># Update metadata</span>
-<span class="n">mdm</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="s1">'test_model'</span><span class="p">,</span> <span class="p">{</span><span class="s1">'description'</span><span class="p">:</span> <span class="s1">'NEW DESCRIPTION'</span><span class="p">})</span>
+    <span class="c1"># Add metadata</span>
+    <span class="n">metadata</span> <span class="o">=</span> <span class="p">[{</span>
+        <span class="s1">'title'</span><span class="p">:</span> <span class="s1">'Test Model'</span><span class="p">,</span>
+        <span class="s1">'description'</span><span class="p">:</span> <span class="s1">'model used for testing'</span><span class="p">,</span>
+        <span class="s1">'tags'</span><span class="p">:</span> <span class="s1">'test exp auto'</span><span class="p">,</span>
+        <span class="s1">'source'</span><span class="p">:</span> <span class="s1">'Automatically generated from Python'</span><span class="p">,</span>
+        <span class="s1">'model'</span><span class="p">:</span> <span class="s1">'Model'</span><span class="p">,</span>
+        <span class="s1">'created_by'</span><span class="p">:</span> <span class="s1">'msdss'</span><span class="p">,</span>
+        <span class="s1">'created_at'</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(),</span>
+        <span class="s1">'updated_at'</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+    <span class="p">}]</span>
+    <span class="n">mdm</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s1">'test_model'</span><span class="p">,</span> <span class="n">metadata</span><span class="p">)</span>
 
-<span class="c1"># Delete metadata</span>
-<span class="n">mdm</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s1">'test_model'</span><span class="p">)</span>
+    <span class="c1"># Get metadata</span>
+    <span class="n">metadata_get</span> <span class="o">=</span> <span class="n">mdm</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'test_model'</span><span class="p">)</span>
+
+    <span class="c1"># Search metadata</span>
+    <span class="n">search_results</span> <span class="o">=</span> <span class="n">mdm</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">where</span><span class="o">=</span><span class="p">[</span><span class="s1">'title = "Test Model"'</span><span class="p">])</span>
+
+    <span class="c1"># Update metadata</span>
+    <span class="n">mdm</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="s1">'test_model'</span><span class="p">,</span> <span class="p">{</span><span class="s1">'description'</span><span class="p">:</span> <span class="s1">'NEW DESCRIPTION'</span><span class="p">})</span>
+
+    <span class="c1"># Delete metadata</span>
+    <span class="n">mdm</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s1">'test_model'</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
+</div>
+</div>
+</dd></dl>
+</section>
+<section id="load-base-models">
+<h2 id="load-base-models">load_base_models<a class="headerlink" href="#load-base-models" title="Permalink to this headline">¶</a></h2>
+<dl class="py method">
+<dt class="sig sig-object py" id="msdss_models_api.managers.ModelsMetadataManager.load_base_models">
+<span class="sig-prename descclassname"><span class="pre">ModelsMetadataManager.</span></span><span class="sig-name descname"><span class="pre">load_base_models</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msdss_models_api/managers.html#ModelsMetadataManager.load_base_models"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msdss_models_api.managers.ModelsMetadataManager.load_base_models" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load base model metadata into a table in the database.</p>
+<p>If a table with the same name exists, it will be deleted and rebuilt.</p>
+<p class="rubric">Author</p>
+<p>Richard Wen &lt;<a class="reference external" href="mailto:rrwen.dev%40gmail.com">rrwen<span>.</span>dev<span>@</span>gmail<span>.</span>com</a>&gt;</p>
+<p class="rubric">Example</p>
+<div class="jupyter_cell jupyter_container docutils container">
+<div class="cell_input code_cell docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">tempfile</span>
+<span class="kn">from</span> <span class="nn">msdss_base_database</span> <span class="kn">import</span> <span class="n">Database</span>
+<span class="kn">from</span> <span class="nn">msdss_data_api.managers</span> <span class="kn">import</span> <span class="n">DataManager</span>
+<span class="kn">from</span> <span class="nn">msdss_models_api.managers</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">msdss_models_api.defaults</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">msdss_models_api.models</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryDirectory</span><span class="p">()</span> <span class="k">as</span> <span class="n">folder_path</span><span class="p">:</span>
+
+    <span class="c1"># Setup available models</span>
+    <span class="n">models</span> <span class="o">=</span> <span class="p">[</span><span class="n">Model</span><span class="p">]</span>
+
+    <span class="c1"># Create manager</span>
+    <span class="n">models_manager</span> <span class="o">=</span> <span class="n">ModelsManager</span><span class="p">(</span><span class="n">models</span><span class="p">,</span> <span class="n">folder</span><span class="o">=</span><span class="n">folder_path</span><span class="p">)</span>
+
+    <span class="c1"># Setup database</span>
+    <span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
+
+    <span class="c1"># Check if the metadata table exists and drop if it does</span>
+    <span class="k">if</span> <span class="n">db</span><span class="o">.</span><span class="n">has_table</span><span class="p">(</span><span class="n">DEFAULT_METADATA_TABLE</span><span class="p">):</span>
+        <span class="n">db</span><span class="o">.</span><span class="n">drop_table</span><span class="p">(</span><span class="n">DEFAULT_METADATA_TABLE</span><span class="p">)</span>
+
+    <span class="c1"># Setup metadata manager</span>
+    <span class="n">data_manager</span> <span class="o">=</span> <span class="n">DataManager</span><span class="p">(</span><span class="n">database</span><span class="o">=</span><span class="n">db</span><span class="p">)</span>
+    <span class="n">mdm</span> <span class="o">=</span> <span class="n">ModelsMetadataManager</span><span class="p">(</span><span class="n">data_manager</span><span class="p">,</span> <span class="n">models_manager</span><span class="p">)</span>
+
+    <span class="c1"># Load base models</span>
+    <span class="n">mdm</span><span class="o">.</span><span class="n">load_base_models</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+</div>
+</div>
+</dd></dl>
+</section>
+<section id="search-base-models">
+<h2 id="search-base-models">search_base_models<a class="headerlink" href="#search-base-models" title="Permalink to this headline">¶</a></h2>
+<dl class="py method">
+<dt class="sig sig-object py" id="msdss_models_api.managers.ModelsMetadataManager.search_base_models">
+<span class="sig-prename descclassname"><span class="pre">ModelsMetadataManager.</span></span><span class="sig-name descname"><span class="pre">search_base_models</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msdss_models_api/managers.html#ModelsMetadataManager.search_base_models"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msdss_models_api.managers.ModelsMetadataManager.search_base_models" title="Permalink to this definition">¶</a></dt>
+<dd><p>Search base model metadata.</p>
+<p>See <a class="reference external" href="https://rrwen.github.io/msdss-data-api/reference/managers.html#msdss_data_api.managers.DataManager.get" title="(in msdss_data_api v0.2.9)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">msdss_data_api.managers.DataManager.get()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>*args</strong> – Additional arguments passed to <a class="reference external" href="https://rrwen.github.io/msdss-data-api/reference/managers.html#msdss_data_api.managers.DataManager.get" title="(in msdss_data_api v0.2.9)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">msdss_data_api.managers.DataManager.get()</span></code></a> except for parameter <code class="docutils literal notranslate"><span class="pre">table</span></code>.</p></li>
+<li><p><strong>**kwargs</strong> – Additional arguments passed to <a class="reference external" href="https://rrwen.github.io/msdss-data-api/reference/managers.html#msdss_data_api.managers.DataManager.get" title="(in msdss_data_api v0.2.9)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">msdss_data_api.managers.DataManager.get()</span></code></a> except for parameter <code class="docutils literal notranslate"><span class="pre">table</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A dict of lists where each key is the column name and each list contains the values for columns in the order of the rows of the table.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)">list</a>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)">dict</a>)</p>
+</dd>
+</dl>
+<p class="rubric">Author</p>
+<p>Richard Wen &lt;<a class="reference external" href="mailto:rrwen.dev%40gmail.com">rrwen<span>.</span>dev<span>@</span>gmail<span>.</span>com</a>&gt;</p>
+<p class="rubric">Example</p>
+<div class="jupyter_cell jupyter_container docutils container">
+<div class="cell_input code_cell docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">tempfile</span>
+<span class="kn">from</span> <span class="nn">msdss_base_database</span> <span class="kn">import</span> <span class="n">Database</span>
+<span class="kn">from</span> <span class="nn">msdss_data_api.managers</span> <span class="kn">import</span> <span class="n">DataManager</span>
+<span class="kn">from</span> <span class="nn">msdss_models_api.managers</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">msdss_models_api.defaults</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">msdss_models_api.models</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryDirectory</span><span class="p">()</span> <span class="k">as</span> <span class="n">folder_path</span><span class="p">:</span>
+
+    <span class="c1"># Setup available models</span>
+    <span class="n">models</span> <span class="o">=</span> <span class="p">[</span><span class="n">Model</span><span class="p">]</span>
+
+    <span class="c1"># Create manager</span>
+    <span class="n">models_manager</span> <span class="o">=</span> <span class="n">ModelsManager</span><span class="p">(</span><span class="n">models</span><span class="p">,</span> <span class="n">folder</span><span class="o">=</span><span class="n">folder_path</span><span class="p">)</span>
+
+    <span class="c1"># Setup database</span>
+    <span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
+
+    <span class="c1"># Check if the metadata table exists and drop if it does</span>
+    <span class="k">if</span> <span class="n">db</span><span class="o">.</span><span class="n">has_table</span><span class="p">(</span><span class="n">DEFAULT_METADATA_TABLE</span><span class="p">):</span>
+        <span class="n">db</span><span class="o">.</span><span class="n">drop_table</span><span class="p">(</span><span class="n">DEFAULT_METADATA_TABLE</span><span class="p">)</span>
+
+    <span class="c1"># Setup metadata manager</span>
+    <span class="n">data_manager</span> <span class="o">=</span> <span class="n">DataManager</span><span class="p">(</span><span class="n">database</span><span class="o">=</span><span class="n">db</span><span class="p">)</span>
+    <span class="n">mdm</span> <span class="o">=</span> <span class="n">ModelsMetadataManager</span><span class="p">(</span><span class="n">data_manager</span><span class="p">,</span> <span class="n">models_manager</span><span class="p">)</span>
+
+    <span class="c1"># Load base models</span>
+    <span class="n">mdm</span><span class="o">.</span><span class="n">load_base_models</span><span class="p">()</span>
+
+    <span class="c1"># Search base models</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">mdm</span><span class="o">.</span><span class="n">search_base_models</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>[{'model': 'Model', 'description': '\nTemplate class to standardize modelling.\n\n\n* Methods delete, load, and save are handled by default using [:class:`pickle`](#id1) and do not need to be defined if there is no need for custom model saving and loading.* Methods input, output and update need to be defined as they are placeholders for standardized functions of the model\n\n\n\n  \nParameters\n----------\n\n\n* file\\_path: Path to save, load, and delete the model for persistence without the extension. Can be used in methods as self.file.\n* file\\_ext: File extension to save the model in.\n* can\\_input: Whether the method .input is defined and available. This is useful for controlling route requests in an API.\n* can\\_output: Whether the method .output is defined and available. This is useful for controlling route requests in an API.\n* can\\_update: Whether the method .update is defined and available. This is useful for controlling route requests in an API.\n* settings: Dict of initial custom settings to be used by model methods. These are expected not to change from the time of initialization.\n\n\n\n', 'input_description': '\nTemplate method for input data to initialize model.\n\n\nRequirements:* The first argument should be the input data seen in the parameters* Other arguments can be defined as any for the model after the first argument* Should set self.instance to the initialized modelNotes:* Does nothing but act as a template reference for class extension* This method should be re-defined using a class extension\n\n\n\n  \nParameters\n----------\n\n\n* data: Data to use for initializing the model. Should accept a list or dict to be input in a [:class:`pandas:pandas.DataFrame`](#id1) or the dataframe itself.\n\n\n\n', 'output_description': '\nTemplate method for a model to output data such as predictions or clusters.\n\n\nRequirements:* The first argument should be the input data seen in the parameters* Other arguments can be defined as any for the model output after the first argument* Ideally, should use self.instance to produce the outputNotes:* Does nothing but act as a template reference for class extension* This method should be re-defined using a class extension\n\n\n\n  \nParameters\n----------\n\n\n* data: Data to use as input for the model. Should accept a list or dict to be input in a [:class:`pandas:pandas.DataFrame`](#id1) or the dataframe itself.\n\n\n\n', 'update_description': '\nTemplate method for updating a model with new data.\n\n\nRequirements:* The first argument should be the input data seen in the parameters* Other arguments can be defined as any for the model output after the first argument* Ideally, should update [``](#id1)self.instance``Notes:* Does nothing but act as a template reference for class extension* This method should be re-defined using a class extension\n\n\n\n  \nParameters\n----------\n\n\n* data: Data to use for updating the model. Should accept a list or dict to be input in a [:class:`pandas:pandas.DataFrame`](#id1) or the dataframe itself.\n\n\n\n'}]
+</pre></div>
+</div>
 </div>
 </div>
 </dd></dl>
@@ -2209,7 +2348,7 @@ This defines the table to store the metadata, where the default is:</p>
       <div class="md-footer-meta__inner md-grid">
         <div class="md-footer-copyright">
           <div class="md-footer-copyright__highlight">
-              &#169; Copyright 2021, Richard Wen.
+              &#169; Copyright 2022, Richard Wen.
               
           </div>
             Created using

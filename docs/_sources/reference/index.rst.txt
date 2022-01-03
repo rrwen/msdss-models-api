@@ -9,4 +9,5 @@ API Reference
     managers
     models
     routers
+    tools
     

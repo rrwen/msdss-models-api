@@ -64,10 +64,6 @@ class ModelsAPI(API):
         Database object for users API.
     models_api_worker : :class:`celery:celery.Celery`
         Same as parameter ``worker``.
-    misc : dict
-        Dictionary of miscellaneous values:
-
-        * ``fastapi_users_objects`` (dict): dict of values returned from :func:`msdss_users_api.tools.create_fastapi_users_objects`
 
     Author
     ------
@@ -214,7 +210,7 @@ class ModelsAPI(API):
         env=ModelsDotEnv(),
         api=FastAPI(
             title='MSDSS Models API',
-            version='0.0.6'
+            version='0.0.7'
         ),
         *args, **kwargs):
         super().__init__(api=api, *args, **kwargs)
@@ -235,7 +231,7 @@ class ModelsAPI(API):
         data_manager = DataManager(database=database)
         models_manager = ModelsDBManager(models=models, data_manager=data_manager, folder=folder)
         worker = worker if worker else Celery(broker=broker_url, backend=backend_url)
-        metadata_manager = ModelsMetadataManager(data_manager)
+        metadata_manager = ModelsMetadataManager(data_manager, models_manager)
         bg_manager = ModelsDBBackgroundManager(worker=worker, models_manager=models_manager, metadata_manager=metadata_manager)
         models_router_settings['bg_manager'] = bg_manager
         
@@ -251,6 +247,13 @@ class ModelsAPI(API):
         self.models_api_worker = worker
         self.misc = {}
         self.misc['bg_manager'] = bg_manager
+
+        # (ModelsAPI_startup) Setup app startup
+        @self.event('startup')
+        async def startup():
+            self.logger.info('Waiting for base models metadata to be loaded into database.')
+            metadata_manager.load_base_models()
+            self.logger.info('Base models metadata loading complete.')
 
     def get_worker(self):
         """

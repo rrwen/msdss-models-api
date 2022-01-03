@@ -47,7 +47,7 @@
   
   
   
-    <title>routers &#8212; 0.0.6</title>
+    <title>routers &#8212; 0.0.7</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/material.css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
@@ -65,6 +65,7 @@
     <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="tools" href="tools.html" />
     <link rel="prev" title="models" href="models.html" />
   
    
@@ -89,11 +90,11 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex navheader">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="../index.html" title="0.0.6"
+        <a href="../index.html" title="0.0.7"
            class="md-header-nav__button md-logo">
           
               <img src="../_static/logo.svg" height="26"
-                   alt="0.0.6 logo">
+                   alt="0.0.7 logo">
           
         </a>
       </div>
@@ -176,7 +177,7 @@
   <nav class="md-tabs" data-md-component="tabs">
     <div class="md-tabs__inner md-grid">
       <ul class="md-tabs__list">
-          <li class="md-tabs__item"><a href="../index.html" class="md-tabs__link">0.0.6</a></li>
+          <li class="md-tabs__item"><a href="../index.html" class="md-tabs__link">0.0.7</a></li>
           <li class="md-tabs__item"><a href="index.html" class="md-tabs__link">API Reference</a></li>
       </ul>
     </div>
@@ -189,13 +190,13 @@
               <div class="md-sidebar__inner">
                 <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href="../index.html" title="0.0.6" class="md-nav__button md-logo">
+    <a href="../index.html" title="0.0.7" class="md-nav__button md-logo">
       
         <img src="../_static/logo.svg" alt=" logo" width="48" height="48">
       
     </a>
     <a href="../index.html"
-       title="0.0.6">msdss-models-api</a>
+       title="0.0.7">msdss-models-api</a>
   </label>
     <div class="md-nav__source">
       <a href="https://github.com/rrwen/msdss-models-api/" title="Go to repository" class="md-source" data-md-source="github">
@@ -282,10 +283,125 @@
 <span id="routers"></span><h1 id="reference-routers--page-root">routers<a class="headerlink" href="#reference-routers--page-root" title="Permalink to this headline">¶</a></h1>
 <section id="get-models-router">
 <h2 id="get-models-router">get_models_router<a class="headerlink" href="#get-models-router" title="Permalink to this headline">¶</a></h2>
-<dl class="py class">
+<dl class="py function">
 <dt class="sig sig-object py" id="msdss_models_api.routers.get_models_router">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">msdss_models_api.routers.</span></span><span class="sig-name descname"><span class="pre">get_models_router</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bg_manager</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">users_api</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">route_settings</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{'cancel':</span> <span class="pre">{'_enable':</span> <span class="pre">True,</span> <span class="pre">'_get_user':</span> <span class="pre">{'superuser':</span> <span class="pre">True},</span> <span class="pre">'path':</span> <span class="pre">'/{name}/cancel'},</span> <span class="pre">'create':</span> <span class="pre">{'_enable':</span> <span class="pre">True,</span> <span class="pre">'_get_user':</span> <span class="pre">{'superuser':</span> <span class="pre">True},</span> <span class="pre">'path':</span> <span class="pre">'/'},</span> <span class="pre">'delete':</span> <span class="pre">{'_enable':</span> <span class="pre">True,</span> <span class="pre">'_get_user':</span> <span class="pre">{'superuser':</span> <span class="pre">True},</span> <span class="pre">'path':</span> <span class="pre">'/{name}'},</span> <span class="pre">'input':</span> <span class="pre">{'_enable':</span> <span class="pre">True,</span> <span class="pre">'_get_user':</span> <span class="pre">{'superuser':</span> <span class="pre">True},</span> <span class="pre">'path':</span> <span class="pre">'/{name}'},</span> <span class="pre">'input_db':</span> <span class="pre">{'_enable':</span> <span class="pre">True,</span> <span class="pre">'_get_user':</span> <span class="pre">{'superuser':</span> <span class="pre">True},</span> <span class="pre">'path':</span> <span class="pre">'/{name}/data'},</span> <span class="pre">'metadata':</span> <span class="pre">{'_enable':</span> <span class="pre">True,</span> <span class="pre">'_get_user':</span> <span class="pre">{},</span> <span class="pre">'path':</span> <span class="pre">'/{name}/metadata',</span> <span class="pre">'tags':</span> <span class="pre">['metadata']},</span> <span class="pre">'metadata_update':</span> <span class="pre">{'_enable':</span> <span class="pre">True,</span> <span class="pre">'_get_user':</span> <span class="pre">{'superuser':</span> <span class="pre">True},</span> <span class="pre">'path':</span> <span class="pre">'/{name}/metadata',</span> <span class="pre">'tags':</span> <span class="pre">['metadata']},</span> <span class="pre">'output':</span> <span class="pre">{'_enable':</span> <span class="pre">True,</span> <span class="pre">'_get_user':</span> <span class="pre">{},</span> <span class="pre">'path':</span> <span class="pre">'/{name}/output'},</span> <span class="pre">'search':</span> <span class="pre">{'_enable':</span> <span class="pre">True,</span> <span class="pre">'_get_user':</span> <span class="pre">{},</span> <span class="pre">'path':</span> <span class="pre">'/'},</span> <span class="pre">'status':</span> <span class="pre">{'_enable':</span> <span class="pre">True,</span> <span class="pre">'_get_user':</span> <span class="pre">{},</span> <span class="pre">'path':</span> <span class="pre">'/{name}/status'},</span> <span class="pre">'update':</span> <span class="pre">{'_enable':</span> <span class="pre">True,</span> <span class="pre">'_get_user':</span> <span class="pre">{'superuser':</span> <span class="pre">True},</span> <span class="pre">'path':</span> <span class="pre">'/{name}'},</span> <span class="pre">'update_db':</span> <span class="pre">{'_enable':</span> <span class="pre">True,</span> <span class="pre">'_get_user':</span> <span class="pre">{'superuser':</span> <span class="pre">True},</span> <span class="pre">'path':</span> <span class="pre">'/{name}/data'}}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'/models'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['models']</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msdss_models_api/routers.html#get_models_router"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msdss_models_api.routers.get_models_router" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<span class="sig-prename descclassname"><span class="pre">msdss_models_api.routers.</span></span><span class="sig-name descname"><span class="pre">get_models_router</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bg_manager</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">users_api</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">route_settings</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{'cancel':</span> <span class="pre">{'_enable':</span> <span class="pre">True,</span> <span class="pre">'_get_user':</span> <span class="pre">{'superuser':</span> <span class="pre">True},</span> <span class="pre">'path':</span> <span class="pre">'/{name}/cancel'},</span> <span class="pre">'create':</span> <span class="pre">{'_enable':</span> <span class="pre">True,</span> <span class="pre">'_get_user':</span> <span class="pre">{'superuser':</span> <span class="pre">True},</span> <span class="pre">'path':</span> <span class="pre">'/'},</span> <span class="pre">'delete':</span> <span class="pre">{'_enable':</span> <span class="pre">True,</span> <span class="pre">'_get_user':</span> <span class="pre">{'superuser':</span> <span class="pre">True},</span> <span class="pre">'path':</span> <span class="pre">'/{name}'},</span> <span class="pre">'input':</span> <span class="pre">{'_enable':</span> <span class="pre">True,</span> <span class="pre">'_get_user':</span> <span class="pre">{'superuser':</span> <span class="pre">True},</span> <span class="pre">'path':</span> <span class="pre">'/{name}'},</span> <span class="pre">'input_db':</span> <span class="pre">{'_enable':</span> <span class="pre">True,</span> <span class="pre">'_get_user':</span> <span class="pre">{'superuser':</span> <span class="pre">True},</span> <span class="pre">'path':</span> <span class="pre">'/{name}/data'},</span> <span class="pre">'metadata':</span> <span class="pre">{'_enable':</span> <span class="pre">True,</span> <span class="pre">'_get_user':</span> <span class="pre">{},</span> <span class="pre">'path':</span> <span class="pre">'/{name}/metadata',</span> <span class="pre">'tags':</span> <span class="pre">['metadata']},</span> <span class="pre">'metadata_update':</span> <span class="pre">{'_enable':</span> <span class="pre">True,</span> <span class="pre">'_get_user':</span> <span class="pre">{'superuser':</span> <span class="pre">True},</span> <span class="pre">'path':</span> <span class="pre">'/{name}/metadata',</span> <span class="pre">'tags':</span> <span class="pre">['metadata']},</span> <span class="pre">'output':</span> <span class="pre">{'_enable':</span> <span class="pre">True,</span> <span class="pre">'_get_user':</span> <span class="pre">{},</span> <span class="pre">'path':</span> <span class="pre">'/{name}/output'},</span> <span class="pre">'search':</span> <span class="pre">{'_enable':</span> <span class="pre">True,</span> <span class="pre">'_get_user':</span> <span class="pre">{},</span> <span class="pre">'path':</span> <span class="pre">'/'},</span> <span class="pre">'status':</span> <span class="pre">{'_enable':</span> <span class="pre">True,</span> <span class="pre">'_get_user':</span> <span class="pre">{},</span> <span class="pre">'path':</span> <span class="pre">'/{name}/status'},</span> <span class="pre">'update':</span> <span class="pre">{'_enable':</span> <span class="pre">True,</span> <span class="pre">'_get_user':</span> <span class="pre">{'superuser':</span> <span class="pre">True},</span> <span class="pre">'path':</span> <span class="pre">'/{name}'},</span> <span class="pre">'update_db':</span> <span class="pre">{'_enable':</span> <span class="pre">True,</span> <span class="pre">'_get_user':</span> <span class="pre">{'superuser':</span> <span class="pre">True},</span> <span class="pre">'path':</span> <span class="pre">'/{name}/data'}}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'/models'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['models']</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msdss_models_api/routers.html#get_models_router"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msdss_models_api.routers.get_models_router" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a models router.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>bg_manager</strong> (<a class="reference internal" href="managers.html#msdss_models_api.managers.ModelsBackgroundManager" title="msdss_models_api.managers.ModelsBackgroundManager"><code class="xref py py-class docutils literal notranslate"><span class="pre">msdss_models_api.managers.ModelsBackgroundManager</span></code></a> or <code class="xref py py-class docutils literal notranslate"><span class="pre">msdss_models_api.managers.DBModelsBackgroundManager</span></code>) – Models background manager for managing model operations.</p></li>
+<li><p><strong>users_api</strong> (<a class="reference external" href="https://rrwen.github.io/msdss-users-api/reference/core.html#msdss_users_api.core.UsersAPI" title="(in msdss_users_api v0.2.1)"><code class="docutils literal notranslate"><span class="pre">msdss_users_api.core.UsersAPI</span></code></a> or None) – Users API object to enable user authentication for routes.
+If <code class="docutils literal notranslate"><span class="pre">None</span></code>, user authentication will not be used for routes.</p></li>
+<li><p><strong>route_settings</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a>) – <p>Dictionary of settings for the data routes. Each route consists of the following keys:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">path</span></code>: resource path for the route</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tags</span></code>: tags for open api spec</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">_enable</span></code> (bool): Whether this route should be included or not</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">_restricted_tables</span></code> (list(str)): List of table names not accessible by this route</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">_get_user</span></code> (dict or None): Additional arguments passed to the <code class="xref py py-meth docutils literal notranslate"><span class="pre">msdss_users_api.msdss_users_api.core.UsersAPI.get_current_user()</span></code> function for the route - only applies if parameter <code class="docutils literal notranslate"><span class="pre">users_api</span></code> is not <code class="docutils literal notranslate"><span class="pre">None</span></code> and this settings is not <code class="docutils literal notranslate"><span class="pre">None</span></code>, otherwise no user authentication will be added for this route</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">**kwargs</span></code>: Additional arguments passed to <code class="xref py py-meth docutils literal notranslate"><span class="pre">fastapi:fastapi.FastAPI.get()</span></code> for the id route</p></li>
+</ul>
+<p>The default settings are:</p>
+<div class="jupyter_cell docutils container">
+<div class="cell_output docutils container">
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>{'cancel': {'_enable': True,
+            '_get_user': {'superuser': True},
+            'path': '/{name}/cancel'},
+ 'create': {'_enable': True, '_get_user': {'superuser': True}, 'path': '/'},
+ 'delete': {'_enable': True,
+            '_get_user': {'superuser': True},
+            'path': '/{name}'},
+ 'input': {'_enable': True,
+           '_get_user': {'superuser': True},
+           'path': '/{name}'},
+ 'input_db': {'_enable': True,
+              '_get_user': {'superuser': True},
+              'path': '/{name}/data'},
+ 'metadata': {'_enable': True,
+              '_get_user': {},
+              'path': '/{name}/metadata',
+              'tags': ['metadata']},
+ 'metadata_update': {'_enable': True,
+                     '_get_user': {'superuser': True},
+                     'path': '/{name}/metadata',
+                     'tags': ['metadata']},
+ 'output': {'_enable': True, '_get_user': {}, 'path': '/{name}/output'},
+ 'search': {'_enable': True, '_get_user': {}, 'path': '/'},
+ 'status': {'_enable': True, '_get_user': {}, 'path': '/{name}/status'},
+ 'update': {'_enable': True,
+            '_get_user': {'superuser': True},
+            'path': '/{name}'},
+ 'update_db': {'_enable': True,
+               '_get_user': {'superuser': True},
+               'path': '/{name}/data'}}
+</pre></div>
+</div>
+</div>
+</div>
+<p>Any unspecified settings will be replaced by their defaults.</p>
+</p></li>
+<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Prefix path to all routes belonging to this router.</p></li>
+<li><p><strong>tags</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em>(</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>)</em>) – Tags for all routes in this router.</p></li>
+<li><p><strong>*args</strong> – Additional arguments to accept any extra parameters passed to <code class="xref py py-class docutils literal notranslate"><span class="pre">fastapi:fastapi.routing.APIRouter</span></code>.</p></li>
+<li><p><strong>**kwargs</strong> – Additional arguments to accept any extra parameters passed to <code class="xref py py-class docutils literal notranslate"><span class="pre">fastapi:fastapi.routing.APIRouter</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A router object used for model routes. See <a class="reference external" href="https://fastapi.tiangolo.com/tutorial/bigger-applications/">FastAPI bigger apps</a></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">fastapi:fastapi.routing.APIRouter</span></code></p>
+</dd>
+</dl>
+<p class="rubric">Author</p>
+<p>Richard Wen &lt;<a class="reference external" href="mailto:rrwen.dev%40gmail.com">rrwen<span>.</span>dev<span>@</span>gmail<span>.</span>com</a>&gt;</p>
+<p class="rubric">Example</p>
+<div class="jupyter_cell jupyter_container docutils container">
+<div class="cell_input code_cell docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">tempfile</span>
+<span class="kn">from</span> <span class="nn">celery</span> <span class="kn">import</span> <span class="n">Celery</span>
+<span class="kn">from</span> <span class="nn">msdss_base_database</span> <span class="kn">import</span> <span class="n">Database</span>
+<span class="kn">from</span> <span class="nn">msdss_data_api.managers</span> <span class="kn">import</span> <span class="n">DataManager</span>
+<span class="kn">from</span> <span class="nn">msdss_models_api.managers</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">msdss_models_api.defaults</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">msdss_models_api.models</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">msdss_models_api.routers</span> <span class="kn">import</span> <span class="n">get_models_router</span>
+
+<span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryDirectory</span><span class="p">()</span> <span class="k">as</span> <span class="n">folder_path</span><span class="p">:</span>
+
+    <span class="c1"># Setup available models</span>
+    <span class="n">models</span> <span class="o">=</span> <span class="p">[</span><span class="n">Model</span><span class="p">]</span>
+
+    <span class="c1"># Setup database</span>
+    <span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
+
+    <span class="c1"># Check if the metadata table exists and drop if it does</span>
+    <span class="k">if</span> <span class="n">db</span><span class="o">.</span><span class="n">has_table</span><span class="p">(</span><span class="n">DEFAULT_METADATA_TABLE</span><span class="p">):</span>
+        <span class="n">db</span><span class="o">.</span><span class="n">drop_table</span><span class="p">(</span><span class="n">DEFAULT_METADATA_TABLE</span><span class="p">)</span>
+
+    <span class="c1"># Create data manager</span>
+    <span class="n">data_manager</span> <span class="o">=</span> <span class="n">DataManager</span><span class="p">(</span><span class="n">database</span><span class="o">=</span><span class="n">db</span><span class="p">)</span>
+
+    <span class="c1"># Create models manager</span>
+    <span class="n">models_manager</span> <span class="o">=</span> <span class="n">ModelsManager</span><span class="p">(</span><span class="n">models</span><span class="p">,</span> <span class="n">folder</span><span class="o">=</span><span class="n">folder_path</span><span class="p">)</span>
+
+    <span class="c1"># Create metadata manager</span>
+    <span class="n">metadata_manager</span> <span class="o">=</span> <span class="n">ModelsMetadataManager</span><span class="p">(</span><span class="n">data_manager</span><span class="p">,</span> <span class="n">models_manager</span><span class="p">)</span>
+
+    <span class="c1"># Create background manager</span>
+    <span class="n">worker</span> <span class="o">=</span> <span class="n">Celery</span><span class="p">(</span><span class="n">broker</span><span class="o">=</span><span class="s1">'redis://localhost:6379/0'</span><span class="p">,</span> <span class="n">backend</span><span class="o">=</span><span class="s1">'redis://localhost:6379/0'</span><span class="p">)</span> <span class="c1"># rabbitmq</span>
+    <span class="n">bg_manager</span> <span class="o">=</span> <span class="n">ModelsBackgroundManager</span><span class="p">(</span><span class="n">worker</span><span class="p">,</span> <span class="n">models_manager</span><span class="p">,</span> <span class="n">metadata_manager</span><span class="o">=</span><span class="n">metadata_manager</span><span class="p">)</span>
+
+    <span class="c1"># Get models router</span>
+    <span class="n">models_router</span> <span class="o">=</span> <span class="n">get_models_router</span><span class="p">(</span><span class="n">bg_manager</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+</div>
+</div>
+</dd></dl>
 </section>
 </section>
 
@@ -313,6 +429,17 @@
             </a>
           
           
+            <a href="tools.html" title="tools"
+               class="md-flex md-footer-nav__link md-footer-nav__link--next"
+               rel="next">
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title"><span
+                class="md-flex__ellipsis"> <span
+                class="md-footer-nav__direction"> Next </span> tools </span>
+            </div>
+            <div class="md-flex__cell md-flex__cell--shrink"><i
+                class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
+            </div>
+          
         </a>
         
       </nav>
@@ -321,7 +448,7 @@
       <div class="md-footer-meta__inner md-grid">
         <div class="md-footer-copyright">
           <div class="md-footer-copyright__highlight">
-              &#169; Copyright 2021, Richard Wen.
+              &#169; Copyright 2022, Richard Wen.
               
           </div>
             Created using

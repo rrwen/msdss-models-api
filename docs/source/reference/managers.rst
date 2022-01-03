@@ -147,3 +147,13 @@ ModelsMetadataManager
 ---------------------
 
 .. autoclass:: msdss_models_api.managers.ModelsMetadataManager
+
+load_base_models
+----------------
+
+.. automethod:: msdss_models_api.managers.ModelsMetadataManager.load_base_models
+
+search_base_models
+------------------
+
+.. automethod:: msdss_models_api.managers.ModelsMetadataManager.search_base_models

@@ -46,7 +46,7 @@
   
   
   
-    <title>msdss_models_api.core &#8212; 0.0.6</title>
+    <title>msdss_models_api.core &#8212; 0.0.7</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/material.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
@@ -87,11 +87,11 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex navheader">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="../../index.html" title="0.0.6"
+        <a href="../../index.html" title="0.0.7"
            class="md-header-nav__button md-logo">
           
               <img src="../../_static/logo.svg" height="26"
-                   alt="0.0.6 logo">
+                   alt="0.0.7 logo">
           
         </a>
       </div>
@@ -174,7 +174,7 @@
   <nav class="md-tabs" data-md-component="tabs">
     <div class="md-tabs__inner md-grid">
       <ul class="md-tabs__list">
-          <li class="md-tabs__item"><a href="../../index.html" class="md-tabs__link">0.0.6</a></li>
+          <li class="md-tabs__item"><a href="../../index.html" class="md-tabs__link">0.0.7</a></li>
           <li class="md-tabs__item"><a href="../index.html" class="md-tabs__link">Module code</a></li>
       </ul>
     </div>
@@ -187,13 +187,13 @@
               <div class="md-sidebar__inner">
                 <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href="../../index.html" title="0.0.6" class="md-nav__button md-logo">
+    <a href="../../index.html" title="0.0.7" class="md-nav__button md-logo">
       
         <img src="../../_static/logo.svg" alt=" logo" width="48" height="48">
       
     </a>
     <a href="../../index.html"
-       title="0.0.6">msdss-models-api</a>
+       title="0.0.7">msdss-models-api</a>
   </label>
     <div class="md-nav__source">
       <a href="https://github.com/rrwen/msdss-models-api/" title="Go to repository" class="md-source" data-md-source="github">
@@ -335,10 +335,6 @@
 <span class="sd">        Database object for users API.</span>
 <span class="sd">    models_api_worker : :class:`celery:celery.Celery`</span>
 <span class="sd">        Same as parameter ``worker``.</span>
-<span class="sd">    misc : dict</span>
-<span class="sd">        Dictionary of miscellaneous values:</span>
-
-<span class="sd">        * ``fastapi_users_objects`` (dict): dict of values returned from :func:`msdss_users_api.tools.create_fastapi_users_objects`</span>
 
 <span class="sd">    Author</span>
 <span class="sd">    ------</span>
@@ -485,7 +481,7 @@
         <span class="n">env</span><span class="o">=</span><span class="n">ModelsDotEnv</span><span class="p">(),</span>
         <span class="n">api</span><span class="o">=</span><span class="n">FastAPI</span><span class="p">(</span>
             <span class="n">title</span><span class="o">=</span><span class="s1">'MSDSS Models API'</span><span class="p">,</span>
-            <span class="n">version</span><span class="o">=</span><span class="s1">'0.0.6'</span>
+            <span class="n">version</span><span class="o">=</span><span class="s1">'0.0.7'</span>
         <span class="p">),</span>
         <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">api</span><span class="o">=</span><span class="n">api</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
@@ -506,7 +502,7 @@
         <span class="n">data_manager</span> <span class="o">=</span> <span class="n">DataManager</span><span class="p">(</span><span class="n">database</span><span class="o">=</span><span class="n">database</span><span class="p">)</span>
         <span class="n">models_manager</span> <span class="o">=</span> <span class="n">ModelsDBManager</span><span class="p">(</span><span class="n">models</span><span class="o">=</span><span class="n">models</span><span class="p">,</span> <span class="n">data_manager</span><span class="o">=</span><span class="n">data_manager</span><span class="p">,</span> <span class="n">folder</span><span class="o">=</span><span class="n">folder</span><span class="p">)</span>
         <span class="n">worker</span> <span class="o">=</span> <span class="n">worker</span> <span class="k">if</span> <span class="n">worker</span> <span class="k">else</span> <span class="n">Celery</span><span class="p">(</span><span class="n">broker</span><span class="o">=</span><span class="n">broker_url</span><span class="p">,</span> <span class="n">backend</span><span class="o">=</span><span class="n">backend_url</span><span class="p">)</span>
-        <span class="n">metadata_manager</span> <span class="o">=</span> <span class="n">ModelsMetadataManager</span><span class="p">(</span><span class="n">data_manager</span><span class="p">)</span>
+        <span class="n">metadata_manager</span> <span class="o">=</span> <span class="n">ModelsMetadataManager</span><span class="p">(</span><span class="n">data_manager</span><span class="p">,</span> <span class="n">models_manager</span><span class="p">)</span>
         <span class="n">bg_manager</span> <span class="o">=</span> <span class="n">ModelsDBBackgroundManager</span><span class="p">(</span><span class="n">worker</span><span class="o">=</span><span class="n">worker</span><span class="p">,</span> <span class="n">models_manager</span><span class="o">=</span><span class="n">models_manager</span><span class="p">,</span> <span class="n">metadata_manager</span><span class="o">=</span><span class="n">metadata_manager</span><span class="p">)</span>
         <span class="n">models_router_settings</span><span class="p">[</span><span class="s1">'bg_manager'</span><span class="p">]</span> <span class="o">=</span> <span class="n">bg_manager</span>
         
@@ -522,6 +518,13 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">models_api_worker</span> <span class="o">=</span> <span class="n">worker</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">misc</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">misc</span><span class="p">[</span><span class="s1">'bg_manager'</span><span class="p">]</span> <span class="o">=</span> <span class="n">bg_manager</span>
+
+        <span class="c1"># (ModelsAPI_startup) Setup app startup</span>
+        <span class="nd">@self</span><span class="o">.</span><span class="n">event</span><span class="p">(</span><span class="s1">'startup'</span><span class="p">)</span>
+        <span class="k">async</span> <span class="k">def</span> <span class="nf">startup</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">'Waiting for base models metadata to be loaded into database.'</span><span class="p">)</span>
+            <span class="n">metadata_manager</span><span class="o">.</span><span class="n">load_base_models</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">'Base models metadata loading complete.'</span><span class="p">)</span>
 
 <div class="viewcode-block" id="ModelsAPI.get_worker"><a class="viewcode-back" href="../../reference/core.html#msdss_models_api.core.ModelsAPI.get_worker">[docs]</a>    <span class="k">def</span> <span class="nf">get_worker</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">"""</span>
@@ -570,7 +573,7 @@
       <div class="md-footer-meta__inner md-grid">
         <div class="md-footer-copyright">
           <div class="md-footer-copyright__highlight">
-              &#169; Copyright 2021, Richard Wen.
+              &#169; Copyright 2022, Richard Wen.
               
           </div>
             Created using

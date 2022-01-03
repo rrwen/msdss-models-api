@@ -17,6 +17,93 @@ def get_models_router(
     tags=['models'],
     *args, **kwargs
 ):
+    """
+    Get a models router.
+    
+    Parameters
+    ----------
+    bg_manager : :class:`msdss_models_api.managers.ModelsBackgroundManager` or :class:`msdss_models_api.managers.DBModelsBackgroundManager`
+        Models background manager for managing model operations.
+    users_api : :class:`msdss_users_api:msdss_users_api.core.UsersAPI` or None
+        Users API object to enable user authentication for routes.
+        If ``None``, user authentication will not be used for routes.
+    route_settings : dict
+        Dictionary of settings for the data routes. Each route consists of the following keys:
+
+        * ``path``: resource path for the route
+        * ``tags``: tags for open api spec
+        * ``_enable`` (bool): Whether this route should be included or not
+        * ``_restricted_tables`` (list(str)): List of table names not accessible by this route
+        * ``_get_user`` (dict or None): Additional arguments passed to the :meth:`msdss_users_api.msdss_users_api.core.UsersAPI.get_current_user` function for the route - only applies if parameter ``users_api`` is not ``None`` and this settings is not ``None``, otherwise no user authentication will be added for this route
+        * ``**kwargs``: Additional arguments passed to :meth:`fastapi:fastapi.FastAPI.get` for the id route
+
+        The default settings are:
+
+        .. jupyter-execute::
+            :hide-code:
+
+            from msdss_models_api.defaults import DEFAULT_MODELS_ROUTE_SETTINGS
+            from pprint import pprint
+            pprint(DEFAULT_MODELS_ROUTE_SETTINGS)
+
+        Any unspecified settings will be replaced by their defaults.
+    prefix : str
+        Prefix path to all routes belonging to this router.
+    tags : list(str)
+        Tags for all routes in this router.
+    *args, **kwargs
+        Additional arguments to accept any extra parameters passed to :class:`fastapi:fastapi.routing.APIRouter`.
+    
+    Returns
+    -------
+    :class:`fastapi:fastapi.routing.APIRouter`
+        A router object used for model routes. See `FastAPI bigger apps <https://fastapi.tiangolo.com/tutorial/bigger-applications/>`_
+    
+    Author
+    ------
+    Richard Wen <rrwen.dev@gmail.com>
+
+    Example
+    -------
+    .. jupyter-execute::
+
+        import tempfile
+        from celery import Celery
+        from msdss_base_database import Database
+        from msdss_data_api.managers import DataManager
+        from msdss_models_api.managers import *
+        from msdss_models_api.defaults import *
+        from msdss_models_api.models import *
+        from msdss_models_api.routers import get_models_router
+
+        with tempfile.TemporaryDirectory() as folder_path:
+            
+            # Setup available models
+            models = [Model]
+        
+            # Setup database
+            db = Database()
+
+            # Check if the metadata table exists and drop if it does
+            if db.has_table(DEFAULT_METADATA_TABLE):
+                db.drop_table(DEFAULT_METADATA_TABLE)
+
+            # Create data manager
+            data_manager = DataManager(database=db)
+
+            # Create models manager
+            models_manager = ModelsManager(models, folder=folder_path)
+
+            # Create metadata manager
+            metadata_manager = ModelsMetadataManager(data_manager, models_manager)
+
+            # Create background manager
+            worker = Celery(broker='redis://localhost:6379/0', backend='redis://localhost:6379/0') # rabbitmq
+            bg_manager = ModelsBackgroundManager(worker, models_manager, metadata_manager=metadata_manager)
+
+            # Get models router
+            models_router = get_models_router(bg_manager)
+    """
 
     # (get_models_router_defaults) Merge defaults and user params 
     get_user = {}
@@ -157,7 +244,7 @@ def get_models_router(
             response = bg_manager.metadata_manager.get(name=name)
             return response
 
-    # (get_data_router_metadata) Add metadata route to data router
+    # (get_models_router_metadata) Add metadata route to models router
     if enable['metadata_update']:
         @out.put(**settings['metadata_update'])
         async def update_model_instance_metadata(
@@ -192,27 +279,39 @@ def get_models_router(
     # (get_data_router_search) Add search route to data router
     if enable['search']:
         @out.get(**settings['search'])
-        async def search_model_instances(
-            select: Optional[List[str]] = Query('*', description='columns to include in search - "*" means all columns and "None" means to omit selection (useful for aggregate queries).'),
+        async def search_models_and_instances(
+            select: Optional[List[str]] = Query('*', description='Columns to include in search - "*" means all columns and "None" means to omit selection (useful for aggregate queries).'),
             where: Optional[List[str]] = Query(None, description='Where statements to filter data in the form of "column operator value" (e.g. "dataset = test_data") - valid operators are: =, !=, >, >=, >, <, <=, !=, LIKE, ILIKE, NOTLIKE, NOTILIKE, CONTAINS, STARTSWITH, ENDSWITH'),
             order_by: Optional[List[str]] = Query(None, alias='order-by', description='column names to order by in the same order as parameter order_by_sort'),
             order_by_sort: Optional[List[Literal['asc', 'desc']]] = Query(None, alias='order-by-sort', description='Either "asc" for ascending or "desc" for descending order in the same order as parameter order_by'),
             limit: Optional[int] = Query(None, description='Number of items to return'),
             offset: Optional[int] = Query(None, description='Number of items to skip'),
             where_boolean: Literal['AND', 'OR'] = Query('AND', alias='where-boolean', description='Either "AND" or "OR" to combine where statements'),
+            what: str = Query('', description='What to search for (default is "instances") - one of: "instances", "models"'),
             bg_manager = Depends(get_bg_manager),
             user = Depends(get_user['search'])
         ):
             select = None if select[0] == 'None' else select
-            response = bg_manager.metadata_manager.search(
-                select=select,
-                where=where,
-                order_by=order_by,
-                order_by_sort=order_by_sort,
-                limit=limit,
-                offset=offset,
-                where_boolean=where_boolean
-            )
+            if what.lower() == 'models':
+                response = bg_manager.metadata_manager.search_base_models(
+                    select=select,
+                    where=where,
+                    order_by=order_by,
+                    order_by_sort=order_by_sort,
+                    limit=limit,
+                    offset=offset,
+                    where_boolean=where_boolean
+                )
+            else:
+                response = bg_manager.metadata_manager.search(
+                    select=select,
+                    where=where,
+                    order_by=order_by,
+                    order_by_sort=order_by_sort,
+                    limit=limit,
+                    offset=offset,
+                    where_boolean=where_boolean
+                )
             return response
 
     # (get_models_router_update) Add update route to models router

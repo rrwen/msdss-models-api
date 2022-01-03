@@ -2,13 +2,14 @@ from datetime import datetime
 import os
 import pickle
 import shutil
+import warnings
 
-from msdss_base_database import Database
 from msdss_data_api.managers import DataManager, MetadataManager
 from shlex import split
 
 from .defaults import *
 from .handlers import *
+from .tools import *
 
 class ModelsManager:
     """
@@ -686,7 +687,6 @@ class ModelsBackgroundManager:
         The handler for the models manager will be disabled (set to ``None``) as model operations will be handled with attribute ``models_handler`` instead.
     handler : :class:`msdss_models_api.handlers.ModelsBackgroundHandler` or None
         Handler object to manage background operations. If ``None``, a default handler will be created.
-
     metadata_manager : :class:`msdss_models_api.managers.ModelsMetadataManager` or ``None``
         A metadata manager object. If ``None``, metadata will not be managed based on model operations.
 
@@ -1814,12 +1814,17 @@ class ModelsMetadataManager(MetadataManager):
         Name of the column identifying each entry.
     updated_column : str
         Name of the column for storing the last updated date/time.
+    base_table : str
+        Name of the table to store the metadata for base models.
     *args, **kwargs
         Additional arguments passed to :class:`msdss_data_api:msdss_data_api.managers.MetadataManager`
 
     Attributes
     ----------
-    See attributes in :class:`msdss_data_api:msdss_data_api.managers.MetadataManager`.
+    base_table : str
+        Same as parameter ``base_table``.
+    
+        See other attributes in :class:`msdss_data_api:msdss_data_api.managers.MetadataManager`.
     
     Author
     ------
@@ -1829,57 +1834,71 @@ class ModelsMetadataManager(MetadataManager):
     -------
     .. jupyter-execute::
 
+        import tempfile
         from datetime import datetime
         from msdss_base_database import Database
         from msdss_data_api.managers import DataManager
         from msdss_models_api.managers import *
         from msdss_models_api.defaults import *
         
-        # Setup database
-        db = Database()
+        with tempfile.TemporaryDirectory() as folder_path:
 
-        # Check if the metadata table exists and drop if it does
-        if db.has_table(DEFAULT_METADATA_TABLE):
-            db.drop_table(DEFAULT_METADATA_TABLE)
-
-        # Setup metadata manager
-        data_manager = DataManager(database=db)
-        mdm = ModelsMetadataManager(data_manager)
-
-        # Add metadata
-        metadata = [{
-            'title': 'Testing Data',
-            'description': 'Data used for testing',
-            'tags': 'test exp auto',
-            'source': 'Automatically generated from Python',
-            'created_by': 'msdss',
-            'created_at': datetime.now(),
-            'updated_at': datetime.now()
-        }]
-        mdm.create('test_model', metadata)
-
-        # Get metadata
-        metadata_get = mdm.get('test_model')
+            # Setup available models
+            models = [Model]
+            
+            # Create manager
+            models_manager = ModelsManager(models, folder=folder_path)
         
-        # Search metadata
-        search_results = mdm.search(where=['title = "Testing Data"'])
+            # Setup database
+            db = Database()
 
-        # Update metadata
-        mdm.update('test_model', {'description': 'NEW DESCRIPTION'})
+            # Check if the metadata table exists and drop if it does
+            if db.has_table(DEFAULT_METADATA_TABLE):
+                db.drop_table(DEFAULT_METADATA_TABLE)
 
-        # Delete metadata
-        mdm.delete('test_model')
+            # Setup metadata manager
+            data_manager = DataManager(database=db)
+            mdm = ModelsMetadataManager(data_manager, models_manager)
+
+            # Add metadata
+            metadata = [{
+                'title': 'Test Model',
+                'description': 'model used for testing',
+                'tags': 'test exp auto',
+                'source': 'Automatically generated from Python',
+                'model': 'Model',
+                'created_by': 'msdss',
+                'created_at': datetime.now(),
+                'updated_at': datetime.now()
+            }]
+            mdm.create('test_model', metadata)
+
+            # Get metadata
+            metadata_get = mdm.get('test_model')
+            
+            # Search metadata
+            search_results = mdm.search(where=['title = "Test Model"'])
+
+            # Update metadata
+            mdm.update('test_model', {'description': 'NEW DESCRIPTION'})
+
+            # Delete metadata
+            mdm.delete('test_model')
     """
     def __init__(
         self,
         data_manager=None,
+        models_manager=None,
         table=DEFAULT_METADATA_TABLE,
         columns=DEFAULT_METADATA_COLUMNS,
         name_column=DEFAULT_NAME_COLUMN,
         updated_column=DEFAULT_UPDATE_COLUMN,
+        base_table=DEFAULT_BASE_METADATA_TABLE,
+        base_columns=DEFAULT_BASE_METADATA_COLUMNS,
         *args, **kwargs
     ):
         data_manager = data_manager if data_manager else DataManager()
+        models_manager = models_manager if models_manager else ModelsManager()
         super().__init__(
             data_manager=data_manager,
             table=table,
@@ -1888,3 +1907,143 @@ class ModelsMetadataManager(MetadataManager):
             updated_column=updated_column,
             *args, **kwargs
         )
+        self.base_table = base_table
+        self.base_columns = base_columns
+        self.models_manager = models_manager
+        self.data_manager.handler.permitted_tables = [self.table, self.base_table]
+
+    def load_base_models(self):
+        """
+        Load base model metadata into a table in the database.
+
+        If a table with the same name exists, it will be deleted and rebuilt.
+
+        Author
+        ------
+        Richard Wen <rrwen.dev@gmail.com>
+        
+        Example
+        -------
+        .. jupyter-execute::
+
+            import tempfile
+            from msdss_base_database import Database
+            from msdss_data_api.managers import DataManager
+            from msdss_models_api.managers import *
+            from msdss_models_api.defaults import *
+            from msdss_models_api.models import *
+
+            with tempfile.TemporaryDirectory() as folder_path:
+
+                # Setup available models
+                models = [Model]
+                
+                # Create manager
+                models_manager = ModelsManager(models, folder=folder_path)
+            
+                # Setup database
+                db = Database()
+
+                # Check if the metadata table exists and drop if it does
+                if db.has_table(DEFAULT_METADATA_TABLE):
+                    db.drop_table(DEFAULT_METADATA_TABLE)
+
+                # Setup metadata manager
+                data_manager = DataManager(database=db)
+                mdm = ModelsMetadataManager(data_manager, models_manager)
+
+                # Load base models
+                mdm.load_base_models()
+        """
+
+        # (ModelsMetadataManager_load_base_models_recreate) Delete table if exists and recreate
+        if self.data_manager.database.has_table(self.base_table):
+            self.data_manager.delete(self.base_table, delete_all=True)
+        self.data_manager.database.create_table(self.base_table, self.base_columns)
+
+        # (ModelsMetadataManager_load_base_models_data) Create base model metadata using model docstrings
+        data = []
+        for model_name, model in self.models_manager.models.items():
+            try:
+                with warnings.catch_warnings():
+                    warnings.simplefilter('ignore')
+                    doc = get_md_doc(model)
+                    input_doc = get_md_doc(model.input) if 'input' in dir(model) else 'Not Available'
+                    output_doc = get_md_doc(model.output) if 'output' in dir(model) else 'Not Available'
+                    update_doc = get_md_doc(model.update) if 'update' in dir(model) else 'Not Available'
+            except:
+                doc = model.__doc__
+                input_doc = model.input.__doc__ if 'input' in dir(model) else 'Not Available'
+                output_doc = model.output.__doc__ if 'output' in dir(model) else 'Not Available'
+                update_doc = model.update.__doc__ if 'update' in dir(model) else 'Not Available'
+            model_data = {
+                'model': model_name,
+                'description': doc,
+                'input_description': input_doc,
+                'output_description': output_doc,
+                'update_description': update_doc
+            }
+            data.append(model_data)
+
+        # (ModelsMetadataManager_load_base_models_insert) Add base model metadata to database
+        self.data_manager.insert(self.base_table, data)
+
+    def search_base_models(self, *args, **kwargs):
+        """
+        Search base model metadata.
+
+        See :meth:`msdss_data_api.managers.DataManager.get`.
+        
+        Parameters
+        ----------
+        *args, **kwargs
+            Additional arguments passed to :meth:`msdss_data_api.managers.DataManager.get` except for parameter ``table``.
+
+        Returns
+        -------
+        list(dict)
+            A dict of lists where each key is the column name and each list contains the values for columns in the order of the rows of the table.
+        
+        Author
+        ------
+        Richard Wen <rrwen.dev@gmail.com>
+
+        Example
+        -------
+        .. jupyter-execute::
+
+            import tempfile
+            from msdss_base_database import Database
+            from msdss_data_api.managers import DataManager
+            from msdss_models_api.managers import *
+            from msdss_models_api.defaults import *
+            from msdss_models_api.models import *
+
+            with tempfile.TemporaryDirectory() as folder_path:
+
+                # Setup available models
+                models = [Model]
+                
+                # Create manager
+                models_manager = ModelsManager(models, folder=folder_path)
+            
+                # Setup database
+                db = Database()
+
+                # Check if the metadata table exists and drop if it does
+                if db.has_table(DEFAULT_METADATA_TABLE):
+                    db.drop_table(DEFAULT_METADATA_TABLE)
+
+                # Setup metadata manager
+                data_manager = DataManager(database=db)
+                mdm = ModelsMetadataManager(data_manager, models_manager)
+
+                # Load base models
+                mdm.load_base_models()
+
+                # Search base models
+                out = mdm.search_base_models()
+                print(out)
+        """
+        out = self.data_manager.get(self.base_table, *args, **kwargs)
+        return out
